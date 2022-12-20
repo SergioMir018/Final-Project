@@ -1,9 +1,8 @@
 package Data.Flight;
 
-//@Getter
-//@Setter
+import java.io.Serializable;
 
-public abstract class Flight {
+public abstract class Flight implements Serializable {
     protected float travel_km;
     protected final String assigned_plane;
     protected String destiny_city;

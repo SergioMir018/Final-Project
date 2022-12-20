@@ -5,10 +5,11 @@ import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
 import GUI.UserInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Terminal {
+public class Terminal implements Serializable {
 
     int terminal_Number;
     String terminal_Name;
@@ -30,6 +31,9 @@ public class Terminal {
 
     public static ArrayList<Flight> getTerminal_Flights(){
         return terminal_Flights;
+    }
+    public static void setTerminal_Flights (ArrayList<Flight> terminal_Flights) {
+        Terminal.terminal_Flights = terminal_Flights;
     }
 
     public static void main(String[] args) {
