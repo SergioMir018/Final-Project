@@ -3,6 +3,7 @@ package Data;
 import Data.Flight.Flight;
 import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
+import GUI.UserInterface;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,7 +33,7 @@ public class Terminal {
     }
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        /*Scanner input = new Scanner(System.in);
 
         char answer;
         int option = 0;
@@ -59,7 +60,9 @@ public class Terminal {
 
             System.out.print("\nAnswer: ");
             answer = input.next().charAt(0);
-        } while (answer == 'y');
+        } while (answer == 'y');*/
+        UserInterface gui = new UserInterface();
+        gui.starGUI();
     }
 
 }
