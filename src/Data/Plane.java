@@ -10,18 +10,20 @@ public class Plane implements Serializable {
     private final int seats;
     private final String builder;
     private final String builder_Country;
+    private final boolean isNational;
     private int firstClass_seats;
     private int secondClass_seats;
     private int thirdClass_seats;
 
     static ArrayList<Plane> planes = new ArrayList<Plane>();
 
-    public Plane (String plate, String model, int seats, String builder, String builder_Country){
+    public Plane (String plate, String model, int seats, String builder, String builder_Country,boolean isNational){
         this.plate = plate;
         this.model = model;
         this.seats = seats;
         this.builder = builder;
         this.builder_Country = builder_Country;
+        this.isNational = isNational;
     }
 
     public void setSeats(int seats){
@@ -62,6 +64,10 @@ public class Plane implements Serializable {
         return builder_Country;
     }
 
+    public boolean getIsNational() {
+        return isNational;
+    }
+
     public int getFirstClass_seats() {
         return firstClass_seats;
     }
@@ -74,15 +80,22 @@ public class Plane implements Serializable {
         return thirdClass_seats;
     }
 
+    public static ArrayList<Plane> getAirportPlanes() {
+        return planes;
+    }
+
+    public static void setAirPortPlanes(ArrayList<Plane> planes) {
+        Plane.planes = planes;
+    }
+
+
     @Override
     public String toString() {
-        return "\nplate = " + plate +
-                "\nmodel = " + model +
-                "\nseats = " + seats +
-                "\nbuilder = " + builder +
-                "\nbuilder_Country = " + builder_Country +
-                "\nfirstClass_seats = " + firstClass_seats +
-                "\nsecondClass_seats = " + secondClass_seats +
-                "\nthirdClass_seats = " + thirdClass_seats;
+        return "plate: " + plate +
+                "\nmodel: " + model +
+                "\nseats: " + seats +
+                "\nbuilder: " + builder +
+                "\nbuilder_Country: " + builder_Country +
+                "\nisNational: " + isNational;
     }
 }

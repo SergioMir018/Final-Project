@@ -4,8 +4,9 @@ public class International_Flight extends Flight{
     private final String destiny_country;
     private float internationalFlightCost;
 
-    public International_Flight(float travel_km, String assigned_plane, String destiny_city, String destiny_country){
-        super(travel_km, assigned_plane, destiny_city);
+    public International_Flight(String destiny_city, float travel_km, String assigned_plane, String terminal_Name,
+                                String date, String hour, String minute, String destiny_country){
+        super(destiny_city, travel_km, assigned_plane, terminal_Name, date, hour, minute);
         this.destiny_country = destiny_country;
     }
 

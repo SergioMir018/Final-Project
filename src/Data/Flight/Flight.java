@@ -3,18 +3,27 @@ package Data.Flight;
 import java.io.Serializable;
 
 public abstract class Flight implements Serializable {
+    protected String destiny_City;
     protected float travel_km;
     protected final String assigned_plane;
-    protected String destiny_city;
+    protected String date;
+    protected String hour;
+    protected String minute;
     protected int firstClassTickets;
     protected int secondClassTickets;
     protected int thirdClassTickets;
+    protected String terminal_Name;
     protected float flightRevenue;
 
-    public Flight(float travel_km, String assigned_plane, String destiny_city){
+    public Flight(String destiny_city, float travel_km, String assigned_plane,String terminal_Name, String date, String hour,
+                  String minute) {
+        this.destiny_City = destiny_city;
         this.travel_km = travel_km;
         this.assigned_plane = assigned_plane;
-        this.destiny_city = destiny_city;
+        this.terminal_Name = terminal_Name;
+        this.date = date;
+        this.hour = hour;
+        this.minute =minute;
     }
 
     public float getTravel_km(){
@@ -26,13 +35,15 @@ public abstract class Flight implements Serializable {
     }
 
     public String getDestiny_city(){
-        return destiny_city;
+        return destiny_City;
     }
 
-    public void setClassTickets(int firstClassSeats,int secondClassSeats,int thirdClassSeats){
-        firstClassTickets = firstClassSeats;
-        secondClassTickets = secondClassSeats;
-        thirdClassTickets = thirdClassSeats;
+    public String getDate() {
+        return date;
+    }
+
+    public String getMinute() {
+        return minute;
     }
 
     public int getFirstClassTickets() {
@@ -47,12 +58,18 @@ public abstract class Flight implements Serializable {
         return thirdClassTickets;
     }
 
+    public void setClassTickets(int firstClassSeats,int secondClassSeats,int thirdClassSeats){
+        firstClassTickets = firstClassSeats;
+        secondClassTickets = secondClassSeats;
+        thirdClassTickets = thirdClassSeats;
+    }
+
     public abstract void sellFirstClassTickets(int firstClassTickets, float travel_km);
 
     @Override
     public String toString() {
         return "\ntravel_km = " + travel_km +
                 "\nassigned_plane = " + assigned_plane +
-                "\ndestiny_city = " + destiny_city;
+                "\ndestiny_city = " + destiny_City;
     }
 }

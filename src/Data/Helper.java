@@ -6,51 +6,33 @@ import Data.Flight.National_Flight;
 import java.util.Scanner;
 
 public class Helper {
-    public static Plane new_Plane(){
+    public static void testFeatures() {
+        char cont = 'n';
+        int option = 0;
         Scanner input = new Scanner(System.in);
 
-        Plane plane;
+        do {
+            System.out.print("Option: ");
+            option = input.nextInt();
 
-        String plane_plate;
-        String plane_model;
-        int seats = 0;
-        String plane_builder;
-        String builder_Country;
+            if (option == 1) {
+                for (Terminal terminal : AirportControl.terminals) {
+                    System.out.println(terminal.toString() + "\n");
+                }
+            } else if (option == 2) {
+                for (Flight flight:Terminal.terminal_Flights) {
+                    if (flight instanceof National_Flight) {
+                        System.out.println(flight.toString() + "\n");
+                    }
+                }
+            } else if (option == 3) {
+                for (Plane plane : Plane.planes) {
+                    System.out.println(plane.toString() + "\n");
+                }
+            }
 
-        System.out.print("\nplane plate: ");
-        plane_plate = input.next();
-        System.out.print("plane model: ");
-        plane_model = input.next();
-        System.out.print("plane seats: ");
-        seats = input.nextInt();
-        System.out.print("plane builder: ");
-        plane_builder = input.next();
-        System.out.print("plane builder country: ");
-        builder_Country = input.next();
-
-        plane = new Plane(plane_plate,plane_model,seats,plane_builder,builder_Country);
-        plane.setSeats(seats);
-
-        return plane;
-    }
-
-    public static Flight new_Flight() {
-        Scanner input = new Scanner(System.in);
-
-        Flight flight;
-
-
-        float travel_km = 0;
-        String assigned_plane;
-        String destiny_city;
-
-        System.out.print("travel km: ");
-        travel_km = input.nextFloat();
-        System.out.print("assigned plane: ");
-        assigned_plane = input.next();
-        System.out.print("destiny city: ");
-        destiny_city = input.next();
-
-        return flight = new National_Flight(travel_km,assigned_plane,destiny_city);
+            System.out.println("Continue (y/n): ");
+            cont = input.next().charAt(0);
+        } while (cont == 'y');
     }
 }
