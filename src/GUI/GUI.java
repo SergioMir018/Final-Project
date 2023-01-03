@@ -14,10 +14,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class GUI {
-    private String empty = "";
     private JButton save_Button;
     private JButton load_Button;
-    private JButton new_Flight_Button;
     private JPanel Main_Panel;
     private JLabel travel_Km_Label;
     private JLabel assigned_National_Plane_Label;
@@ -34,22 +32,21 @@ public class GUI {
     private JPanel typeFlightPane;
     private JButton next_Type_Flight_Button;
     private JPanel new_International_Flight_Panel;
-    private JComboBox destined_Country_ComboBox;
+    private JComboBox<String> international_Country_ComboBox;
     private JLabel destinedCountryLabel;
     private JComboBox destined_Region_ComboBox;
     private JPanel country_Panel;
-    private JButton next_Region_Button;
-    private JButton next_Country_Button;
-    private JComboBox international_Destiny_City_ComboBox;
+    private JButton next_InternationalCountry_Button;
+    private JComboBox<String> international_City_ComboBox;
     private JPanel destined_City_Panel;
-    private JComboBox national_Destiny_Cities_ComboBox;
-    private JButton new_Terminal_lButton;
+    private JComboBox<String> national_City_ComboBox;
+    private JButton new_Terminal_Button;
     private JTextField terminal_Name_Text;
     private JTextField terminal_Number_Text;
     private JPanel new_Terminal_Panel;
     private JButton add_Terminal_Button;
-    public JComboBox national_Terminal_ComboBox;
-    public JComboBox international_Terminal_ComboBox;
+    public JComboBox<String> national_Terminal_ComboBox;
+    public JComboBox<String> international_Terminal_ComboBox;
     private JLabel save_Label;
     private JPanel save_Panel;
     private JPanel load_Panel;
@@ -62,28 +59,27 @@ public class GUI {
     private JPanel national_Km_Panel;
     private JButton confirm_City_Button;
     private JLabel destinedCityLabel;
-    private JComboBox national_Day_ComboBox;
-    private JButton confrim_International_Destiny_Button;
+    private JComboBox<String> national_Day_ComboBox;
+    private JButton confirm_International_Destiny_Button;
     private JButton add_International_Flight_Button;
     private JPanel international_Km_Panel;
-    private JComboBox national_Month_ComboBox;
-    private JComboBox national_Year_ComboBox;
-    private JComboBox national_Hour_ComboBox;
-    private JComboBox national_Minutes_ConboBox;
-    private JComboBox international_Day_ComboBox;
-    private JComboBox international_Month_ComboBox;
-    private JComboBox international_Year_ComboBox;
-    private JComboBox international_Hour_ComboBox;
-    private JComboBox international_Minute_ComboBox;
+    private JComboBox<String> national_Month_ComboBox;
+    private JComboBox<String> national_Year_ComboBox;
+    private JComboBox<String> national_Hour_ComboBox;
+    private JComboBox<String> national_Minutes_ComboBox;
+    private JComboBox<String> international_Day_ComboBox;
+    private JComboBox<String> international_Month_ComboBox;
+    private JComboBox<String> international_Year_ComboBox;
+    private JComboBox<String> international_Hour_ComboBox;
+    private JComboBox<String> international_Minute_ComboBox;
     private JLabel flight_Type_Label;
     private JButton new_Plane_Button;
     private JTextField plane_Plate_Text;
     private JTextField plane_Model_Text;
     private JTextField plane_Seats_Text;
     private JTextField plane_Builder_Text;
-    private JComboBox plane_Builder_Country_ComboBox;
+    private JComboBox<String> plane_Builder_Country_ComboBox;
     private JLabel national_Terminal_Label;
-    private JLabel international_Terminal_Label;
     private JLabel national_Date_Label;
     private JLabel national_Hour_Label;
     private JLabel plane_Plate_Label;
@@ -92,23 +88,66 @@ public class GUI {
     private JLabel plane_Maker_Label;
     private JLabel plane_Maker_Country_Label;
     private JButton add_New_Plane_Button;
-    private JPanel new_Plane_Planel;
-    private JComboBox national_Assigned_Plane_ComboBox;
+    private JPanel new_Plane_Panel;
+    private JComboBox<String> national_Assigned_Plane_ComboBox;
     private JCheckBox national_Plane_CheckBox;
     private JCheckBox international_Plane_CheckBox;
-    private JComboBox international_Assigned_Plane_ComboBox;
+    private JComboBox<String> international_Assigned_Plane_ComboBox;
     private JLabel load_Label;
-    private JTextField assigned_Plane_Text;
-    private JTextField destiny_city_Text;
+    private JPanel new_Charter_Flight_Panel;
+    private JCheckBox charter_Plane_CheckBox;
+    private JComboBox charter_Country_ComboBox;
+    private JComboBox charter_City_ComboBox;
+    private JComboBox international_Airline_ComboBox;
+    private JCheckBox charter_Flight_CheckBox;
+    private JComboBox<String> charter_Region_ComboBox;
+    private JComboBox<String> charter_Terminal_ComboBox;
+    private JComboBox charter_Day_ComboBox;
+    private JComboBox charter_Month_ComboBox;
+    private JComboBox charter_Year_ComboBox;
+    private JComboBox charter_Hour_ComboBox;
+    private JComboBox charter_Minute_ComboBox;
+    private JComboBox charter_Assigned_Plane_ComboBox;
+    private JComboBox charter_Airline_ComboBox;
+    private JButton admin_Options_Button;
+    private JButton new_Arrival_Button;
+    private JButton new_FlightOut_Button;
+    private JComboBox national_Airline_ComboBox;
+    private JComboBox<String> international_Region_ComboBox;
+    private JCheckBox national_Terminal_CheckBox;
+    private JCheckBox international_Terminal_CheckBox;
+    private JCheckBox charter_Terminal_CheckBox;
+    private JButton next_CharterRegion_Button;
+    private JButton next_CharterCountry_Button;
+    private JButton confirm_Charter_Destiny_Button;
+    private JLabel charter_Km_Label;
+    private JTextField admin_User_Name_Text;
+    private JPasswordField admin_Password_Text;
+    private JButton options_Admin_Button;
+    private JPanel admin_Credentials_Panel;
+    private JPanel admin_Options_Panel;
+    private JButton next_InternationalRegion_Button;
+    private JButton adminBack_Options_Button;
+    private JLabel international_Terminal_Label;
 
     AirportControl airportControl = new AirportControl();
 
     public GUI() {
+        String empty = "";
         national_Terminal_ComboBox.addItem(empty);
         international_Terminal_ComboBox.addItem(empty);
         national_Assigned_Plane_ComboBox.addItem(empty);
         international_Assigned_Plane_ComboBox.addItem(empty);
 
+        for (Terminal terminal: AirportControl.getTerminals()) {
+            if (terminal.getTerminal_Number() == 1) {
+                national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+            } else if (terminal.getTerminal_Number() == 2) {
+                international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+            } else if (terminal.getTerminal_Number() == 3) {
+                charter_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+            }
+        }
 
         new_National_Flight_Panel.setVisible(false);
         new_International_Flight_Panel.setVisible(false);
@@ -124,7 +163,11 @@ public class GUI {
         load_Error_Panel.setVisible(false);
         national_Km_Panel.setVisible(false);
         international_Km_Panel.setVisible(false);
-        new_Plane_Planel.setVisible(false);
+        new_Plane_Panel.setVisible(false);
+        new_Charter_Flight_Panel.setVisible(false);
+        admin_Credentials_Panel.setVisible(false);
+        admin_Options_Panel.setVisible(false);
+        adminBack_Options_Button.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -134,26 +177,36 @@ public class GUI {
         menu_Button.addActionListener(new MenuActionListenerActionListener());
         save_Button.addActionListener(new SaveButtonActionListener());
         load_Button.addActionListener(new LoadButtonActionListener());
-        new_Flight_Button.addActionListener(new NewFlightActionListener());
+        new_FlightOut_Button.addActionListener(new NewFlightActionListener());
         next_Type_Flight_Button.addActionListener(new NextTypeFlightButtonActionListener());
-        new_Terminal_lButton.addActionListener(new NewTerminalActionListener());
+
+        admin_Options_Button.addActionListener(new OptionsActionListener());
+        options_Admin_Button.addActionListener(new AdminActionListener());
+        adminBack_Options_Button.addActionListener(new AdminBackOptionsButtonActionListener());
+
+        new_Terminal_Button.addActionListener(new NewTerminalActionListener());
         add_Terminal_Button.addActionListener(new AddTerminalActionListener());
+        national_Terminal_CheckBox.addActionListener(new NationalTerminalCheckBoxActionListener());
+        international_Terminal_CheckBox.addActionListener(new InternationalTerminalCheckBoxActionListener());
+        charter_Terminal_CheckBox.addActionListener(new CharterTerminalCheckBoxActionListener());
         confirm_City_Button.addActionListener(new ConfirmCityActionListener());
         new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
 
-        next_Region_Button.addActionListener(new RegionButtonComboBoxActionListener());
-        next_Country_Button.setVisible(false);
-        next_Country_Button.addActionListener(new CountryButtonComboBoxActionListener());
-        confrim_International_Destiny_Button.setVisible(false);
-        confrim_International_Destiny_Button.addActionListener(new ConfirmInternationalDestinyButtonActionListener());
+        next_InternationalRegion_Button.addActionListener(new InternationalRegionButtonComboBoxActionListener());
+        next_InternationalCountry_Button.setVisible(false);
+        next_InternationalCountry_Button.addActionListener(new InternationalCountryButtonComboBoxActionListener());
+        confirm_International_Destiny_Button.setVisible(false);
+        confirm_International_Destiny_Button.addActionListener(new ConfirmInternationalDestinyButtonActionListener());
 
         national_Flight_CheckBox.addActionListener(new NationalCheckboxActionListener());
         international_Flight_CheckBox.addActionListener(new InternationalCheckboxActionListener());
+        charter_Flight_CheckBox.addActionListener(new CharterCheckBoxActionListener());
         add_National_Flight_Button.addActionListener(new AddNationalActionListener());
         add_International_Flight_Button.addActionListener(new AddInternationalActionListener());
 
         national_Plane_CheckBox.addActionListener(new NationalPlaneCheckBoxActionListener());
-        international_Plane_CheckBox.addActionListener(new InterationalPlaneCheckBoxActionListener());
+        international_Plane_CheckBox.addActionListener(new InternationalPlaneCheckBoxActionListener());
+        charter_Plane_CheckBox.addActionListener(new CharterPlaneCheckBoxActionListener());
         add_New_Plane_Button.addActionListener(new AddNewPlaneActionListener());
     }
 
@@ -161,10 +214,44 @@ public class GUI {
         JFrame frame = new JFrame("Control Aeropuerto");
         frame.setContentPane(new GUI().Main_Panel);
         frame.pack();
-        frame.setMinimumSize(new Dimension(500, 500));
+        frame.setMinimumSize(new Dimension(580, 400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+    }
+
+    public class MenuActionListenerActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            menu_Panel.setVisible(true);
+            new_National_Flight_Panel.setVisible(false);
+            new_International_Flight_Panel.setVisible(false);
+            country_Panel.setVisible(false);
+            option_Panel.setVisible(false);
+            new_Terminal_Panel.setVisible(false);
+            save_Panel.setVisible(false);
+            save_Error_Panel.setVisible(false);
+            load_Panel.setVisible(false);
+            load_Error_Panel.setVisible(false);
+            national_Flight_CheckBox.setSelected(false);
+            international_Flight_CheckBox.setSelected(false);
+            typeFlightPane.setVisible(false);
+            new_Plane_Panel.setVisible(false);
+            national_Plane_CheckBox.setSelected(false);
+            international_Plane_CheckBox.setSelected(false);
+            charter_Plane_CheckBox.setSelected(false);
+            charter_Flight_CheckBox.setSelected(false);
+            new_Charter_Flight_Panel.setVisible(false);
+            terminal_Name_Text.setText("");
+            terminal_Number_Text.setText("");
+            national_Terminal_CheckBox.setSelected(false);
+            international_Terminal_CheckBox.setSelected(false);
+            charter_Terminal_CheckBox.setSelected(false);
+            admin_Options_Panel.setVisible(false);
+            adminBack_Options_Button.setVisible(false);
+            admin_User_Name_Text.setText("");
+            admin_Password_Text.setText("");
+        }
     }
 
     public class SaveButtonActionListener implements ActionListener {
@@ -239,21 +326,80 @@ public class GUI {
                     "18","19","20","21","22","23","24"};
             String[] minutes = {"","00","05","10","15","20","25","30","35","40","45","50","55"};
 
-            national_Day_ComboBox.setModel(new DefaultComboBoxModel(days));
-            international_Day_ComboBox.setModel(new DefaultComboBoxModel(days));
-            national_Month_ComboBox.setModel(new DefaultComboBoxModel(months));
-            international_Month_ComboBox.setModel(new DefaultComboBoxModel(months));
-            national_Year_ComboBox.setModel(new DefaultComboBoxModel(years));
-            international_Year_ComboBox.setModel(new DefaultComboBoxModel(years));
-            national_Hour_ComboBox.setModel(new DefaultComboBoxModel(hours));
-            international_Hour_ComboBox.setModel(new DefaultComboBoxModel(hours));
-            national_Minutes_ConboBox.setModel(new DefaultComboBoxModel(minutes));
-            international_Minute_ComboBox.setModel(new DefaultComboBoxModel(minutes));
+            national_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
+            international_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
+            national_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
+            international_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
+            national_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
+            international_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
+            national_Hour_ComboBox.setModel(new DefaultComboBoxModel<>(hours));
+            international_Hour_ComboBox.setModel(new DefaultComboBoxModel<>(hours));
+            national_Minutes_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
+            international_Minute_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
 
             typeFlightPane.setVisible(true);
 
             JOptionPane.showOptionDialog(null,typeFlightPane,"Tipo de vuelo",
                     JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class OptionsActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            admin_Credentials_Panel.setVisible(true);
+
+            JOptionPane.showOptionDialog(null,admin_Credentials_Panel,"Admin",
+                    JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class AdminActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String admin_User_Name;
+            String admin_User_Password;
+
+            if (admin_User_Name_Text.getText().equals("") && String.valueOf(admin_Password_Text.getPassword()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nIngrese el nombre de usuario y la " +
+                                "contraseña", "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            }else if (admin_User_Name_Text.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nIngrese el nombre de usuario",
+                        "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            }else if (String.valueOf(admin_Password_Text.getPassword()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nIngrese la contraseña", "ERROR!",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                try {
+                    admin_User_Name = admin_User_Name_Text.getText();
+                    admin_User_Password = String.valueOf(admin_Password_Text.getPassword()) ;
+
+                    System.out.println(admin_User_Name + " " + admin_User_Password);
+
+                    if (airportControl.checkAdminUser(admin_User_Name,admin_User_Password)) {
+                        JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(admin_Credentials_Panel));
+                        pane.dispose();
+
+                        menu_Panel.setVisible(false);
+                        option_Panel.setVisible(true);
+                        admin_Credentials_Panel.setVisible(false);
+                        admin_Options_Panel.setVisible(true);
+                        admin_User_Name_Text.setText("");
+                        admin_Password_Text.setText("");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class AdminBackOptionsButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            adminBack_Options_Button.setVisible(false);
+            admin_Options_Panel.setVisible(true);
+            new_Terminal_Panel.setVisible(false);
         }
     }
 
@@ -265,7 +411,7 @@ public class GUI {
                 pane.dispose();
 
                 String[] cubaCities = {"", "Baracoa", "Cayo Coco", "Guantánamo", "Holguín", "Nueva Gerona", "Santiago de Cuba"};
-                national_Destiny_Cities_ComboBox.setModel(new DefaultComboBoxModel(cubaCities));
+                national_City_ComboBox.setModel(new DefaultComboBoxModel<>(cubaCities));
 
                 menu_Panel.setVisible(false);
                 typeFlightPane.setVisible(false);
@@ -276,38 +422,27 @@ public class GUI {
                 JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(typeFlightPane));
                 pane.dispose();
 
+                String[] regions = {"", "America del Norte", "America Central", "America del Sur", "Europa", "Africa"};
+                international_Region_ComboBox.setModel(new DefaultComboBoxModel<>(regions));
+                international_Region_ComboBox.setSelectedItem("");
+
                 menu_Panel.setVisible(false);
                 typeFlightPane.setVisible(false);
                 new_International_Flight_Panel.setVisible(true);
-                next_Region_Button.setVisible(true);
                 option_Panel.setVisible(true);
+            } else if (charter_Flight_CheckBox.isSelected()) {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(typeFlightPane));
+                pane.dispose();
 
-                String[] regions = {"", "America del Norte", "America Central", "America del Sur", "Europa", "Africa"};
-                destined_Region_ComboBox.setModel(new DefaultComboBoxModel(regions));
-                destined_Region_ComboBox.setSelectedItem("");
+                String[] regions = {"", "America del Norte", "America Central"};
+                charter_Region_ComboBox.setModel(new DefaultComboBoxModel<>(regions));
+                charter_Region_ComboBox.setSelectedItem("");
+
+                menu_Panel.setVisible(false);
+                typeFlightPane.setVisible(false);
+                new_Charter_Flight_Panel.setVisible(true);
+                option_Panel.setVisible(true);
             }
-        }
-    }
-
-    public class MenuActionListenerActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            menu_Panel.setVisible(true);
-            new_National_Flight_Panel.setVisible(false);
-            new_International_Flight_Panel.setVisible(false);
-            country_Panel.setVisible(false);
-            option_Panel.setVisible(false);
-            new_Terminal_Panel.setVisible(false);
-            save_Panel.setVisible(false);
-            save_Error_Panel.setVisible(false);
-            load_Panel.setVisible(false);
-            load_Error_Panel.setVisible(false);
-            national_Flight_CheckBox.setSelected(false);
-            international_Flight_CheckBox.setSelected(false);
-            typeFlightPane.setVisible(false);
-            new_Plane_Planel.setVisible(false);
-            national_Plane_CheckBox.setSelected(false);
-            international_Plane_CheckBox.setSelected(false);
         }
     }
 
@@ -315,6 +450,7 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             international_Flight_CheckBox.setSelected(false);
+            charter_Flight_CheckBox.setSelected(false);
         }
     }
 
@@ -322,71 +458,79 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             national_Flight_CheckBox.setSelected(false);
+            charter_Flight_CheckBox.setSelected(false);
         }
     }
 
-    public class RegionButtonComboBoxActionListener implements ActionListener {
+    public class CharterCheckBoxActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("")) {
+            international_Flight_CheckBox.setSelected(false);
+            national_Flight_CheckBox.setSelected(false);
+        }
+    }
+
+    public class InternationalRegionButtonComboBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nIngrese una region para continuar",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                countryList();
-                next_Region_Button.setVisible(false);
-                next_Country_Button.setVisible(true);
+                internationalCountryList();
+                next_InternationalRegion_Button.setVisible(false);
+                next_InternationalCountry_Button.setVisible(true);
                 country_Panel.setVisible(true);
             }
         }
     }
 
-    public void countryList() {
+    public void internationalCountryList() {
         String[] countryListNorthAmerica = {"", "Canadá", "Estados Unidos", "México"};
-        String[] countryListCenterAmerica = {"", "Bahamas", "Guadalupe", "Haití", "Islas Caimán",
+        String[] countryListCenterAmerica = {"", "Bahamas", "Haití", "Islas Caimán",
                 "Jamaica", "Nicaragua", "Panamá", "República Dominicana", "Trinidad y Tobago"};
         String[] countryListSouthAmerica = {"", "Argentina", "Colombia", " Guyana", "Surinam", "Venezuela"};
         String[] countryListEurope = {"", "Alemania", "España", "Francia", "Italia", "Rusia", "Suiza", "Turquía"};
         String[] countryListAfrica = {"", "Angola"};
 
-        if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("America del Norte")) {
-            destined_Country_ComboBox.setModel(new DefaultComboBoxModel(countryListNorthAmerica));
+        if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("America del Norte")) {
+            international_Country_ComboBox.setModel(new DefaultComboBoxModel<>(countryListNorthAmerica));
         }
-        if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("America Central")) {
-            destined_Country_ComboBox.setModel(new DefaultComboBoxModel(countryListCenterAmerica));
+        if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("America Central")) {
+            international_Country_ComboBox.setModel(new DefaultComboBoxModel<>(countryListCenterAmerica));
         }
-        if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("America del Sur")) {
-            destined_Country_ComboBox.setModel(new DefaultComboBoxModel(countryListSouthAmerica));
+        if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("America del Sur")) {
+            international_Country_ComboBox.setModel(new DefaultComboBoxModel<>(countryListSouthAmerica));
         }
-        if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("Europa")) {
-            destined_Country_ComboBox.setModel(new DefaultComboBoxModel(countryListEurope));
+        if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("Europa")) {
+            international_Country_ComboBox.setModel(new DefaultComboBoxModel<>(countryListEurope));
         }
-        if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("Africa")) {
-            destined_Country_ComboBox.setModel(new DefaultComboBoxModel(countryListAfrica));
+        if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("Africa")) {
+            international_Country_ComboBox.setModel(new DefaultComboBoxModel<>(countryListAfrica));
         }
     }
 
-    public class CountryButtonComboBoxActionListener implements ActionListener {
+    public class InternationalCountryButtonComboBoxActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("")) {
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nIngrese un pais para continuar",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                cityList();
-                next_Country_Button.setVisible(false);
+                internationalCityList();
+                next_InternationalCountry_Button.setVisible(false);
                 destined_City_Panel.setVisible(true);
-                confrim_International_Destiny_Button.setVisible(true);
+                confirm_International_Destiny_Button.setVisible(true);
 
             }
         }
     }
 
-    public void cityList() {
+    public void internationalCityList() {
         String[] Canada = {"", "Montreal", "Toronto"};
         String[] EEUU = {"", "Fort Lauderdale", "Houston", "Miami", "Newark", "Nueva York", "Tampa"};
         String[] Mexico = {"", "Cancún", "Ciudad de México", "Mérida", "Monterrey"};
         String[] Bahamas = {"", "Nasáu"};
-        String[] Guadalupe = {"", "Pointe-à-Pitre"};
         String[] Haiti = {"", "Puerto Príncipe"};
         String[] Islas_Caiman = {"", "Gran Caimán"};
         String[] Jamaica = {"", "Kingston", "Montego Bay"};
@@ -408,90 +552,121 @@ public class GUI {
         String[] Turquia = {"", "Estambul"};
         String[] Angola = {"", "Luanda"};
 
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Canadá")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Canada));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Canadá")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Canada));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(EEUU));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("México")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Mexico));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("México")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Mexico));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Bahamas")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Bahamas));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Bahamas")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Bahamas));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Guadalupe")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Guadalupe));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Haití")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Haiti));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Haití")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Haiti));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Islas Caimán")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Islas_Caiman));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Islas Caimán")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Islas_Caiman));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Jamaica")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Jamaica));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Jamaica")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Jamaica));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Nicaragua")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Nicaragua));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Nicaragua")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Nicaragua));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Panamá")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Panama));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Panamá")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Panama));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("República Dominicana")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Republica_Dominicana));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("República Dominicana")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Republica_Dominicana));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Trinidad y Tobago")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Trinidad_Tobago));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Trinidad y Tobago")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Trinidad_Tobago));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Argentina")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Argentina));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Argentina")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Argentina));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Colombia")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Colombia));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Colombia")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Colombia));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Guyana")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guyana));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Guyana")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Guyana));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Surinam")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Surinam));
         }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Surinam")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Surinam));
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Venezuela")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Venezuela));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Alemania")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Alemania));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("España")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Espana));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Francia")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Francia));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Italia")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Italia));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Rusia")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Rusia));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Suiza")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Suiza));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Turquía")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Turquia));
+        }
+        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Angola")) {
+            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Angola));
+        }
+    }
 
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Venezuela")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Venezuela));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Alemania")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Alemania));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("España")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Espana));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Francia")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Francia));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Italia")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Italia));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Rusia")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Rusia));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Suiza")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Suiza));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Turquía")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Turquia));
-        }
-        if (destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("Angola")) {
-            international_Destiny_City_ComboBox.setModel(new DefaultComboBoxModel(Angola));
+    public class CharterRegionButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (charter_Region_ComboBox.getItemAt(charter_Region_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nIngrese una region para continuar",
+                        "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
     public class NewTerminalActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            menu_Panel.setVisible(false);
+            admin_Options_Panel.setVisible(false);
             option_Panel.setVisible(true);
             new_Terminal_Panel.setVisible(true);
+            adminBack_Options_Button.setVisible(true);
+        }
+    }
+
+    public class NationalTerminalCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            international_Terminal_CheckBox.setSelected(false);
+            charter_Terminal_CheckBox.setSelected(false);
+        }
+    }
+
+    public class InternationalTerminalCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            national_Terminal_CheckBox.setSelected(false);
+            charter_Terminal_CheckBox.setSelected(false);
+        }
+    }
+
+    public class CharterTerminalCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            international_Terminal_CheckBox.setSelected(false);
+            national_Terminal_CheckBox.setSelected(false);
         }
     }
 
@@ -500,6 +675,8 @@ public class GUI {
         public void actionPerformed(ActionEvent e) {
             String terminal_Name;
             int terminal_Number = 0;
+            boolean isNational = false;
+            boolean isCharter = false;
 
             try {
                 if ((terminal_Name_Text.getText().isEmpty() && terminal_Number_Text.getText().isEmpty())) {
@@ -511,12 +688,27 @@ public class GUI {
                 } else if (terminal_Name_Text.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el nombre" +
                             " de la terminal", "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+                }else if (!national_Terminal_CheckBox.isSelected() && !international_Terminal_CheckBox.isSelected()
+                    && !charter_Terminal_CheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha seleccionado el tipo" +
+                            " de operaciones que realizara la terminal", "ERROR!", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     terminal_Name = terminal_Name_Text.getText();
                     terminal_Number = Integer.parseInt(terminal_Number_Text.getText());
 
-                    if (airportControl.newTerminal(terminal_Name, terminal_Number)) {
-                        addNameTerminal(terminal_Name);
+                    if (national_Terminal_CheckBox.isSelected()) {
+                        isNational = true;
+                    } else if (charter_Terminal_CheckBox.isSelected()) {
+                        isCharter = true;
+                    }
+
+                    if (airportControl.newTerminal(terminal_Name, terminal_Number, isNational, isCharter)) {
+                        addNameTerminal(terminal_Name, isNational, isCharter);
+                        terminal_Name_Text.setText("");
+                        terminal_Number_Text.setText("");
+                        national_Terminal_CheckBox.setSelected(false);
+                        international_Terminal_CheckBox.setSelected(false);
+                        charter_Terminal_CheckBox.setSelected(false);
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -525,17 +717,19 @@ public class GUI {
                                 Caracteres erroneos!
                                 Ingrese solo numeros en >>NUMERO DE LA TERMINAL<<""",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
-            } finally {
-                terminal_Name_Text.setText("");
                 terminal_Number_Text.setText("");
             }
-
         }
     }
 
-    public void addNameTerminal(String terminal_Name) {
-        national_Terminal_ComboBox.addItem(terminal_Name);
-        international_Terminal_ComboBox.addItem(terminal_Name);
+    public void addNameTerminal(String terminal_Name, boolean isNational, boolean isCharter) {
+        if (isNational) {
+            national_Terminal_ComboBox.addItem(terminal_Name);
+        } else if (isCharter) {
+            charter_Terminal_ComboBox.addItem(terminal_Name);
+        } else if (!isNational && !isCharter) {
+            international_Terminal_ComboBox.addItem(terminal_Name);
+        }
     }
 
     public class AddNationalActionListener implements ActionListener {
@@ -555,14 +749,14 @@ public class GUI {
                 } else if (national_Terminal_ComboBox.getItemAt(national_Terminal_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido la terminal" +
                             " asignada al vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
-                } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("")) {
+                } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido la ciudad" +
                             " destino del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 } else if (national_Day_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()).equals("") ||
                         national_Month_ComboBox.getItemAt(national_Month_ComboBox.getSelectedIndex()).equals("") ||
                         national_Year_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()).equals("") ||
                         national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex()).equals("") ||
-                        national_Minutes_ConboBox.getItemAt(national_Minutes_ConboBox.getSelectedIndex()).equals("")) {
+                        national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null,"ERROR!\nNo ha intoducido la fecha del" +
                             " vuelo","ERROR!",JOptionPane.WARNING_MESSAGE);
                 } else if (national_Km_Label.getText().equals("Label")) {
@@ -570,15 +764,15 @@ public class GUI {
                             " del vuelo","ERROR!",JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
-                        national_City = (String) national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex());
+                        national_City = national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex());
                         travel_km = Float.parseFloat(national_Km_Label.getText());
-                        assigned_Plane = (String) national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex());
-                        date.append((String) national_Day_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()));
-                        date.append((String) national_Month_ComboBox.getItemAt(national_Month_ComboBox.getSelectedIndex()));
-                        date.append((String) national_Year_ComboBox.getItemAt(national_Year_ComboBox.getSelectedIndex()));
-                        terminal = (String) national_Terminal_ComboBox.getItemAt(national_Terminal_ComboBox.getSelectedIndex());
-                        hour = (String) national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex());
-                        minutes = (String) national_Minutes_ConboBox.getItemAt(national_Minutes_ConboBox.getSelectedIndex());
+                        assigned_Plane = national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex());
+                        date.append(national_Day_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()));
+                        date.append(national_Month_ComboBox.getItemAt(national_Month_ComboBox.getSelectedIndex()));
+                        date.append(national_Year_ComboBox.getItemAt(national_Year_ComboBox.getSelectedIndex()));
+                        terminal = national_Terminal_ComboBox.getItemAt(national_Terminal_ComboBox.getSelectedIndex());
+                        hour = national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex());
+                        minutes = national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex());
 
                         airportControl.newNationalFlight(national_City, travel_km, assigned_Plane, terminal,
                                 String.valueOf(date), hour, minutes);
@@ -592,7 +786,7 @@ public class GUI {
     public class ConfirmCityActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("")) {
+            if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nIngrese una ciudad para continuar",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -607,17 +801,17 @@ public class GUI {
     }
 
     public void nationalCitiesDistance() {
-        if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Baracoa")) {
+        if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Baracoa")) {
             national_Km_Label.setText("871");
-        } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Cayo Coco")) {
+        } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Cayo Coco")) {
             national_Km_Label.setText("402");
-        } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Guantánamo")) {
+        } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Guantánamo")) {
             national_Km_Label.setText("812");
-        } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Holguín")) {
+        } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Holguín")) {
             national_Km_Label.setText("678");
-        } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Nueva Gerona")) {
+        } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Nueva Gerona")) {
             national_Km_Label.setText("128");
-        } else if (national_Destiny_Cities_ComboBox.getItemAt(national_Destiny_Cities_ComboBox.getSelectedIndex()).equals("Santiago de Cuba")) {
+        } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Santiago de Cuba")) {
             national_Km_Label.setText("762");
         }
     }
@@ -635,8 +829,8 @@ public class GUI {
             String minutes;
 
             if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("") ||
-                    destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex()).equals("") ||
-                    international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("")) {
+                    international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("") ||
+                    international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de introducir los " +
                         "datos sobre el destino del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
             } else if (international_Km_Label.getText().equals("Label")) {
@@ -657,16 +851,16 @@ public class GUI {
                         " vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
-                    destined_International_City = (String) international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex());
+                    destined_International_City = international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex());
                     travel_km = Float.parseFloat(international_Km_Label.getText());
-                    assigned_Plane = (String) international_Assigned_Plane_ComboBox.getItemAt(international_Assigned_Plane_ComboBox.getSelectedIndex());
-                    terminal = (String) international_Terminal_ComboBox.getItemAt(international_Terminal_ComboBox.getSelectedIndex());
-                    date.append((String) international_Day_ComboBox.getItemAt(international_Day_ComboBox.getSelectedIndex()));
-                    date.append((String) international_Month_ComboBox.getItemAt(international_Month_ComboBox.getSelectedIndex()));
-                    date.append((String) international_Year_ComboBox.getItemAt(international_Year_ComboBox.getSelectedIndex()));
-                    hour = (String) international_Hour_ComboBox.getItemAt(international_Hour_ComboBox.getSelectedIndex());
-                    minutes = (String) international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex());
-                    destined_Country = (String) destined_Country_ComboBox.getItemAt(destined_Country_ComboBox.getSelectedIndex());
+                    assigned_Plane = international_Assigned_Plane_ComboBox.getItemAt(international_Assigned_Plane_ComboBox.getSelectedIndex());
+                    terminal = international_Terminal_ComboBox.getItemAt(international_Terminal_ComboBox.getSelectedIndex());
+                    date.append(international_Day_ComboBox.getItemAt(international_Day_ComboBox.getSelectedIndex()));
+                    date.append(international_Month_ComboBox.getItemAt(international_Month_ComboBox.getSelectedIndex()));
+                    date.append(international_Year_ComboBox.getItemAt(international_Year_ComboBox.getSelectedIndex()));
+                    hour = international_Hour_ComboBox.getItemAt(international_Hour_ComboBox.getSelectedIndex());
+                    minutes = international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex());
+                    destined_Country = international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex());
 
                     airportControl.newInternationalFlight(destined_International_City, travel_km, assigned_Plane, terminal,
                             String.valueOf(date), hour, minutes, destined_Country);
@@ -678,85 +872,85 @@ public class GUI {
     }
 
     public void internationalCitiesDistance() {
-        if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Montreal")) {
+        if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Montreal")) {
             international_Km_Label.setText("2616");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Toronto")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Toronto")) {
             international_Km_Label.setText("2299");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Fort Lauderdale")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Fort Lauderdale")) {
             international_Km_Label.setText("410");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Houston")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Houston")) {
             international_Km_Label.setText("1360");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Miami")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Miami")) {
             international_Km_Label.setText("369");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Newark")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Newark")) {
             international_Km_Label.setText("2109");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Newark")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Newark")) {
             international_Km_Label.setText("2109");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Nueva York")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Nueva York")) {
             international_Km_Label.setText("2107");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Tampa")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Tampa")) {
             international_Km_Label.setText("536");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Cancún")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Cancún")) {
             international_Km_Label.setText("509");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Ciudad de México")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Ciudad de México")) {
             international_Km_Label.setText("1782");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Mérida")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Mérida")) {
             international_Km_Label.setText("784");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Monterrey")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Monterrey")) {
             international_Km_Label.setText("1837");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Nasáu")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Nasáu")) {
             international_Km_Label.setText("554");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Pointe-à-Pitre")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Pointe-à-Pitre")) {
             international_Km_Label.setText("2335");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Puerto Príncipe")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Puerto Príncipe")) {
             international_Km_Label.setText("1159");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Gran Caimán")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Gran Caimán")) {
             international_Km_Label.setText("440");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Kingston")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Kingston")) {
             international_Km_Label.setText("812");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Montego Bay")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Montego Bay")) {
             international_Km_Label.setText("683");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Managua")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Managua")) {
             international_Km_Label.setText("1288");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Ciudad de Panamá")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Ciudad de Panamá")) {
             international_Km_Label.setText("1594");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Punta Cana")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Punta Cana")) {
             international_Km_Label.setText("1537");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Santo Domingo")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Santo Domingo")) {
             international_Km_Label.setText("1387");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Puerto España")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Puerto España")) {
             international_Km_Label.setText("2625");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Buenos Aires")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Buenos Aires")) {
             international_Km_Label.setText("6905");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Bogotá")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Bogotá")) {
             international_Km_Label.setText("2243");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Medellín")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Medellín")) {
             international_Km_Label.setText("2016");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Georgetown")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Georgetown")) {
             international_Km_Label.setText("3164");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Paramaribo")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Paramaribo")) {
             international_Km_Label.setText("3508");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Caracas")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Caracas")) {
             international_Km_Label.setText("2161");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Las Piedras")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Las Piedras")) {
             international_Km_Label.setText("1967");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Fráncfort")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Fráncfort")) {
             international_Km_Label.setText("8132");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Madrid")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Madrid")) {
             international_Km_Label.setText("7442");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("París")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("París")) {
             international_Km_Label.setText("4290");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Milán")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Milán")) {
             international_Km_Label.setText("8318");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Roma")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Roma")) {
             international_Km_Label.setText("8801");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Moscú")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Moscú")) {
             international_Km_Label.setText("9589");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Zúrich")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Zúrich")) {
             international_Km_Label.setText("8208");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Estambul")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Estambul")) {
             international_Km_Label.setText("9978");
-        } else if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("Luanda")) {
+        } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Luanda")) {
             international_Km_Label.setText("10969");
         }
 
@@ -766,13 +960,13 @@ public class GUI {
     public class ConfirmInternationalDestinyButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (international_Destiny_City_ComboBox.getItemAt(international_Destiny_City_ComboBox.getSelectedIndex()).equals("")) {
+            if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha intoducido la ciudad " +
                         "destino del vuelo","ERROR!",JOptionPane.INFORMATION_MESSAGE);
             } else {
                 internationalCitiesDistance();
                 international_Km_Panel.setVisible(true);
-                confrim_International_Destiny_Button.setVisible(false);
+                confirm_International_Destiny_Button.setVisible(false);
             }
         }
     }
@@ -808,10 +1002,10 @@ public class GUI {
                     "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania", "Uganda", "Uruguay", "Uzbekistán",
                     "Vanuatu", "Venezuela", "Viet Nam", "Yemen", "Zambia", "Zimbabwe"};
 
-            plane_Builder_Country_ComboBox.setModel(new DefaultComboBoxModel(world_Country_List));
+            plane_Builder_Country_ComboBox.setModel(new DefaultComboBoxModel<>(world_Country_List));
 
             menu_Panel.setVisible(false);
-            new_Plane_Planel.setVisible(true);
+            new_Plane_Panel.setVisible(true);
             option_Panel.setVisible(true);
         }
     }
@@ -819,18 +1013,24 @@ public class GUI {
     public class NationalPlaneCheckBoxActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (international_Plane_CheckBox.isSelected()) {
-                international_Plane_CheckBox.setSelected(false);
-            }
+            international_Plane_CheckBox.setSelected(false);
+            charter_Plane_CheckBox.setSelected(false);
         }
     }
 
-    public class InterationalPlaneCheckBoxActionListener implements ActionListener {
+    public class InternationalPlaneCheckBoxActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (national_Plane_CheckBox.isSelected()) {
-                national_Plane_CheckBox.setSelected(false);
-            }
+            national_Plane_CheckBox.setSelected(false);
+            charter_Plane_CheckBox.setSelected(false);
+        }
+    }
+
+    public class CharterPlaneCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            national_Plane_CheckBox.setSelected(false);
+            international_Plane_CheckBox.setSelected(false);
         }
     }
 
@@ -842,7 +1042,8 @@ public class GUI {
             int plane_Seats = 0;
             String plane_Builder;
             String plane_Builder_Country;
-            boolean isNational = true;
+            boolean isNational = false;
+            boolean isCharter = false;
 
             if (plane_Plate_Text.getText().isEmpty() && plane_Plate_Text.getText().isEmpty() &&
                     plane_Seats_Text.getText().isEmpty() && plane_Builder_Text.getText().isEmpty() &&
@@ -869,8 +1070,11 @@ public class GUI {
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha introducido ninguna informacion " +
                         "sobre los tipos de vuelos que realizara el avion","ERROR!",JOptionPane.WARNING_MESSAGE);
             } else {
-                if (international_Plane_CheckBox.isSelected()) {
-                    isNational = false;
+
+                if (national_Plane_CheckBox.isSelected()) {
+                    isNational = true;
+                } else if (charter_Plane_CheckBox.isSelected()) {
+                    isCharter = true;
                 }
 
                 try {
@@ -878,15 +1082,22 @@ public class GUI {
                     plane_Model = plane_Model_Text.getText();
                     plane_Seats = Integer.parseInt(plane_Seats_Text.getText());
                     plane_Builder = plane_Builder_Text.getText();
-                    plane_Builder_Country = (String) plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex());
+                    plane_Builder_Country = plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex());
 
                     if (airportControl.newPlane(plane_Plate,plane_Model, plane_Seats,plane_Builder,plane_Builder_Country,
-                            isNational)) {
+                            isNational, isCharter)) {
                         if (national_Plane_CheckBox.isSelected()) {
                             national_Assigned_Plane_ComboBox.addItem(plane_Plate);
                         }else if (international_Plane_CheckBox.isSelected()) {
                             international_Assigned_Plane_ComboBox.addItem(plane_Plate);
                         }
+                        plane_Plate_Text.setText("");
+                        plane_Model_Text.setText("");
+                        plane_Seats_Text.setText("");
+                        plane_Builder_Text.setText("");
+                        plane_Builder_Country_ComboBox.setSelectedItem("");
+                        national_Plane_CheckBox.setSelected(false);
+                        international_Plane_CheckBox.setSelected(false);
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, """
@@ -894,14 +1105,7 @@ public class GUI {
                                 Caracteres erroneos!
                                 Ingrese solo numeros en >> CANTIDAD DE ASIENTOS <<""",
                             "ERROR!", JOptionPane.INFORMATION_MESSAGE);
-                } finally {
-                    plane_Plate_Text.setText("");
-                    plane_Model_Text.setText("");
                     plane_Seats_Text.setText("");
-                    plane_Builder_Text.setText("");
-                    plane_Builder_Country_ComboBox.setSelectedItem("");
-                    national_Plane_CheckBox.setSelected(false);
-                    international_Plane_CheckBox.setSelected(false);
                 }
             }
         }

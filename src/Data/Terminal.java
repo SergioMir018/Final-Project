@@ -10,12 +10,16 @@ import java.util.ArrayList;
 public class Terminal implements Serializable {
     int terminal_Number;
     String terminal_Name;
+    boolean isNational;
+    boolean isCharter;
 
     static ArrayList<Flight> terminal_Flights = new ArrayList<Flight>();
 
-    public Terminal (String terminal_Name, int terminal_Number){
+    public Terminal (String terminal_Name, int terminal_Number, boolean isNational, boolean isCharter){
         this.terminal_Name = terminal_Name;
         this.terminal_Number = terminal_Number;
+        this.isNational = isNational;
+        this.isCharter = isCharter;
     }
 
     public String getTerminal_Name() {
@@ -44,8 +48,8 @@ public class Terminal implements Serializable {
 
     @Override
     public String toString() {
-        return "terminal_Number " + terminal_Number +
-                "\nterminal_Name " + terminal_Name;
+        return  "terminal_Name " + terminal_Name +
+                "\nterminal_Number " + terminal_Number;
     }
 }
 

@@ -29,6 +29,10 @@ public class Helper {
                 for (Plane plane : Plane.planes) {
                     System.out.println(plane.toString() + "\n");
                 }
+            } else if (option == 4) {
+                for (User user: AirportControl.users) {
+                    System.out.println(user.toString() + "\n");
+                }
             }
 
             System.out.println("Continue (y/n): ");
