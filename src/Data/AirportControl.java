@@ -63,7 +63,7 @@ public class AirportControl implements Serializable {
     }
 
     public boolean newPlane(String plate, String model, int seats, String builder, String builder_Country,
-                            boolean isNational, boolean isCharter) {
+                            boolean isNational, boolean isCharter, String planeAirline) {
         boolean cont = true;
 
         for (Plane plane: Plane.planes) {
@@ -75,14 +75,14 @@ public class AirportControl implements Serializable {
             }
         }
 
-        if (seats > 850 || seats < 110) {
+        if (seats > 615 || seats < 110) {
             JOptionPane.showMessageDialog(null, "ERROR!\nEste numero de asientos es invalido",
                     "ERROR!", JOptionPane.WARNING_MESSAGE);
             cont = false;
         }
 
         if (cont) {
-            Plane plane = new Plane(plate, model, seats, builder, builder_Country, isNational, isCharter);
+            Plane plane = new Plane(plate, model, seats, builder, builder_Country, isNational, isCharter, planeAirline);
             plane.setSeats(seats);
             Plane.planes.add(plane);
         }
@@ -102,7 +102,6 @@ public class AirportControl implements Serializable {
 
     public void newInternationalFlight(String international_City, float travel_km, String assigned_Plane, String terminal,
         String date, String hour, String minute, String destined_Country) {
-        boolean cont = true;
 
         if (checkFlights(date, assigned_Plane, minute)) {
             International_Flight international_flight = new International_Flight(international_City, travel_km,

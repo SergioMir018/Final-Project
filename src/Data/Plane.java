@@ -12,6 +12,7 @@ public class Plane implements Serializable {
     private final String builder_Country;
     private final boolean isNational;
     private final boolean isCharter;
+    private final String planeAirline;
     private int firstClass_seats;
     private int secondClass_seats;
     private int thirdClass_seats;
@@ -19,7 +20,7 @@ public class Plane implements Serializable {
     static ArrayList<Plane> planes = new ArrayList<>();
 
     public Plane (String plate, String model, int seats, String builder, String builder_Country, boolean isNational,
-                  boolean isCharter){
+                  boolean isCharter, String planeAirline){
         this.plate = plate;
         this.model = model;
         this.seats = seats;
@@ -27,6 +28,7 @@ public class Plane implements Serializable {
         this.builder_Country = builder_Country;
         this.isNational = isNational;
         this.isCharter = isCharter;
+        this.planeAirline = planeAirline;
     }
 
     public void setSeats(int seats){
@@ -75,6 +77,10 @@ public class Plane implements Serializable {
         return isCharter;
     }
 
+    public String getPlaneAirline() {
+        return planeAirline;
+    }
+
     public int getFirstClass_seats() {
         return firstClass_seats;
     }
@@ -103,6 +109,8 @@ public class Plane implements Serializable {
                 "\nseats: " + seats +
                 "\nbuilder: " + builder +
                 "\nbuilder_Country: " + builder_Country +
-                "\nisNational: " + isNational;
+                "\nisNational: " + isNational +
+                "\nisCharter: " + isCharter +
+                "\nplaneAirline: " + planeAirline;
     }
 }

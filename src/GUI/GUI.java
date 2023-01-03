@@ -29,7 +29,7 @@ public class GUI {
     private JButton add_National_Flight_Button;
     private JCheckBox international_Flight_CheckBox;
     private JCheckBox national_Flight_CheckBox;
-    private JPanel typeFlightPane;
+    private JPanel type_Flight_Panel;
     private JButton next_Type_Flight_Button;
     private JPanel new_International_Flight_Panel;
     private JComboBox<String> international_Country_ComboBox;
@@ -107,7 +107,7 @@ public class GUI {
     private JComboBox charter_Year_ComboBox;
     private JComboBox charter_Hour_ComboBox;
     private JComboBox charter_Minute_ComboBox;
-    private JComboBox charter_Assigned_Plane_ComboBox;
+    private JComboBox<String> charter_Assigned_Plane_ComboBox;
     private JComboBox charter_Airline_ComboBox;
     private JButton admin_Options_Button;
     private JButton new_Arrival_Button;
@@ -129,6 +129,12 @@ public class GUI {
     private JButton next_InternationalRegion_Button;
     private JButton adminBack_Options_Button;
     private JLabel international_Terminal_Label;
+    private JPanel type_Plane_Panel;
+    private JButton next_Type_Plane_Button;
+    private JComboBox<String> plane_Airline_ComboBox;
+    private JLabel planeNational_Type_Label;
+    private JLabel planeInternational_Type_Label;
+    private JLabel planeCharter_Type_Label;
 
     AirportControl airportControl = new AirportControl();
 
@@ -143,16 +149,16 @@ public class GUI {
             if (terminal.getTerminal_Number() == 1) {
                 national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
             } else if (terminal.getTerminal_Number() == 2) {
-                international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
-            } else if (terminal.getTerminal_Number() == 3) {
                 charter_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+            } else if (terminal.getTerminal_Number() == 3) {
+                international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
             }
         }
 
         new_National_Flight_Panel.setVisible(false);
         new_International_Flight_Panel.setVisible(false);
         menu_Panel.setVisible(true);
-        typeFlightPane.setVisible(false);
+        type_Flight_Panel.setVisible(false);
         country_Panel.setVisible(false);
         destined_City_Panel.setVisible(false);
         option_Panel.setVisible(false);
@@ -168,6 +174,10 @@ public class GUI {
         admin_Credentials_Panel.setVisible(false);
         admin_Options_Panel.setVisible(false);
         adminBack_Options_Button.setVisible(false);
+        type_Plane_Panel.setVisible(false);
+        planeNational_Type_Label.setVisible(false);
+        planeInternational_Type_Label.setVisible(false);
+        planeCharter_Type_Label.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -179,6 +189,8 @@ public class GUI {
         load_Button.addActionListener(new LoadButtonActionListener());
         new_FlightOut_Button.addActionListener(new NewFlightActionListener());
         next_Type_Flight_Button.addActionListener(new NextTypeFlightButtonActionListener());
+        new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
+        next_Type_Plane_Button.addActionListener(new NextPlaneButtonActionListener());
 
         admin_Options_Button.addActionListener(new OptionsActionListener());
         options_Admin_Button.addActionListener(new AdminActionListener());
@@ -190,7 +202,7 @@ public class GUI {
         international_Terminal_CheckBox.addActionListener(new InternationalTerminalCheckBoxActionListener());
         charter_Terminal_CheckBox.addActionListener(new CharterTerminalCheckBoxActionListener());
         confirm_City_Button.addActionListener(new ConfirmCityActionListener());
-        new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
+
 
         next_InternationalRegion_Button.addActionListener(new InternationalRegionButtonComboBoxActionListener());
         next_InternationalCountry_Button.setVisible(false);
@@ -235,7 +247,7 @@ public class GUI {
             load_Error_Panel.setVisible(false);
             national_Flight_CheckBox.setSelected(false);
             international_Flight_CheckBox.setSelected(false);
-            typeFlightPane.setVisible(false);
+            type_Flight_Panel.setVisible(false);
             new_Plane_Panel.setVisible(false);
             national_Plane_CheckBox.setSelected(false);
             international_Plane_CheckBox.setSelected(false);
@@ -251,6 +263,9 @@ public class GUI {
             adminBack_Options_Button.setVisible(false);
             admin_User_Name_Text.setText("");
             admin_Password_Text.setText("");
+            planeNational_Type_Label.setVisible(false);
+            planeInternational_Type_Label.setVisible(false);
+            planeCharter_Type_Label.setVisible(false);
         }
     }
 
@@ -288,13 +303,20 @@ public class GUI {
                 Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
 
                 for (Terminal terminal : AirportControl.getTerminals()) {
-                    national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
-                    international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+                    if (terminal.getTerminal_Number() == 1) {
+                        national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+                    } else if (terminal.getTerminal_Number() == 2) {
+                        charter_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+                    } else if (terminal.getTerminal_Number() == 3) {
+                        international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
+                    }
                 }
 
                 for (Plane plane : Plane.getAirportPlanes()) {
                     if (plane.getIsNational()) {
                         national_Assigned_Plane_ComboBox.addItem(plane.getPlate());
+                    } else if (plane.getIsCharter()){
+                        charter_Assigned_Plane_ComboBox.addItem(plane.getPlate());
                     } else {
                         international_Assigned_Plane_ComboBox.addItem(plane.getPlate());
                     }
@@ -337,9 +359,9 @@ public class GUI {
             national_Minutes_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
             international_Minute_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
 
-            typeFlightPane.setVisible(true);
+            type_Flight_Panel.setVisible(true);
 
-            JOptionPane.showOptionDialog(null,typeFlightPane,"Tipo de vuelo",
+            JOptionPane.showOptionDialog(null, type_Flight_Panel,"Tipo de vuelo",
                     JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
         }
     }
@@ -407,19 +429,19 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (national_Flight_CheckBox.isSelected()) {
-                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(typeFlightPane));
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Flight_Panel));
                 pane.dispose();
 
                 String[] cubaCities = {"", "Baracoa", "Cayo Coco", "Guantánamo", "Holguín", "Nueva Gerona", "Santiago de Cuba"};
                 national_City_ComboBox.setModel(new DefaultComboBoxModel<>(cubaCities));
 
                 menu_Panel.setVisible(false);
-                typeFlightPane.setVisible(false);
+                type_Flight_Panel.setVisible(false);
                 new_National_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
                 confirm_City_Button.setVisible(true);
             } else if (international_Flight_CheckBox.isSelected()) {
-                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(typeFlightPane));
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Flight_Panel));
                 pane.dispose();
 
                 String[] regions = {"", "America del Norte", "America Central", "America del Sur", "Europa", "Africa"};
@@ -427,11 +449,11 @@ public class GUI {
                 international_Region_ComboBox.setSelectedItem("");
 
                 menu_Panel.setVisible(false);
-                typeFlightPane.setVisible(false);
+                type_Flight_Panel.setVisible(false);
                 new_International_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
             } else if (charter_Flight_CheckBox.isSelected()) {
-                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(typeFlightPane));
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Flight_Panel));
                 pane.dispose();
 
                 String[] regions = {"", "America del Norte", "America Central"};
@@ -439,7 +461,7 @@ public class GUI {
                 charter_Region_ComboBox.setSelectedItem("");
 
                 menu_Panel.setVisible(false);
-                typeFlightPane.setVisible(false);
+                type_Flight_Panel.setVisible(false);
                 new_Charter_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
             }
@@ -974,6 +996,28 @@ public class GUI {
     public class NewPlaneButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            type_Plane_Panel.setVisible(true);
+
+            JOptionPane.showOptionDialog(null, type_Plane_Panel,"Tipo de avion",
+                    JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class NextPlaneButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Plane_Panel));
+            pane.dispose();
+
+            String[] national_Airlines = {"", "Aerogaviota", "Cubana de Aviacion"};
+            String[] international_Airlines = {"", "Air Transat", "Air Canada Rouge", "JetBlue Airways", "Southwest Airlines",
+            "United Airlines", "United Express", "American Airlines", "Delta Air Lines", "United Express",
+            "Aeromar", "Viva Aerobus", "Aeroméxico" ,"Magnicharters", "Bahamasair", "Sunrise Airways", "Cayman Airways",
+            "Aerogaviota", "InterCaribbean Airways", "Aruba Airlines", "Conviasa", "Copa Airlines", "Wingo", "Aerolíneas Argentinas",
+            "Air Century", "Caribbean Airlines", "Fly All Ways", "Condor", "Air Europa", "Iberia", "Iberojet", "World2fly",
+            "Air France", "Neos", "Aeroflot", "Edelweiss Air", "Turkish Airlines", "TAAG Angola Airlines"};
+            String[] charter_Airlines = {"", "Havana Air", "Air France"};
+
             String[] world_Country_List = {"","Afganistán", "Albania", "Alemania", "Andorra", "Angola",
                     "Antigua y Barbuda", "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria",
                     "Azerbaiyán", "Bahamas", "Bahrein", "Bangladesh", "Barbados", "Belarús", "Bélgica", "Belice",
@@ -1002,9 +1046,21 @@ public class GUI {
                     "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania", "Uganda", "Uruguay", "Uzbekistán",
                     "Vanuatu", "Venezuela", "Viet Nam", "Yemen", "Zambia", "Zimbabwe"};
 
+            if (national_Plane_CheckBox.isSelected()) {
+                plane_Airline_ComboBox.setModel(new DefaultComboBoxModel<String>(national_Airlines));
+                planeNational_Type_Label.setVisible(true);
+            } else if (international_Plane_CheckBox.isSelected()) {
+                plane_Airline_ComboBox.setModel(new DefaultComboBoxModel<String>(international_Airlines));
+                planeInternational_Type_Label.setVisible(true);
+            } else if (charter_Plane_CheckBox.isSelected()) {
+                plane_Airline_ComboBox.setModel(new DefaultComboBoxModel<String>(charter_Airlines));
+                planeCharter_Type_Label.setVisible(true);
+            }
+
             plane_Builder_Country_ComboBox.setModel(new DefaultComboBoxModel<>(world_Country_List));
 
             menu_Panel.setVisible(false);
+            type_Plane_Panel.setVisible(false);
             new_Plane_Panel.setVisible(true);
             option_Panel.setVisible(true);
         }
@@ -1044,11 +1100,12 @@ public class GUI {
             String plane_Builder_Country;
             boolean isNational = false;
             boolean isCharter = false;
+            String plane_Airline;
 
-            if (plane_Plate_Text.getText().isEmpty() && plane_Plate_Text.getText().isEmpty() &&
+            if (plane_Plate_Text.getText().isEmpty() && plane_Model_Text.getText().isEmpty() &&
                     plane_Seats_Text.getText().isEmpty() && plane_Builder_Text.getText().isEmpty() &&
-                    plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex()) == "" &&
-                    !national_Plane_CheckBox.isSelected() && !international_Plane_CheckBox.isSelected()) {
+                    plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex()).equals("") &&
+                    plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha introducido ninguna informacion " +
                         "sobre el avion","ERROR!",JOptionPane.WARNING_MESSAGE);
             } else if (plane_Plate_Text.getText().isEmpty()) {
@@ -1063,12 +1120,12 @@ public class GUI {
             } else if (plane_Builder_Text.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha introducido ninguna informacion " +
                         "sobre el fabricante del avion","ERROR!",JOptionPane.WARNING_MESSAGE);
-            } else if (plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex()) == "") {
+            } else if (plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha introducido ninguna informacion " +
                         "sobre el pais del fabricante del avion","ERROR!",JOptionPane.WARNING_MESSAGE);
-            } else if (!national_Plane_CheckBox.isSelected() && !international_Plane_CheckBox.isSelected()){
+            } else if (plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex()).equals("")){
                 JOptionPane.showMessageDialog(null,"ERROR!\nNo ha introducido ninguna informacion " +
-                        "sobre los tipos de vuelos que realizara el avion","ERROR!",JOptionPane.WARNING_MESSAGE);
+                        "sobre la aerolinea a la que pertenece el avion","ERROR!",JOptionPane.WARNING_MESSAGE);
             } else {
 
                 if (national_Plane_CheckBox.isSelected()) {
@@ -1079,19 +1136,24 @@ public class GUI {
 
                 try {
                     plane_Plate = plane_Plate_Text.getText();
+                    plane_Airline = plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex());
                     plane_Model = plane_Model_Text.getText();
                     plane_Seats = Integer.parseInt(plane_Seats_Text.getText());
                     plane_Builder = plane_Builder_Text.getText();
                     plane_Builder_Country = plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex());
 
                     if (airportControl.newPlane(plane_Plate,plane_Model, plane_Seats,plane_Builder,plane_Builder_Country,
-                            isNational, isCharter)) {
+                            isNational, isCharter, plane_Airline)) {
                         if (national_Plane_CheckBox.isSelected()) {
                             national_Assigned_Plane_ComboBox.addItem(plane_Plate);
-                        }else if (international_Plane_CheckBox.isSelected()) {
+                        } else if (international_Plane_CheckBox.isSelected()) {
                             international_Assigned_Plane_ComboBox.addItem(plane_Plate);
+                        } else if (charter_Plane_CheckBox.isSelected()) {
+                            charter_Assigned_Plane_ComboBox.addItem(plane_Plate);
                         }
+
                         plane_Plate_Text.setText("");
+                        plane_Airline_ComboBox.setSelectedItem("");
                         plane_Model_Text.setText("");
                         plane_Seats_Text.setText("");
                         plane_Builder_Text.setText("");
