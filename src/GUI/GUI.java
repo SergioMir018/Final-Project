@@ -135,6 +135,8 @@ public class GUI {
     private JLabel planeNational_Type_Label;
     private JLabel planeInternational_Type_Label;
     private JLabel planeCharter_Type_Label;
+    private JButton confirmarAerolineaButton;
+    private JButton confirmarAerolineaButton1;
 
     AirportControl airportControl = new AirportControl();
 
