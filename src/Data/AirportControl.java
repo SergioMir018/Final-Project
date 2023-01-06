@@ -63,7 +63,7 @@ public class AirportControl implements Serializable {
     }
 
     public boolean newPlane(String plate, String model, int seats, String builder, String builder_Country,
-                            boolean isNational, boolean isCharter, String planeAirline) {
+                            boolean isNational, boolean isCharter, String planeAirline, String planeRuteDestiny) {
         boolean cont = true;
 
         for (Plane plane: Plane.planes) {
@@ -82,7 +82,8 @@ public class AirportControl implements Serializable {
         }
 
         if (cont) {
-            Plane plane = new Plane(plate, model, seats, builder, builder_Country, isNational, isCharter, planeAirline);
+            Plane plane = new Plane(plate, model, seats, builder, builder_Country, isNational, isCharter, planeAirline,
+                    planeRuteDestiny);
             plane.setSeats(seats);
             Plane.planes.add(plane);
         }

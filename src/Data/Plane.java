@@ -13,6 +13,7 @@ public class Plane implements Serializable {
     private final boolean isNational;
     private final boolean isCharter;
     private final String planeAirline;
+    private final String planeRuteDestiny;
     private int firstClass_seats;
     private int secondClass_seats;
     private int thirdClass_seats;
@@ -20,7 +21,7 @@ public class Plane implements Serializable {
     static ArrayList<Plane> planes = new ArrayList<>();
 
     public Plane (String plate, String model, int seats, String builder, String builder_Country, boolean isNational,
-                  boolean isCharter, String planeAirline){
+                  boolean isCharter, String planeAirline, String planeRuteDestiny){
         this.plate = plate;
         this.model = model;
         this.seats = seats;
@@ -29,6 +30,7 @@ public class Plane implements Serializable {
         this.isNational = isNational;
         this.isCharter = isCharter;
         this.planeAirline = planeAirline;
+        this.planeRuteDestiny = planeRuteDestiny;
     }
 
     public void setSeats(int seats){
@@ -61,14 +63,6 @@ public class Plane implements Serializable {
         return seats;
     }
 
-    public String getBuilder() {
-        return builder;
-    }
-
-    public String getBuilder_Country() {
-        return builder_Country;
-    }
-
     public boolean getIsNational() {
         return isNational;
     }
@@ -79,6 +73,10 @@ public class Plane implements Serializable {
 
     public String getPlaneAirline() {
         return planeAirline;
+    }
+
+    public String getPlaneRuteDestiny() {
+        return planeRuteDestiny;
     }
 
     public int getFirstClass_seats() {
