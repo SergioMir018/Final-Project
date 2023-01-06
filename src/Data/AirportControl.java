@@ -3,14 +3,13 @@ package Data;
 import Data.Flight.Flight;
 import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
-import Data.Plane;
+import Data.Person.User;
 import GUI.GUI;
 
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class AirportControl implements Serializable {
 
@@ -91,37 +90,45 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
-    public void newNationalFlight(String national_City, float travel_km, String assigned_Plane, String terminal,
+    public void newNationalFlight(String flight_Name, String national_City, float travel_km, String assigned_Plane, String terminal,
         String date, String hour, String minute) {
 
-        if (checkFlights(date, assigned_Plane, minute)) {
-            National_Flight national_flight = new National_Flight(national_City, travel_km, assigned_Plane, terminal, date,
+        if (checkFlights(flight_Name, date, minute, hour)) {
+            National_Flight national_flight = new National_Flight(flight_Name, national_City, travel_km, assigned_Plane, terminal, date,
                 hour, minute);
+
+            for (Plane plane : Plane.planes) {
+                if (plane.getPlate().equals(assigned_Plane)) {
+                    national_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                }
+            }
+
             Terminal.terminal_Flights.add(national_flight);
         }
     }
 
-    public void newInternationalFlight(String international_City, float travel_km, String assigned_Plane, String terminal,
+    public void newInternationalFlight(String flight_Name, String international_City, float travel_km, String assigned_Plane, String terminal,
         String date, String hour, String minute, String destined_Country) {
 
-        if (checkFlights(date, assigned_Plane, minute)) {
-            International_Flight international_flight = new International_Flight(international_City, travel_km,
+        if (checkFlights(flight_Name, date, minute, hour)) {
+            International_Flight international_flight = new International_Flight(flight_Name, international_City, travel_km,
                     assigned_Plane, terminal, date, hour, minute, destined_Country);
             Terminal.terminal_Flights.add(international_flight);
         }
     }
-    public boolean checkFlights(String date, String assigned_Plane, String minute) {
+    public boolean checkFlights(String flight_Name, String date, String minute, String hour) {
         boolean cont =true;
 
         for (Flight flight: Terminal.terminal_Flights) {
-            if (flight.getDate().equals(date) && flight.getAssigned_plane().equals(assigned_Plane)) {
-                JOptionPane.showMessageDialog(null, "ERROR!\nEste avion ya esta asignado a otro " +
-                    "vuelo en esta fecha", "ERROR!", JOptionPane.WARNING_MESSAGE);
-                cont = false;
-                break;
-            } else if (flight.getMinute().equals(minute) && flight.getDate().equals(date)) {
+            if (flight.getDate().equals(date)
+                    && flight.getMinute().equals(minute) && flight.getHour().equals(hour)) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nEste hora ya esta confirmada para " +
                     "otro vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                cont = false;
+                break;
+            } else if (flight.getFlightName().equals(flight_Name)) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nEste nombre ya esta asignado para " +
+                        "otro vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 cont = false;
                 break;
             }

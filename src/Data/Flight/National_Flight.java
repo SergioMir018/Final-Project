@@ -5,9 +5,9 @@ public class National_Flight extends Flight{
     private float nationalFlightCost;
     private float nationalKmCost;
 
-    public National_Flight(String destiny_city, float travel_km, String assigned_plane, String terminal_Name, String date,
+    public National_Flight(String flight_name, String destiny_city, float travel_km, String assigned_plane, String terminal_Name, String date,
                            String hour, String minute){
-        super(destiny_city, travel_km, assigned_plane, terminal_Name, date, hour, minute);
+        super(flight_name, destiny_city, travel_km, assigned_plane, terminal_Name, date, hour, minute);
     }
 
     public void setNationalFlightCost(float nationalFlightCost){
@@ -36,12 +36,15 @@ public class National_Flight extends Flight{
     @Override
     public String toString() {
         return "National_Flight" +
+                "\ndestiny_city: " + destiny_City +
                 "\ntravel_km: " + travel_km +
                 "\nassigned_plane: " + assigned_plane +
-                "\ndestiny_city: " + destiny_City +
                 "\nterminal_name: " + terminal_Name +
                 "\ndate: " + date +
                 "\nhour: " + hour +
-                "\nminute: " + minute;
+                "\nminute: " + minute +
+                "\nfirstClass: " + firstClassTickets +
+                "\nsecondClass: " + secondClassTickets +
+                "\nthirdClass: " + thirdClassTickets;
     }
 }

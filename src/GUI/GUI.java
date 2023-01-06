@@ -150,6 +150,30 @@ public class GUI {
     private JComboBox plane_Rute_Destiny_ComboBox;
     private JButton confirm_PlaneAirline_Button;
     private JPanel plane_Rute_Panel;
+    private JButton sell_Flight_Passage_Button;
+    private JPanel type_Passage_Panel;
+    private JCheckBox national_Passage_CheckBox;
+    private JCheckBox international_Passage_CheckBox;
+    private JCheckBox charter_Passage_CheckBox;
+    private JButton next_Type_Passage_Button;
+    private JPanel sell_Passage_Panel;
+    private JTextField national_Flight_Name_Text;
+    private JTextField international_Flight_Name_Text;
+    private JTextField charter_Flight_Name_Text;
+    private JComboBox passenger_Destiny_ComboBox;
+    private JComboBox passenger_Airline_ComboBox;
+    private JButton passenger_Destiny_NextButton;
+    private JComboBox passage_Day_ComboBox;
+    private JComboBox passage_Month_ComboBox;
+    private JComboBox passage_Class_ComboBox;
+    private JButton confirmarFechaButton;
+    private JTextField passenger_Name_Text;
+    private JComboBox passage_Flight_ComboBox;
+    private JTextField passenger_LastName_Text;
+    private JPanel passenger_Airline_Panel;
+    private JComboBox passage_Year_ComboBox;
+    private JPanel passage_Flight_Panel;
+    private JButton add_Charter_Flight_Button;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -210,6 +234,8 @@ public class GUI {
         international_ConfirmAirline_Button.setVisible(false);
         charter_ConfirmAirline_Button.setVisible(false);
         plane_Rute_Panel.setVisible(false);
+        type_Passage_Panel.setVisible(false);
+        sell_Passage_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -223,6 +249,11 @@ public class GUI {
         next_Type_Flight_Button.addActionListener(new NextTypeFlightButtonActionListener());
         new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
         next_Type_Plane_Button.addActionListener(new NextPlaneButtonActionListener());
+        sell_Flight_Passage_Button.addActionListener(new SellPassageMenuButtonActionListener());
+        national_Passage_CheckBox.addActionListener(new NationalPassageCheckBoxActionListener());
+        international_Passage_CheckBox.addActionListener(new InternationalPassageCheckBoxActionListener());
+        charter_Passage_CheckBox.addActionListener(new CharterPassageCheckBoxActionListener());
+        next_Type_Passage_Button.addActionListener(new NextTypePassageButtonActionListener());
 
         admin_Options_Button.addActionListener(new OptionsActionListener());
         options_Admin_Button.addActionListener(new AdminActionListener());
@@ -361,15 +392,13 @@ public class GUI {
             international_Assigned_Plane_Panel.setVisible(false);
             charter_Airline_Panel.setVisible(false);
             charter_Assigned_Plane_Panel.setVisible(false);
-            national_Terminal_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
-            international_Terminal_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
-            charter_Terminal_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             national_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             international_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             charter_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             plane_Airline_ComboBox.setSelectedItem("");
             plane_Rute_Panel.setVisible(false);
             plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(empty));
+
         }
     }
 
@@ -851,6 +880,7 @@ public class GUI {
     public class AddNationalActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            String flight_Name;
             String national_City;
             float travel_km = 0;
             StringBuffer date = new StringBuffer("");
@@ -878,8 +908,12 @@ public class GUI {
                 } else if (national_Km_Label.getText().equals("Label")) {
                     JOptionPane.showMessageDialog(null,"ERROR!\nNo ha confirmado la ciudad destino" +
                             " del vuelo","ERROR!",JOptionPane.WARNING_MESSAGE);
+                } else if (national_Flight_Name_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el nombre" +
+                            " del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
+                        flight_Name = national_Flight_Name_Text.getText();
                         national_City = national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex());
                         travel_km = Float.parseFloat(national_Km_Label.getText());
                         assigned_Plane = national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex());
@@ -890,7 +924,7 @@ public class GUI {
                         hour = national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex());
                         minutes = national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex());
 
-                        airportControl.newNationalFlight(national_City, travel_km, assigned_Plane, terminal,
+                        airportControl.newNationalFlight(flight_Name, national_City, travel_km, assigned_Plane, terminal,
                                 String.valueOf(date), hour, minutes);
                 } catch (Exception ex) {
                         ex.printStackTrace();
@@ -984,6 +1018,7 @@ public class GUI {
     public class AddInternationalActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            String flight_Name;
             String destined_Country;
             String destined_International_City;
             float travel_km = 0;
@@ -1014,8 +1049,12 @@ public class GUI {
                     international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nNo ha intoducido la fecha del" +
                         " vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (international_Flight_Name_Text.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el nombre" +
+                        " del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
+                    flight_Name = international_Flight_Name_Text.getText();
                     destined_International_City = international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex());
                     travel_km = Float.parseFloat(international_Km_Label.getText());
                     assigned_Plane = international_Assigned_Plane_ComboBox.getItemAt(international_Assigned_Plane_ComboBox.getSelectedIndex());
@@ -1027,7 +1066,7 @@ public class GUI {
                     minutes = international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex());
                     destined_Country = international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex());
 
-                    airportControl.newInternationalFlight(destined_International_City, travel_km, assigned_Plane, terminal,
+                    airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, assigned_Plane, terminal,
                             String.valueOf(date), hour, minutes, destined_Country);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1655,6 +1694,80 @@ public class GUI {
             switch (plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex())) {
                 case "Havana Air" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(havanaAir));
                 case "Air France" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airFranceCharter));
+            }
+        }
+    }
+
+    /*public class AddCharterFlightButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String flight_Name;
+            String destined_Country;
+            String destined_International_City;
+            float travel_km = 0;
+            String terminal;
+            String assigned_Plane;
+            StringBuffer date = new StringBuffer("");
+            String hour;
+            String minutes;
+
+            if (charter_Flight_Name_Text.getText().equals(""))
+        }
+    } */
+
+    public class SellPassageMenuButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            type_Passage_Panel.setVisible(true);
+            JOptionPane.showOptionDialog(null, type_Passage_Panel,"Tipo de pasaje",
+                        JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class NextTypePassageButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (national_Passage_CheckBox.isSelected() || international_Passage_CheckBox.isSelected()
+                    || charter_Passage_CheckBox.isSelected()) {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Passage_Panel));
+                pane.dispose();
+
+                menu_Panel.setVisible(false);
+                option_Panel.setVisible(true);
+                sell_Passage_Panel.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null,"ERROR!\nSeleccione un tipo de pasaje para " +
+                        "continuar","ERROR!",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    public class NationalPassageCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (national_Passage_CheckBox.isSelected()) {
+                international_Passage_CheckBox.setSelected(false);
+                charter_Passage_CheckBox.setSelected(false);
+            }
+        }
+    }
+
+    public class InternationalPassageCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (international_Passage_CheckBox.isSelected()) {
+                national_Passage_CheckBox.setSelected(false);
+                charter_Passage_CheckBox.setSelected(false);
+            }
+        }
+    }
+
+    public class CharterPassageCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (charter_Passage_CheckBox.isSelected()) {
+                national_Passage_CheckBox.setSelected(false);
+                international_Passage_CheckBox.setSelected(false);
             }
         }
     }

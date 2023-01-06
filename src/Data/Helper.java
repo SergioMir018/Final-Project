@@ -1,8 +1,9 @@
 package Data;
 
 import Data.Flight.Flight;
-import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
+import Data.Person.User;
+
 import java.util.Scanner;
 
 public class Helper {

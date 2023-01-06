@@ -3,6 +3,7 @@ package Data.Flight;
 import java.io.Serializable;
 
 public abstract class Flight implements Serializable {
+    protected final String flightName;
     protected String destiny_City;
     protected float travel_km;
     protected final String assigned_plane;
@@ -15,8 +16,9 @@ public abstract class Flight implements Serializable {
     protected String terminal_Name;
     protected float flightRevenue;
 
-    public Flight(String destiny_city, float travel_km, String assigned_plane,String terminal_Name, String date, String hour,
+    public Flight(String flightName, String destiny_city, float travel_km, String assigned_plane,String terminal_Name, String date, String hour,
                   String minute) {
+        this.flightName = flightName;
         this.destiny_City = destiny_city;
         this.travel_km = travel_km;
         this.assigned_plane = assigned_plane;
@@ -24,6 +26,10 @@ public abstract class Flight implements Serializable {
         this.date = date;
         this.hour = hour;
         this.minute =minute;
+    }
+
+    public String getFlightName() {
+        return flightName;
     }
 
     public float getTravel_km(){
@@ -44,6 +50,9 @@ public abstract class Flight implements Serializable {
 
     public String getMinute() {
         return minute;
+    }
+    public String getHour() {
+        return hour;
     }
 
     public int getFirstClassTickets() {

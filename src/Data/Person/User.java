@@ -1,4 +1,4 @@
-package Data;
+package Data.Person;
 
 import javax.naming.Name;
 import java.util.Arrays;
