@@ -8,12 +8,15 @@ import GUI.GUI;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class AirportControl implements Serializable {
 
     static ArrayList<Terminal> terminals = new ArrayList<>();
+    static ArrayList<Ticket> tickets = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>();
     static GUI gui = new GUI();
 
@@ -91,11 +94,10 @@ public class AirportControl implements Serializable {
     }
 
     public void newNationalFlight(String flight_Name, String national_City, float travel_km, String assigned_Plane, String terminal,
-        String date, String hour, String minute) {
+                                  LocalDateTime date) {
 
-        if (checkFlights(flight_Name, date, minute, hour)) {
-            National_Flight national_flight = new National_Flight(flight_Name, national_City, travel_km, assigned_Plane, terminal, date,
-                hour, minute);
+        if (checkFlights(flight_Name, date)) {
+            National_Flight national_flight = new National_Flight(flight_Name, national_City, travel_km, assigned_Plane, terminal, date);
 
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
@@ -108,20 +110,19 @@ public class AirportControl implements Serializable {
     }
 
     public void newInternationalFlight(String flight_Name, String international_City, float travel_km, String assigned_Plane, String terminal,
-        String date, String hour, String minute, String destined_Country) {
+                                       LocalDateTime date, String destined_Country) {
 
-        if (checkFlights(flight_Name, date, minute, hour)) {
+        if (checkFlights(flight_Name, date)) {
             International_Flight international_flight = new International_Flight(flight_Name, international_City, travel_km,
-                    assigned_Plane, terminal, date, hour, minute, destined_Country);
+                    assigned_Plane, terminal, date, destined_Country);
             Terminal.terminal_Flights.add(international_flight);
         }
     }
-    public boolean checkFlights(String flight_Name, String date, String minute, String hour) {
+    public boolean checkFlights(String flight_Name, LocalDateTime date) {
         boolean cont =true;
 
         for (Flight flight: Terminal.terminal_Flights) {
-            if (flight.getDate().equals(date)
-                    && flight.getMinute().equals(minute) && flight.getHour().equals(hour)) {
+            if (flight.getDate().equals(date)) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nEste hora ya esta confirmada para " +
                     "otro vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 cont = false;

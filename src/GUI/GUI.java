@@ -11,7 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GUI {
     private JButton save_Button;
@@ -174,6 +179,21 @@ public class GUI {
     private JComboBox passage_Year_ComboBox;
     private JPanel passage_Flight_Panel;
     private JButton add_Charter_Flight_Button;
+    private JButton change_AirlineTicket_Price_Button;
+    private JComboBox airline_Price_ComboBox;
+    private JPanel change_Tikect_Price_Panel;
+    private JTextField firstClass_price_Text;
+    private JPanel firstClass_Price_Panel;
+    private JTextField secondClass_price_Text;
+    private JTextField thirdClass_price_Text;
+    private JPanel type_Ticket_Panel;
+    private JCheckBox allClass_Price_CheckBox;
+    private JCheckBox firstClass_Price_CheckBox;
+    private JCheckBox secondClass_Price_CheckBox;
+    private JCheckBox thirdClass_PriceCheckBox;
+    private JButton next_Type_Tickec_Button;
+    private JButton change_Ticket_Priece_Button;
+    private JButton change_AirporrtTicket_Price;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -236,6 +256,8 @@ public class GUI {
         plane_Rute_Panel.setVisible(false);
         type_Passage_Panel.setVisible(false);
         sell_Passage_Panel.setVisible(false);
+        change_Tikect_Price_Panel.setVisible(false);
+        type_Ticket_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -258,6 +280,8 @@ public class GUI {
         admin_Options_Button.addActionListener(new OptionsActionListener());
         options_Admin_Button.addActionListener(new AdminActionListener());
         adminBack_Options_Button.addActionListener(new AdminBackOptionsButtonActionListener());
+        change_AirlineTicket_Price_Button.addActionListener(new ChangeAirlineTicketPriceButtonActionListener());
+        next_Type_Tickec_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
 
         new_Terminal_Button.addActionListener(new NewTerminalActionListener());
         add_Terminal_Button.addActionListener(new AddTerminalActionListener());
@@ -464,8 +488,7 @@ public class GUI {
         public void actionPerformed(ActionEvent e) {
             String[] days = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19",
                     "20","21","22","23","24","25","26","27","28","29","30","31"};
-            String[] months = {"","enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre",
-                    "octubre","noviembre","diciembre"};
+            String[] months = {"","1","2","3","4","5","6","7","8","9", "10","11","12"};
             String[] years = {"","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
             String[] hours = {"","00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17",
                     "18","19","20","21","22","23","24"};
@@ -545,6 +568,7 @@ public class GUI {
             adminBack_Options_Button.setVisible(false);
             admin_Options_Panel.setVisible(true);
             new_Terminal_Panel.setVisible(false);
+            change_Tikect_Price_Panel.setVisible(false);
         }
     }
 
@@ -877,17 +901,48 @@ public class GUI {
         }
     }
 
+    public class ChangeAirlineTicketPriceButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            type_Ticket_Panel.setVisible(true);
+            JOptionPane.showOptionDialog(null, type_Ticket_Panel,"Precio a configurar",
+                    JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class NextTypeTicketPriceButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (firstClass_Price_CheckBox.isSelected() || secondClass_Price_CheckBox.isSelected()
+                    || thirdClass_PriceCheckBox.isSelected() || allClass_Price_CheckBox.isSelected()) {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Ticket_Panel));
+                pane.dispose();
+
+                admin_Options_Panel.setVisible(false);
+                option_Panel.setVisible(true);
+                change_Tikect_Price_Panel.setVisible(true);
+                adminBack_Options_Button.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null,"ERROR!", "Elija una de las opciones para " +
+                        "continuar!",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
     public class AddNationalActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String flight_Name;
             String national_City;
             float travel_km = 0;
-            StringBuffer date = new StringBuffer("");
+            int day;
+            int month;
+            int year;
+            int hour;
+            int minute;
+            LocalDateTime date;
             String assigned_Plane;
             String terminal;
-            String hour;
-            String minutes;
 
                 if (national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el avion" +
@@ -917,15 +972,18 @@ public class GUI {
                         national_City = national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex());
                         travel_km = Float.parseFloat(national_Km_Label.getText());
                         assigned_Plane = national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex());
-                        date.append(national_Day_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()));
-                        date.append(national_Month_ComboBox.getItemAt(national_Month_ComboBox.getSelectedIndex()));
-                        date.append(national_Year_ComboBox.getItemAt(national_Year_ComboBox.getSelectedIndex()));
+
+                        day = Integer.parseInt(national_Day_ComboBox.getItemAt(national_Day_ComboBox.getSelectedIndex()));
+                        month = Integer.parseInt(national_Month_ComboBox.getItemAt(national_Month_ComboBox.getSelectedIndex()));
+                        year = Integer.parseInt(national_Year_ComboBox.getItemAt(national_Year_ComboBox.getSelectedIndex()));
+                        hour = Integer.parseInt(national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex()));
+                        minute = Integer.parseInt(national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex()));
+                        date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
+
                         terminal = national_Terminal_ComboBox.getItemAt(national_Terminal_ComboBox.getSelectedIndex());
-                        hour = national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex());
-                        minutes = national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex());
 
                         airportControl.newNationalFlight(flight_Name, national_City, travel_km, assigned_Plane, terminal,
-                                String.valueOf(date), hour, minutes);
+                                date);
                 } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1024,9 +1082,12 @@ public class GUI {
             float travel_km = 0;
             String terminal;
             String assigned_Plane;
-            StringBuffer date = new StringBuffer("");
-            String hour;
-            String minutes;
+            int day;
+            int month;
+            int year;
+            int hour;
+            int minute;
+            LocalDateTime date;
 
             if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("") ||
                     international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("") ||
@@ -1059,15 +1120,18 @@ public class GUI {
                     travel_km = Float.parseFloat(international_Km_Label.getText());
                     assigned_Plane = international_Assigned_Plane_ComboBox.getItemAt(international_Assigned_Plane_ComboBox.getSelectedIndex());
                     terminal = international_Terminal_ComboBox.getItemAt(international_Terminal_ComboBox.getSelectedIndex());
-                    date.append(international_Day_ComboBox.getItemAt(international_Day_ComboBox.getSelectedIndex()));
-                    date.append(international_Month_ComboBox.getItemAt(international_Month_ComboBox.getSelectedIndex()));
-                    date.append(international_Year_ComboBox.getItemAt(international_Year_ComboBox.getSelectedIndex()));
-                    hour = international_Hour_ComboBox.getItemAt(international_Hour_ComboBox.getSelectedIndex());
-                    minutes = international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex());
+
+                    day = Integer.parseInt(international_Day_ComboBox.getItemAt(international_Day_ComboBox.getSelectedIndex()));
+                    month = Integer.parseInt(international_Month_ComboBox.getItemAt(international_Month_ComboBox.getSelectedIndex()));
+                    year = Integer.parseInt(international_Year_ComboBox.getItemAt(international_Year_ComboBox.getSelectedIndex()));
+                    hour = Integer.parseInt(international_Hour_ComboBox.getItemAt(international_Hour_ComboBox.getSelectedIndex()));
+                    minute = Integer.parseInt(international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex()));
+                    date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
+
                     destined_Country = international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex());
 
                     airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, assigned_Plane, terminal,
-                            String.valueOf(date), hour, minutes, destined_Country);
+                            date, destined_Country);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

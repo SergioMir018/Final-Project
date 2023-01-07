@@ -1,29 +1,12 @@
 package Data.Flight;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class National_Flight extends Flight{
 
-    private float nationalFlightCost;
-    private float nationalKmCost;
-
-    public National_Flight(String flight_name, String destiny_city, float travel_km, String assigned_plane, String terminal_Name, String date,
-                           String hour, String minute){
-        super(flight_name, destiny_city, travel_km, assigned_plane, terminal_Name, date, hour, minute);
-    }
-
-    public void setNationalFlightCost(float nationalFlightCost){
-        this.nationalFlightCost = nationalFlightCost;
-    }
-
-    public float getNationalFlightCost(){
-        return nationalFlightCost;
-    }
-
-    public float getNationalKmCost() {
-        return nationalKmCost;
-    }
-
-    public void setNationalKmCost(float nationalKmCost) {
-        this.nationalKmCost = nationalKmCost;
+    public National_Flight(String flight_name, String destiny_city, float travel_km, String assigned_plane, String terminal_Name, LocalDateTime date){
+        super(flight_name, destiny_city, travel_km, assigned_plane, terminal_Name, date);
     }
 
     @Override
@@ -41,8 +24,6 @@ public class National_Flight extends Flight{
                 "\nassigned_plane: " + assigned_plane +
                 "\nterminal_name: " + terminal_Name +
                 "\ndate: " + date +
-                "\nhour: " + hour +
-                "\nminute: " + minute +
                 "\nfirstClass: " + firstClassTickets +
                 "\nsecondClass: " + secondClassTickets +
                 "\nthirdClass: " + thirdClassTickets;
