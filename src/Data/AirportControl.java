@@ -1,5 +1,6 @@
 package Data;
 
+import Data.Flight.Charter_Flight;
 import Data.Flight.Flight;
 import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
@@ -115,9 +116,33 @@ public class AirportControl implements Serializable {
         if (checkFlights(flight_Name, date)) {
             International_Flight international_flight = new International_Flight(flight_Name, international_City, travel_km,
                     assigned_Plane, terminal, date, destined_Country);
+
+            for (Plane plane : Plane.planes) {
+                if (plane.getPlate().equals(assigned_Plane)) {
+                    international_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                }
+            }
+
             Terminal.terminal_Flights.add(international_flight);
         }
     }
+
+    public void newCharterFlight(String flight_Name, String international_City, float travel_km, String assigned_Plane, String terminal,
+                                 LocalDateTime date, String destined_Country) {
+        if (checkFlights(flight_Name, date)) {
+            Charter_Flight charter_flight = new Charter_Flight(flight_Name, international_City, travel_km,
+                    assigned_Plane, terminal, date, destined_Country);
+
+            for (Plane plane : Plane.planes) {
+                if (plane.getPlate().equals(assigned_Plane)) {
+                    charter_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                }
+            }
+
+            Terminal.terminal_Flights.add(charter_flight);
+        }
+    }
+
     public boolean checkFlights(String flight_Name, LocalDateTime date) {
         boolean cont =true;
 

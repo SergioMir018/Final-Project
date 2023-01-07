@@ -11,12 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class GUI {
     private JButton save_Button;
@@ -24,9 +21,7 @@ public class GUI {
     private JPanel Main_Panel;
     private JLabel travel_Km_Label;
     private JLabel destined_City_Label;
-    private JTextField assigned_National_Plane_Text;
     private JPanel new_National_Flight_Panel;
-    private JTextField nationalkm_Text;
     private JPanel menu_Panel;
     private JButton menu_Button;
     private JPanel option_Panel;
@@ -38,7 +33,7 @@ public class GUI {
     private JPanel new_International_Flight_Panel;
     private JComboBox<String> international_Country_ComboBox;
     private JLabel destinedCountryLabel;
-    private JComboBox destined_Region_ComboBox;
+    private JComboBox<String> destined_Region_ComboBox;
     private JPanel international_Country_Panel;
     private JButton next_InternationalCountry_Button;
     private JComboBox<String> international_City_ComboBox;
@@ -100,23 +95,23 @@ public class GUI {
     private JLabel load_Label;
     private JPanel new_Charter_Flight_Panel;
     private JCheckBox charter_Plane_CheckBox;
-    private JComboBox charter_Country_ComboBox;
-    private JComboBox charter_City_ComboBox;
-    private JComboBox international_Airline_ComboBox;
+    private JComboBox<String> charter_Country_ComboBox;
+    private JComboBox<String> charter_City_ComboBox;
+    private JComboBox<String> international_Airline_ComboBox;
     private JCheckBox charter_Flight_CheckBox;
     private JComboBox<String> charter_Region_ComboBox;
     private JComboBox<String> charter_Terminal_ComboBox;
-    private JComboBox charter_Day_ComboBox;
-    private JComboBox charter_Month_ComboBox;
-    private JComboBox charter_Year_ComboBox;
-    private JComboBox charter_Hour_ComboBox;
-    private JComboBox charter_Minute_ComboBox;
+    private JComboBox<String> charter_Day_ComboBox;
+    private JComboBox<String> charter_Month_ComboBox;
+    private JComboBox<String> charter_Year_ComboBox;
+    private JComboBox<String> charter_Hour_ComboBox;
+    private JComboBox<String> charter_Minute_ComboBox;
     private JComboBox<String> charter_Assigned_Plane_ComboBox;
-    private JComboBox charter_Airline_ComboBox;
+    private JComboBox<String> charter_Airline_ComboBox;
     private JButton admin_Options_Button;
     private JButton new_Arrival_Button;
     private JButton new_FlightOut_Button;
-    private JComboBox national_Airline_ComboBox;
+    private JComboBox<String> national_Airline_ComboBox;
     private JComboBox<String> international_Region_ComboBox;
     private JCheckBox national_Terminal_CheckBox;
     private JCheckBox international_Terminal_CheckBox;
@@ -152,7 +147,7 @@ public class GUI {
     private JPanel national_Assigned_Plane_Panel;
     private JPanel national_Airline_Panel;
     private JPanel charter_Airline_Panel;
-    private JComboBox plane_Rute_Destiny_ComboBox;
+    private JComboBox<String> plane_Rute_Destiny_ComboBox;
     private JButton confirm_PlaneAirline_Button;
     private JPanel plane_Rute_Panel;
     private JButton sell_Flight_Passage_Button;
@@ -165,23 +160,23 @@ public class GUI {
     private JTextField national_Flight_Name_Text;
     private JTextField international_Flight_Name_Text;
     private JTextField charter_Flight_Name_Text;
-    private JComboBox passenger_Destiny_ComboBox;
-    private JComboBox passenger_Airline_ComboBox;
+    private JComboBox<String> passenger_Destiny_ComboBox;
+    private JComboBox<String> passenger_Airline_ComboBox;
     private JButton passenger_Destiny_NextButton;
-    private JComboBox passage_Day_ComboBox;
-    private JComboBox passage_Month_ComboBox;
-    private JComboBox passage_Class_ComboBox;
-    private JButton confirmarFechaButton;
+    private JComboBox<String> passage_Day_ComboBox;
+    private JComboBox<String> passage_Month_ComboBox;
+    private JComboBox<String> passage_Class_ComboBox;
+    private JButton confirm_Passage_Date_Button;
     private JTextField passenger_Name_Text;
-    private JComboBox passage_Flight_ComboBox;
+    private JComboBox<String> passage_Flight_ComboBox;
     private JTextField passenger_LastName_Text;
     private JPanel passenger_Airline_Panel;
-    private JComboBox passage_Year_ComboBox;
+    private JComboBox<String> passage_Year_ComboBox;
     private JPanel passage_Flight_Panel;
     private JButton add_Charter_Flight_Button;
     private JButton change_AirlineTicket_Price_Button;
-    private JComboBox airline_Price_ComboBox;
-    private JPanel change_Tikect_Price_Panel;
+    private JComboBox<String> airline_Price_ComboBox;
+    private JPanel change_Ticket_Price_Panel;
     private JTextField firstClass_price_Text;
     private JPanel firstClass_Price_Panel;
     private JTextField secondClass_price_Text;
@@ -191,9 +186,9 @@ public class GUI {
     private JCheckBox firstClass_Price_CheckBox;
     private JCheckBox secondClass_Price_CheckBox;
     private JCheckBox thirdClass_PriceCheckBox;
-    private JButton next_Type_Tickec_Button;
-    private JButton change_Ticket_Priece_Button;
-    private JButton change_AirporrtTicket_Price;
+    private JButton next_Type_Ticket_Button;
+    private JButton change_Ticket_Price_Button;
+    private JButton change_AirportTicket_Price;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -256,7 +251,7 @@ public class GUI {
         plane_Rute_Panel.setVisible(false);
         type_Passage_Panel.setVisible(false);
         sell_Passage_Panel.setVisible(false);
-        change_Tikect_Price_Panel.setVisible(false);
+        change_Ticket_Price_Panel.setVisible(false);
         type_Ticket_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -281,7 +276,7 @@ public class GUI {
         options_Admin_Button.addActionListener(new AdminActionListener());
         adminBack_Options_Button.addActionListener(new AdminBackOptionsButtonActionListener());
         change_AirlineTicket_Price_Button.addActionListener(new ChangeAirlineTicketPriceButtonActionListener());
-        next_Type_Tickec_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
+        next_Type_Ticket_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
 
         new_Terminal_Button.addActionListener(new NewTerminalActionListener());
         add_Terminal_Button.addActionListener(new AddTerminalActionListener());
@@ -301,6 +296,7 @@ public class GUI {
         charter_Flight_CheckBox.addActionListener(new CharterCheckBoxActionListener());
         add_National_Flight_Button.addActionListener(new AddNationalActionListener());
         add_International_Flight_Button.addActionListener(new AddInternationalActionListener());
+        add_Charter_Flight_Button.addActionListener(new AddCharterActionListener());
         national_ConfirmAirline_Button.addActionListener(new ConfirmNationalAirlineButtonActionListener());
         international_ConfirmAirline_Button.addActionListener(new ConfirmInternationalAirlineButtonActionListener());
         charter_ConfirmAirline_Button.addActionListener(new ConfirmCharterAirlineButtonActionListener());
@@ -320,7 +316,7 @@ public class GUI {
         JFrame frame = new JFrame("Control Aeropuerto");
         frame.setContentPane(new GUI().Main_Panel);
         frame.pack();
-        frame.setMinimumSize(new Dimension(580, 400));
+        frame.setMinimumSize(new Dimension(580, 450));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
@@ -421,8 +417,20 @@ public class GUI {
             charter_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             plane_Airline_ComboBox.setSelectedItem("");
             plane_Rute_Panel.setVisible(false);
-            plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(empty));
-
+            plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
+            national_Flight_Name_Text.setText("");
+            international_Flight_Name_Text.setText("");
+            charter_Flight_Name_Text.setText("");
+            sell_Passage_Panel.setVisible(false);
+            passenger_Destiny_ComboBox.setSelectedItem("");
+            passenger_Name_Text.setText("");
+            passenger_LastName_Text.setText("");
+            passenger_Airline_ComboBox.setSelectedItem("");
+            passenger_Airline_Panel.setVisible(false);
+            passage_Flight_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
+            national_Passage_CheckBox.setSelected(false);
+            international_Passage_CheckBox.setSelected(false);
+            charter_Passage_CheckBox.setSelected(false);
         }
     }
 
@@ -459,16 +467,6 @@ public class GUI {
                 AirportControl.setTerminals((ArrayList<Terminal>) is.readObject());
                 Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
 
-                for (Terminal terminal : AirportControl.getTerminals()) {
-                    if (terminal.getTerminal_Number() == 1) {
-                        national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
-                    } else if (terminal.getTerminal_Number() == 2) {
-                        charter_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
-                    } else if (terminal.getTerminal_Number() == 3) {
-                        international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
-                    }
-                }
-
                 load_Panel.setVisible(true);
                 save_Panel.setVisible(false);
                 save_Error_Panel.setVisible(false);
@@ -496,14 +494,19 @@ public class GUI {
 
             national_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
             international_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
+            charter_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
             national_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
             international_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
+            charter_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
             national_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
             international_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
+            charter_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
             national_Hour_ComboBox.setModel(new DefaultComboBoxModel<>(hours));
             international_Hour_ComboBox.setModel(new DefaultComboBoxModel<>(hours));
+            charter_Hour_ComboBox.setModel(new DefaultComboBoxModel<>(hours));
             national_Minutes_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
             international_Minute_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
+            charter_Minute_ComboBox.setModel(new DefaultComboBoxModel<>(minutes));
 
             type_Flight_Panel.setVisible(true);
 
@@ -568,7 +571,7 @@ public class GUI {
             adminBack_Options_Button.setVisible(false);
             admin_Options_Panel.setVisible(true);
             new_Terminal_Panel.setVisible(false);
-            change_Tikect_Price_Panel.setVisible(false);
+            change_Ticket_Price_Panel.setVisible(false);
         }
     }
 
@@ -896,7 +899,7 @@ public class GUI {
             national_Terminal_ComboBox.addItem(terminal_Name);
         } else if (isCharter) {
             charter_Terminal_ComboBox.addItem(terminal_Name);
-        } else if (!isNational && !isCharter) {
+        } else {
             international_Terminal_ComboBox.addItem(terminal_Name);
         }
     }
@@ -920,7 +923,7 @@ public class GUI {
 
                 admin_Options_Panel.setVisible(false);
                 option_Panel.setVisible(true);
-                change_Tikect_Price_Panel.setVisible(true);
+                change_Ticket_Price_Panel.setVisible(true);
                 adminBack_Options_Button.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null,"ERROR!", "Elija una de las opciones para " +
@@ -1033,6 +1036,72 @@ public class GUI {
             charter_ConfirmAirline_Button.setVisible(false);
             setAirlinePlanes();
             charter_Assigned_Plane_Panel.setVisible(true);
+        }
+    }
+
+    public class AddCharterActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String flight_Name;
+            String destined_Country;
+            String destined_Charter_City;
+            float travel_km = 0;
+            String terminal;
+            String assigned_Plane;
+            int day;
+            int month;
+            int year;
+            int hour;
+            int minute;
+            LocalDateTime date;
+
+            if (charter_Region_ComboBox.getItemAt(charter_Region_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de introducir los " +
+                        "datos sobre el destino del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (charter_Km_Label.getText().equals("Label")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha confirmado el destino del vuelo",
+                        "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (charter_Terminal_ComboBox.getItemAt(charter_Terminal_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido la terminal asignada " +
+                        "al vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (charter_Assigned_Plane_ComboBox.getItemAt(charter_Assigned_Plane_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el avion asignado al" +
+                        " vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (charter_Day_ComboBox.getItemAt(charter_Day_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_Month_ComboBox.getItemAt(charter_Month_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_Year_ComboBox.getItemAt(charter_Year_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_Hour_ComboBox.getItemAt(charter_Hour_ComboBox.getSelectedIndex()).equals("") ||
+                    charter_Minute_ComboBox.getItemAt(charter_Minute_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha intoducido la fecha del" +
+                        " vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else if (charter_Flight_Name_Text.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido el nombre" +
+                        " del vuelo", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    flight_Name = charter_Flight_Name_Text.getText();
+                    destined_Charter_City = (String) charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex());
+                    travel_km = Float.parseFloat(charter_Km_Label.getText());
+                    assigned_Plane = charter_Assigned_Plane_ComboBox.getItemAt(charter_Assigned_Plane_ComboBox.getSelectedIndex());
+                    terminal = charter_Terminal_ComboBox.getItemAt(charter_Terminal_ComboBox.getSelectedIndex());
+
+                    day = Integer.parseInt((String) charter_Day_ComboBox.getItemAt(charter_Day_ComboBox.getSelectedIndex()));
+                    month = Integer.parseInt((String) charter_Month_ComboBox.getItemAt(charter_Month_ComboBox.getSelectedIndex()));
+                    year = Integer.parseInt((String) charter_Year_ComboBox.getItemAt(charter_Year_ComboBox.getSelectedIndex()));
+                    hour = Integer.parseInt((String) charter_Hour_ComboBox.getItemAt(charter_Hour_ComboBox.getSelectedIndex()));
+                    minute = Integer.parseInt((String) charter_Minute_ComboBox.getItemAt(charter_Minute_ComboBox.getSelectedIndex()));
+                    date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
+
+                    destined_Country = charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex());
+
+                    airportControl.newCharterFlight(flight_Name, destined_Charter_City, travel_km, assigned_Plane, terminal,
+                            date, destined_Country);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
@@ -1523,17 +1592,17 @@ public class GUI {
         //setting national airlines
         if (national_Flight_CheckBox.isSelected()) {
             if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Baracoa")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(baracoaAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(baracoaAirlines));
             } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Cayo Coco")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(cayoCocoAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(cayoCocoAirlines));
             } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Guantánamo")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(guantanamoAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(guantanamoAirlines));
             } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Holguín")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(holguinAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(holguinAirlines));
             } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Nueva Gerona")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(nuevaGeronaAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(nuevaGeronaAirlines));
             } else if (national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex()).equals("Santiago de Cuba")) {
-                national_Airline_ComboBox.setModel(new DefaultComboBoxModel(santiagoDesCubaAirlines));
+                national_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(santiagoDesCubaAirlines));
             }
         }
 
@@ -1541,81 +1610,81 @@ public class GUI {
         //setting international airlines
         if (international_Flight_CheckBox.isSelected()) {
             if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Montreal")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(montrealAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(montrealAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Toronto")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(torontoAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(torontoAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Fort Lauderdale")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(fortLauderdaleAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(fortLauderdaleAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Houston")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(houstonAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(houstonAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Miami")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(miamiAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(miamiAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Newark")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(newarkAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(newarkAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Nueva York")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(newYorkAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(newYorkAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Tampa")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(tampaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(tampaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Cancún")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(cancunAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(cancunAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Ciudad de México")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(ciudadMexicoAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(ciudadMexicoAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Mérida")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(meridaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(meridaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Monterrey")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(monterreyAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(monterreyAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Nasáu")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(nasauAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(nasauAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Puerto Príncipe")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(haitiAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(haitiAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Gran Caimán")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(caimanAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(caimanAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Kingston")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(kingstonAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(kingstonAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Montego Bay")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(montegoBayAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(montegoBayAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Managua")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(managuaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(managuaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Ciudad de Panamá")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(panamaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(panamaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Punta Cana")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(puntaCanaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(puntaCanaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Santo Domingo")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(santoDomingoAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(santoDomingoAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Puerto España")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(puertoEspanaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(puertoEspanaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Buenos Aires")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(buenosAiresAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(buenosAiresAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Bogotá")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(bogotaleAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(bogotaleAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Medellín")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(medellinAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(medellinAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Georgetown")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(georgetownAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(georgetownAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Paramaribo")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(paramariboAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(paramariboAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Caracas")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(caracasAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(caracasAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Las Piedras")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(lasPiedrasAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(lasPiedrasAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Fráncfort")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(francfortAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(francfortAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Madrid")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(madridAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(madridAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("París")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(parisAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(parisAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Milán")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(milanAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(milanAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Roma")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(romaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(romaAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Moscú")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(moscuAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(moscuAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Zúrich")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(zurichAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(zurichAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Estambul")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(estambulAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(estambulAirlines));
             } else if (international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("Luanda")) {
-                international_Airline_ComboBox.setModel(new DefaultComboBoxModel(luandaAirlines));
+                international_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(luandaAirlines));
             }
         }
 
@@ -1623,11 +1692,11 @@ public class GUI {
         //setting charter airlines
         if (charter_Flight_CheckBox.isSelected()) {
             if (charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex()).equals("Pointe-à-Pitre")) {
-                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel(guadalupeCharterAirlines));
+                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(guadalupeCharterAirlines));
             } else if (charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex()).equals("Miami")) {
-                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel(miamiCharterAirlines));
+                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(miamiCharterAirlines));
             }else if (charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex()).equals("Tampa")) {
-                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel(tampaCharterAirlines));
+                charter_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(tampaCharterAirlines));
             }
         }
 
@@ -1650,9 +1719,9 @@ public class GUI {
         String[] Guadalupe = {"", "Pointe-à-Pitre"};
 
         if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
-            charter_City_ComboBox.setModel(new DefaultComboBoxModel(EEUU));
+            charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
         } else if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Guadalupe")) {
-            charter_City_ComboBox.setModel(new DefaultComboBoxModel(Guadalupe));
+            charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guadalupe));
         }
     }
 
@@ -1711,73 +1780,56 @@ public class GUI {
 
         if (national_Plane_CheckBox.isSelected()) {
             switch (plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex())) {
-                case "Aerogaviota" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aerogaviota));
-                case "Cubana de Aviación" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(cubanaAviacion));
+                case "Aerogaviota" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aerogaviota));
+                case "Cubana de Aviación" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(cubanaAviacion));
             }
         } else if (international_Plane_CheckBox.isSelected()) {
             switch (plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex())) {
-                case "Aerogaviota" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aerogaviotaInternational));
-                case "Cubana de Aviación" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(cubanaAviacionInternational));
-                case "Air Transat" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airTransat));
-                case "Air Canada Rouge" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airCanadaRogue));
-                case "JetBlue Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(jetBlueAirways));
-                case "Southwest Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(southWestAirlines));
-                case "United Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(unitedAirlines));
-                case "United Express" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(unitedExpress));
-                case "American Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(americanAirlines));
-                case "Delta Air Lines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(deltaAirAirlines));
-                case "Aeromar" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aeromar));
-                case "Viva Aerobus" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(vivaAerobus));
-                case "Aeroméxico" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aeromexico));
-                case "Magnicharters" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(magnicharters));
-                case "Bahamasair" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(bahamasair));
-                case "Sunrise Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(sunriseAirways));
-                case "Cayman Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(caymanAirways));
-                case "InterCaribbean Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(intercaribbeanAirways));
-                case "Aruba Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(arubaAirlines));
-                case "Conviasa" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(conviasa));
-                case "Copa Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(copaAirlines));
-                case "Wingo" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(wingo));
-                case "Aerolíneas Argentinas" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aerolineasArgentinas));
-                case "Air Century" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airCentury));
-                case "Caribbean Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(caribbeanAirlines));
-                case "Fly All Ways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(flyAllWays));
-                case "Condor" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(condor));
-                case "Air Europa" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airEuropa));
-                case "Iberia" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(iberia));
-                case "Iberojet" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(iberojet));
-                case "World2fly" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(world2fly));
-                case "Air France" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airFrance));
-                case "Neos" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(neos));
-                case "Aeroflot" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(aeroflot));
-                case "Edelweiss Air" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(edelweissAir));
-                case "Turkish Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(turkishAirlines));
-                case "TAAG Angola Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(taagAngolaAirlines));
+                case "Aerogaviota" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aerogaviotaInternational));
+                case "Cubana de Aviación" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(cubanaAviacionInternational));
+                case "Air Transat" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airTransat));
+                case "Air Canada Rouge" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airCanadaRogue));
+                case "JetBlue Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(jetBlueAirways));
+                case "Southwest Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(southWestAirlines));
+                case "United Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(unitedAirlines));
+                case "United Express" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(unitedExpress));
+                case "American Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(americanAirlines));
+                case "Delta Air Lines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(deltaAirAirlines));
+                case "Aeromar" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aeromar));
+                case "Viva Aerobus" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(vivaAerobus));
+                case "Aeroméxico" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aeromexico));
+                case "Magnicharters" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(magnicharters));
+                case "Bahamasair" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(bahamasair));
+                case "Sunrise Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(sunriseAirways));
+                case "Cayman Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(caymanAirways));
+                case "InterCaribbean Airways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(intercaribbeanAirways));
+                case "Aruba Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(arubaAirlines));
+                case "Conviasa" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(conviasa));
+                case "Copa Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(copaAirlines));
+                case "Wingo" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(wingo));
+                case "Aerolíneas Argentinas" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aerolineasArgentinas));
+                case "Air Century" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airCentury));
+                case "Caribbean Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(caribbeanAirlines));
+                case "Fly All Ways" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(flyAllWays));
+                case "Condor" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(condor));
+                case "Air Europa" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airEuropa));
+                case "Iberia" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(iberia));
+                case "Iberojet" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(iberojet));
+                case "World2fly" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(world2fly));
+                case "Air France" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airFrance));
+                case "Neos" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(neos));
+                case "Aeroflot" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(aeroflot));
+                case "Edelweiss Air" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(edelweissAir));
+                case "Turkish Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(turkishAirlines));
+                case "TAAG Angola Airlines" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(taagAngolaAirlines));
             }
         } else if (charter_Plane_CheckBox.isSelected()) {
             switch (plane_Airline_ComboBox.getItemAt(plane_Airline_ComboBox.getSelectedIndex())) {
-                case "Havana Air" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(havanaAir));
-                case "Air France" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel(airFranceCharter));
+                case "Havana Air" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(havanaAir));
+                case "Air France" -> plane_Rute_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(airFranceCharter));
             }
         }
     }
-
-    /*public class AddCharterFlightButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String flight_Name;
-            String destined_Country;
-            String destined_International_City;
-            float travel_km = 0;
-            String terminal;
-            String assigned_Plane;
-            StringBuffer date = new StringBuffer("");
-            String hour;
-            String minutes;
-
-            if (charter_Flight_Name_Text.getText().equals(""))
-        }
-    } */
 
     public class SellPassageMenuButtonActionListener implements ActionListener {
         @Override

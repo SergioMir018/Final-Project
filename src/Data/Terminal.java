@@ -14,6 +14,7 @@ public class Terminal implements Serializable {
     boolean isCharter;
 
     static ArrayList<Flight> terminal_Flights = new ArrayList<Flight>();
+    static ArrayList<Flight> terminal_Arrivals = new ArrayList<>();
 
     public Terminal (String terminal_Name, int terminal_Number, boolean isNational, boolean isCharter){
         this.terminal_Name = terminal_Name;
