@@ -8,21 +8,26 @@ public abstract class Flight implements Serializable {
     protected final String flightName;
     protected String destiny_City;
     protected float travel_km;
+    protected String flightAirline;
     protected final String assigned_plane;
     protected LocalDateTime date;
+    protected LocalDate partialDate;
     protected int firstClassTickets;
     protected int secondClassTickets;
     protected int thirdClassTickets;
     protected String terminal_Name;
     protected float flightRevenue;
 
-    public Flight(String flightName, String destiny_city, float travel_km, String assigned_plane,String terminal_Name, LocalDateTime date) {
+    public Flight(String flightName, String destiny_city, float travel_km, String flightAirline, String assigned_plane,
+                  String terminal_Name, LocalDateTime date, LocalDate partialDate) {
         this.flightName = flightName;
         this.destiny_City = destiny_city;
         this.travel_km = travel_km;
+        this.flightAirline = flightAirline;
         this.assigned_plane = assigned_plane;
         this.terminal_Name = terminal_Name;
         this.date = date;
+        this.partialDate = partialDate;
     }
 
     public String getFlightName() {
@@ -31,6 +36,10 @@ public abstract class Flight implements Serializable {
 
     public float getTravel_km(){
         return travel_km;
+    }
+
+    public String getFlightAirline() {
+        return flightAirline;
     }
 
     public String getAssigned_plane(){
@@ -43,6 +52,10 @@ public abstract class Flight implements Serializable {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public LocalDate getPartialDate() {
+        return partialDate;
     }
 
     public int getFirstClassTickets() {

@@ -94,11 +94,12 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
-    public void newNationalFlight(String flight_Name, String national_City, float travel_km, String assigned_Plane, String terminal,
-                                  LocalDateTime date) {
+    public void newNationalFlight(String flight_Name, String national_City, float travel_km, String flightAirline,
+                                  String assigned_Plane, String terminal, LocalDateTime date, LocalDate partialDate) {
 
         if (checkFlights(flight_Name, date)) {
-            National_Flight national_flight = new National_Flight(flight_Name, national_City, travel_km, assigned_Plane, terminal, date);
+            National_Flight national_flight = new National_Flight(flight_Name, national_City, travel_km, flightAirline,
+                    assigned_Plane, terminal, date, partialDate);
 
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
@@ -110,12 +111,13 @@ public class AirportControl implements Serializable {
         }
     }
 
-    public void newInternationalFlight(String flight_Name, String international_City, float travel_km, String assigned_Plane, String terminal,
-                                       LocalDateTime date, String destined_Country) {
+    public void newInternationalFlight(String flight_Name, String international_City, float travel_km, String flightAirline,
+                                       String assigned_Plane, String terminal, LocalDateTime date, LocalDate partialDate,
+                                       String destined_Country) {
 
         if (checkFlights(flight_Name, date)) {
             International_Flight international_flight = new International_Flight(flight_Name, international_City, travel_km,
-                    assigned_Plane, terminal, date, destined_Country);
+                    flightAirline, assigned_Plane, terminal, date, partialDate, destined_Country);
 
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
@@ -127,11 +129,11 @@ public class AirportControl implements Serializable {
         }
     }
 
-    public void newCharterFlight(String flight_Name, String international_City, float travel_km, String assigned_Plane, String terminal,
-                                 LocalDateTime date, String destined_Country) {
+    public void newCharterFlight(String flight_Name, String international_City, float travel_km, String flightAirline,
+                                 String assigned_Plane, String terminal, LocalDateTime date, LocalDate partialDate, String destined_Country) {
         if (checkFlights(flight_Name, date)) {
-            Charter_Flight charter_flight = new Charter_Flight(flight_Name, international_City, travel_km,
-                    assigned_Plane, terminal, date, destined_Country);
+            Charter_Flight charter_flight = new Charter_Flight(flight_Name, international_City, travel_km, flightAirline,
+                    assigned_Plane, terminal, date, partialDate, destined_Country);
 
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {

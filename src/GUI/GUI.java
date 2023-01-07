@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -162,7 +163,6 @@ public class GUI {
     private JTextField charter_Flight_Name_Text;
     private JComboBox<String> passenger_Destiny_ComboBox;
     private JComboBox<String> passenger_Airline_ComboBox;
-    private JButton passenger_Destiny_NextButton;
     private JComboBox<String> passage_Day_ComboBox;
     private JComboBox<String> passage_Month_ComboBox;
     private JComboBox<String> passage_Class_ComboBox;
@@ -189,9 +189,24 @@ public class GUI {
     private JButton next_Type_Ticket_Button;
     private JButton change_Ticket_Price_Button;
     private JButton change_AirportTicket_Price;
+    private JPanel passage_Country_Panel;
+    private JPanel passage_Destiny_Panel;
+    private JComboBox<String> passage_Country_ComboBox;
+    private JButton confirm_Passage_Country_Button;
+    private JButton passenger_Destiny_NextButton;
+    private JLabel passenger_Destiny_Label;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
+    String[] days = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19",
+            "20","21","22","23","24","25","26","27","28","29","30","31"};
+    String[] months = {"","1","2","3","4","5","6","7","8","9", "10","11","12"};
+    String[] years = {"","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
+    String[] hours = {"","00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17",
+            "18","19","20","21","22","23","24"};
+    String[] minutes = {"","00","05","10","15","20","25","30","35","40","45","50","55"};
+    String[] ticketClass = {"", "Primera Clase", "Clase Ejecutiva", "Clase Turista"};
+    String[] cubaCities = {"", "Baracoa", "Cayo Coco", "Guantánamo", "Holguín", "Nueva Gerona", "Santiago de Cuba"};
 
     public GUI() {
         national_Terminal_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
@@ -253,6 +268,13 @@ public class GUI {
         sell_Passage_Panel.setVisible(false);
         change_Ticket_Price_Panel.setVisible(false);
         type_Ticket_Panel.setVisible(false);
+        passenger_Airline_Panel.setVisible(false);
+        passage_Flight_Panel.setVisible(false);
+        passage_Country_Panel.setVisible(false);
+        passage_Destiny_Panel.setVisible(false);
+        confirm_Passage_Country_Button.setVisible(false);
+        confirm_Passage_Date_Button.setVisible(false);
+        passenger_Destiny_NextButton.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -310,6 +332,10 @@ public class GUI {
         charter_Plane_CheckBox.addActionListener(new CharterPlaneCheckBoxActionListener());
         add_New_Plane_Button.addActionListener(new AddNewPlaneActionListener());
         confirm_PlaneAirline_Button.addActionListener(new ConfirmPlaneAirlineButtonActionListener());
+
+        passenger_Destiny_NextButton.addActionListener(new PassengerDestinyNextButton());
+        confirm_Passage_Country_Button.addActionListener(new ConfirmPassageCountryButtonActionListener());
+        confirm_Passage_Date_Button.addActionListener(new ConfirmPassageDateButtonActionListener());
     }
 
     public void startGUI() {
@@ -431,6 +457,9 @@ public class GUI {
             national_Passage_CheckBox.setSelected(false);
             international_Passage_CheckBox.setSelected(false);
             charter_Passage_CheckBox.setSelected(false);
+            passage_Country_Panel.setVisible(false);
+            passage_Country_ComboBox.setModel(new DefaultComboBoxModel(empty));
+            passenger_Destiny_NextButton.setVisible(false);
         }
     }
 
@@ -484,14 +513,6 @@ public class GUI {
     public class NewFlightActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String[] days = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19",
-                    "20","21","22","23","24","25","26","27","28","29","30","31"};
-            String[] months = {"","1","2","3","4","5","6","7","8","9", "10","11","12"};
-            String[] years = {"","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
-            String[] hours = {"","00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17",
-                    "18","19","20","21","22","23","24"};
-            String[] minutes = {"","00","05","10","15","20","25","30","35","40","45","50","55"};
-
             national_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
             international_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
             charter_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
@@ -582,7 +603,6 @@ public class GUI {
                 JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Flight_Panel));
                 pane.dispose();
 
-                String[] cubaCities = {"", "Baracoa", "Cayo Coco", "Guantánamo", "Holguín", "Nueva Gerona", "Santiago de Cuba"};
                 national_City_ComboBox.setModel(new DefaultComboBoxModel<>(cubaCities));
 
                 menu_Panel.setVisible(false);
@@ -724,77 +744,108 @@ public class GUI {
         String[] Turquia = {"", "Estambul"};
         String[] Angola = {"", "Luanda"};
 
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Canadá")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Canada));
+        if (international_Flight_CheckBox.isSelected()){
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Canadá")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Canada));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("México")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Mexico));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Bahamas")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Bahamas));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Haití")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Haiti));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Islas Caimán")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Islas_Caiman));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Jamaica")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Jamaica));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Nicaragua")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Nicaragua));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Panamá")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Panama));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("República Dominicana")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Republica_Dominicana));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Trinidad y Tobago")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Trinidad_Tobago));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Argentina")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Argentina));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Colombia")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Colombia));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Guyana")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guyana));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Surinam")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Surinam));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Venezuela")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Venezuela));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Alemania")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Alemania));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("España")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Espana));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Francia")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Francia));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Italia")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Italia));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Rusia")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Rusia));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Suiza")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Suiza));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Turquía")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Turquia));
+            }
+            if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Angola")) {
+                international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Angola));
+            }
         }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("México")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Mexico));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Bahamas")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Bahamas));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Haití")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Haiti));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Islas Caimán")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Islas_Caiman));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Jamaica")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Jamaica));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Nicaragua")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Nicaragua));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Panamá")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Panama));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("República Dominicana")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Republica_Dominicana));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Trinidad y Tobago")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Trinidad_Tobago));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Argentina")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Argentina));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Colombia")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Colombia));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Guyana")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guyana));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Surinam")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Surinam));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Venezuela")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Venezuela));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Alemania")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Alemania));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("España")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Espana));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Francia")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Francia));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Italia")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Italia));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Rusia")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Rusia));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Suiza")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Suiza));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Turquía")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Turquia));
-        }
-        if (international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("Angola")) {
-            international_City_ComboBox.setModel(new DefaultComboBoxModel<>(Angola));
+
+        if (international_Passage_CheckBox.isSelected()) {
+            switch (passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex())) {
+                case "Canadá" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Canada));
+                case "Estados Unidos" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
+                case "México" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Mexico));
+                case "Bahamas" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Bahamas));
+                case "Haití" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Haiti));
+                case "Islas Caimán" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Islas_Caiman));
+                case "Jamaica" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Jamaica));
+                case "Nicaragua" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Nicaragua));
+                case "Panamá" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Panama));
+                case "República Dominicana" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Republica_Dominicana));
+                case "Trinidad y Tobago" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Trinidad_Tobago));
+                case "Argentina" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Argentina));
+                case "Colombia" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Colombia));
+                case "Guyana" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Guyana));
+                case "Surinam" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Surinam));
+                case "Venezuela" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Venezuela));
+                case "Alemania" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Alemania));
+                case "España" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Espana));
+                case "Francia" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Francia));
+                case "Italia" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Italia));
+                case "Rusia" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Rusia));
+                case "Suiza" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Suiza));
+                case "Turquía" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Turquia));
+                case "Angola" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Angola));
+            }
         }
     }
 
@@ -944,6 +995,8 @@ public class GUI {
             int hour;
             int minute;
             LocalDateTime date;
+            LocalDate partialDate;
+            String flightAirline;
             String assigned_Plane;
             String terminal;
 
@@ -973,6 +1026,7 @@ public class GUI {
                     try {
                         flight_Name = national_Flight_Name_Text.getText();
                         national_City = national_City_ComboBox.getItemAt(national_City_ComboBox.getSelectedIndex());
+                        flightAirline = national_Airline_ComboBox.getItemAt(national_Airline_ComboBox.getSelectedIndex());
                         travel_km = Float.parseFloat(national_Km_Label.getText());
                         assigned_Plane = national_Assigned_Plane_ComboBox.getItemAt(national_Assigned_Plane_ComboBox.getSelectedIndex());
 
@@ -981,12 +1035,13 @@ public class GUI {
                         year = Integer.parseInt(national_Year_ComboBox.getItemAt(national_Year_ComboBox.getSelectedIndex()));
                         hour = Integer.parseInt(national_Hour_ComboBox.getItemAt(national_Hour_ComboBox.getSelectedIndex()));
                         minute = Integer.parseInt(national_Minutes_ComboBox.getItemAt(national_Minutes_ComboBox.getSelectedIndex()));
+                        partialDate = LocalDate.of(year,Month.of(month),day);
                         date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
 
                         terminal = national_Terminal_ComboBox.getItemAt(national_Terminal_ComboBox.getSelectedIndex());
 
-                        airportControl.newNationalFlight(flight_Name, national_City, travel_km, assigned_Plane, terminal,
-                                date);
+                        airportControl.newNationalFlight(flight_Name, national_City, travel_km, flightAirline, assigned_Plane,
+                                terminal, date, partialDate);
                 } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1047,6 +1102,7 @@ public class GUI {
             String destined_Charter_City;
             float travel_km = 0;
             String terminal;
+            String flightAirline;
             String assigned_Plane;
             int day;
             int month;
@@ -1054,6 +1110,7 @@ public class GUI {
             int hour;
             int minute;
             LocalDateTime date;
+            LocalDate partialDate;
 
             if (charter_Region_ComboBox.getItemAt(charter_Region_ComboBox.getSelectedIndex()).equals("") ||
                     charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("") ||
@@ -1084,20 +1141,22 @@ public class GUI {
                     flight_Name = charter_Flight_Name_Text.getText();
                     destined_Charter_City = (String) charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex());
                     travel_km = Float.parseFloat(charter_Km_Label.getText());
+                    flightAirline = charter_Airline_ComboBox.getItemAt(charter_Airline_ComboBox.getSelectedIndex());
                     assigned_Plane = charter_Assigned_Plane_ComboBox.getItemAt(charter_Assigned_Plane_ComboBox.getSelectedIndex());
                     terminal = charter_Terminal_ComboBox.getItemAt(charter_Terminal_ComboBox.getSelectedIndex());
 
-                    day = Integer.parseInt((String) charter_Day_ComboBox.getItemAt(charter_Day_ComboBox.getSelectedIndex()));
-                    month = Integer.parseInt((String) charter_Month_ComboBox.getItemAt(charter_Month_ComboBox.getSelectedIndex()));
-                    year = Integer.parseInt((String) charter_Year_ComboBox.getItemAt(charter_Year_ComboBox.getSelectedIndex()));
-                    hour = Integer.parseInt((String) charter_Hour_ComboBox.getItemAt(charter_Hour_ComboBox.getSelectedIndex()));
-                    minute = Integer.parseInt((String) charter_Minute_ComboBox.getItemAt(charter_Minute_ComboBox.getSelectedIndex()));
+                    day = Integer.parseInt( charter_Day_ComboBox.getItemAt(charter_Day_ComboBox.getSelectedIndex()));
+                    month = Integer.parseInt( charter_Month_ComboBox.getItemAt(charter_Month_ComboBox.getSelectedIndex()));
+                    year = Integer.parseInt( charter_Year_ComboBox.getItemAt(charter_Year_ComboBox.getSelectedIndex()));
+                    hour = Integer.parseInt( charter_Hour_ComboBox.getItemAt(charter_Hour_ComboBox.getSelectedIndex()));
+                    minute = Integer.parseInt( charter_Minute_ComboBox.getItemAt(charter_Minute_ComboBox.getSelectedIndex()));
+                    partialDate = LocalDate.of(year,Month.of(month),day);
                     date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
 
                     destined_Country = charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex());
 
-                    airportControl.newCharterFlight(flight_Name, destined_Charter_City, travel_km, assigned_Plane, terminal,
-                            date, destined_Country);
+                    airportControl.newCharterFlight(flight_Name, destined_Charter_City, travel_km, flightAirline, assigned_Plane,
+                            terminal, date, partialDate, destined_Country);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1150,12 +1209,14 @@ public class GUI {
             String destined_International_City;
             float travel_km = 0;
             String terminal;
+            String flightAirline;
             String assigned_Plane;
             int day;
             int month;
             int year;
             int hour;
             int minute;
+            LocalDate partialDate;
             LocalDateTime date;
 
             if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("") ||
@@ -1187,6 +1248,7 @@ public class GUI {
                     flight_Name = international_Flight_Name_Text.getText();
                     destined_International_City = international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex());
                     travel_km = Float.parseFloat(international_Km_Label.getText());
+                    flightAirline = international_Airline_ComboBox.getItemAt(international_Airline_ComboBox.getSelectedIndex());
                     assigned_Plane = international_Assigned_Plane_ComboBox.getItemAt(international_Assigned_Plane_ComboBox.getSelectedIndex());
                     terminal = international_Terminal_ComboBox.getItemAt(international_Terminal_ComboBox.getSelectedIndex());
 
@@ -1195,12 +1257,13 @@ public class GUI {
                     year = Integer.parseInt(international_Year_ComboBox.getItemAt(international_Year_ComboBox.getSelectedIndex()));
                     hour = Integer.parseInt(international_Hour_ComboBox.getItemAt(international_Hour_ComboBox.getSelectedIndex()));
                     minute = Integer.parseInt(international_Minute_ComboBox.getItemAt(international_Minute_ComboBox.getSelectedIndex()));
+                    partialDate = LocalDate.of(year,Month.of(month),day);
                     date = LocalDateTime.of(year,Month.of(month),day,hour,minute);
 
                     destined_Country = international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex());
 
-                    airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, assigned_Plane, terminal,
-                            date, destined_Country);
+                    airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, flightAirline,
+                            assigned_Plane, terminal, date, partialDate, destined_Country);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1466,7 +1529,7 @@ public class GUI {
                     plane_Seats = Integer.parseInt(plane_Seats_Text.getText());
                     plane_Builder = plane_Builder_Text.getText();
                     plane_Builder_Country = plane_Builder_Country_ComboBox.getItemAt(plane_Builder_Country_ComboBox.getSelectedIndex());
-                    planeRuteDestiny = (String) plane_Rute_Destiny_ComboBox.getItemAt(plane_Rute_Destiny_ComboBox.getSelectedIndex());
+                    planeRuteDestiny = plane_Rute_Destiny_ComboBox.getItemAt(plane_Rute_Destiny_ComboBox.getSelectedIndex());
 
                     if (airportControl.newPlane(plane_Plate,plane_Model, plane_Seats,plane_Builder,plane_Builder_Country,
                             isNational, isCharter, plane_Airline, planeRuteDestiny)) {
@@ -1700,6 +1763,64 @@ public class GUI {
             }
         }
 
+        //setting passage airlines
+        if (national_Passage_CheckBox.isSelected()) {
+            switch (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex())) {
+                case "Baracoa" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(baracoaAirlines));
+                case "Cayo Coco" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(cayoCocoAirlines));
+                case "Guantánamo" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(guantanamoAirlines));
+                case "Holguín" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(holguinAirlines));
+                case "Nueva Gerona" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(nuevaGeronaAirlines));
+                case "Santiago de Cuba" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(santiagoDesCubaAirlines));
+            }
+        } else if (international_Passage_CheckBox.isSelected()) {
+            switch (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex())) {
+                case "Montreal" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(montrealAirlines));
+                case "Toronto" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(torontoAirlines));
+                case "Fort Lauderdale" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(fortLauderdaleAirlines));
+                case "Houston" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(houstonAirlines));
+                case "Miami" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(miamiAirlines));
+                case "Newark" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(newarkAirlines));
+                case "Nueva York" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(newYorkAirlines));
+                case "Tampa" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(tampaAirlines));
+                case "Cancún" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(cancunAirlines));
+                case "Ciudad de México" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(ciudadMexicoAirlines));
+                case "Mérida" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(meridaAirlines));
+                case "Monterrey" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(monterreyAirlines));
+                case "Nasáu" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(nasauAirlines));
+                case "Puerto Príncipe" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(haitiAirlines));
+                case "Gran Caimán" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(caimanAirlines));
+                case "Kingston" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(kingstonAirlines));
+                case "Montego Bay" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(montegoBayAirlines));
+                case "Managua" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(managuaAirlines));
+                case "Ciudad de Panamá" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(panamaAirlines));
+                case "Punta Cana" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(puntaCanaAirlines));
+                case "Santo Domingo" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(santoDomingoAirlines));
+                case "Puerto España" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(puertoEspanaAirlines));
+                case "Buenos Aires" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(buenosAiresAirlines));
+                case "Bogotá" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(bogotaleAirlines));
+                case "Medellín" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(medellinAirlines));
+                case "Georgetown" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(georgetownAirlines));
+                case "Paramaribo" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(paramariboAirlines));
+                case "Caracas" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(caracasAirlines));
+                case "Las Piedras" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(lasPiedrasAirlines));
+                case "Fráncfort" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(francfortAirlines));
+                case "Madrid" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(madridAirlines));
+                case "París" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(parisAirlines));
+                case "Milán" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(milanAirlines));
+                case "Roma" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(romaAirlines));
+                case "Moscú" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(moscuAirlines));
+                case "Zúrich" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(zurichAirlines));
+                case "Estambul" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(estambulAirlines));
+                case "Luanda" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(luandaAirlines));
+            }
+        } else if (charter_Passage_CheckBox.isSelected()) {
+            switch (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex())) {
+                case "Pointe-à-Pitre" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(guadalupeCharterAirlines));
+                case "Miami" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(miamiCharterAirlines));
+                case "Tampa" -> passenger_Airline_ComboBox.setModel(new DefaultComboBoxModel<>(tampaCharterAirlines));
+            }
+        }
     }
 
     public void charterCountryList() {
@@ -1718,10 +1839,19 @@ public class GUI {
         String[] EEUU = {"", "Miami", "Tampa"};
         String[] Guadalupe = {"", "Pointe-à-Pitre"};
 
-        if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
-            charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
-        } else if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Guadalupe")) {
-            charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guadalupe));
+        if (charter_Flight_CheckBox.isSelected()){
+            if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Estados Unidos")) {
+                charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
+            } else if (charter_Country_ComboBox.getItemAt(charter_Country_ComboBox.getSelectedIndex()).equals("Guadalupe")) {
+                charter_City_ComboBox.setModel(new DefaultComboBoxModel<>(Guadalupe));
+            }
+        }
+
+        if (charter_Passage_CheckBox.isSelected()) {
+            switch (passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex())) {
+                case "Estados Unidos" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(EEUU));
+                case "Guadalupe" -> passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(Guadalupe));
+            }
         }
     }
 
@@ -1834,6 +1964,38 @@ public class GUI {
     public class SellPassageMenuButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+
+
+            String[] Canada = {"", "Montreal", "Toronto"};
+            String[] EEUU = {"", "Fort Lauderdale", "Houston", "Miami", "Newark", "Nueva York", "Tampa"};
+            String[] Mexico = {"", "Cancún", "Ciudad de México", "Mérida", "Monterrey"};
+            String[] Bahamas = {"", "Nasáu"};
+            String[] Haiti = {"", "Puerto Príncipe"};
+            String[] Islas_Caiman = {"", "Gran Caimán"};
+            String[] Jamaica = {"", "Kingston", "Montego Bay"};
+            String[] Nicaragua = {"", "Managua"};
+            String[] Panama = {"", "Ciudad de Panamá"};
+            String[] Republica_Dominicana = {"", "Punta Cana", "Santo Domingo"};
+            String[] Trinidad_Tobago = {"", "Puerto España"};
+            String[] Argentina = {"", "Buenos Aires"};
+            String[] Colombia = {"", "Bogotá", "Medellín"};
+            String[] Guyana = {"", "Georgetown"};
+            String[] Surinam = {"", "Paramaribo"};
+            String[] Venezuela = {"", "Caracas", "Las Piedras"};
+            String[] Alemania = {"", "Fráncfort"};
+            String[] Espana = {"", "Madrid"};
+            String[] Francia = {"", "París"};
+            String[] Italia = {"", "Milán", "Roma"};
+            String[] Rusia = {"", "Moscú"};
+            String[] Suiza = {"", "Zúrich"};
+            String[] Turquia = {"", "Estambul"};
+            String[] Angola = {"", "Luanda"};
+
+            passage_Class_ComboBox.setModel(new DefaultComboBoxModel<>(ticketClass));
+            passage_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
+            passage_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
+            passage_Year_ComboBox.setModel(new DefaultComboBoxModel<>(years));
+
             type_Passage_Panel.setVisible(true);
             JOptionPane.showOptionDialog(null, type_Passage_Panel,"Tipo de pasaje",
                         JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
@@ -1847,6 +2009,27 @@ public class GUI {
                     || charter_Passage_CheckBox.isSelected()) {
                 JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Passage_Panel));
                 pane.dispose();
+
+                if (national_Passage_CheckBox.isSelected()) {
+                    passage_Destiny_Panel.setVisible(true);
+                    passenger_Destiny_NextButton.setVisible(true);
+                    passenger_Destiny_ComboBox.setModel(new DefaultComboBoxModel<>(cubaCities));
+                } else if (international_Passage_CheckBox.isSelected()) {
+                    String[] passage_International_Country = {"", "Canadá", "Estados Unidos", "México", "Bahamas", "Haití", "Islas Caimán",
+                            "Jamaica", "Nicaragua", "Panamá", "República Dominicana", "Trinidad y Tobago", "Argentina", "Colombia",
+                            " Guyana", "Surinam", "Venezuela", "Alemania", "España", "Francia", "Italia", "Rusia", "Suiza",
+                            "Turquía", "Angola"};
+
+                    passage_Country_Panel.setVisible(true);
+                    confirm_Passage_Country_Button.setVisible(true);
+                    passage_Country_ComboBox.setModel(new DefaultComboBoxModel<>(passage_International_Country));
+                } else if (charter_Passage_CheckBox.isSelected()) {
+                    String[] passage_Charter_Country = {"", "Estados Unidos", "Guadalupe"};
+
+                    passage_Country_Panel.setVisible(true);
+                    confirm_Passage_Country_Button.setVisible(true);
+                    passage_Country_ComboBox.setModel(new DefaultComboBoxModel<>(passage_Charter_Country));
+                }
 
                 menu_Panel.setVisible(false);
                 option_Panel.setVisible(true);
@@ -1885,6 +2068,58 @@ public class GUI {
                 national_Passage_CheckBox.setSelected(false);
                 international_Passage_CheckBox.setSelected(false);
             }
+        }
+    }
+
+    public class PassengerDestinyNextButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setAirlineFlight();
+            passenger_Destiny_NextButton.setVisible(false);
+            passenger_Airline_Panel.setVisible(true);
+            confirm_Passage_Date_Button.setVisible(true);
+        }
+    }
+
+    public class ConfirmPassageCountryButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (international_Passage_CheckBox.isSelected()){
+                internationalCityList();
+                confirm_Passage_Country_Button.setVisible(false);
+                passage_Destiny_Panel.setVisible(true);
+                passenger_Destiny_NextButton.setVisible(true);
+            } else if (charter_Passage_CheckBox.isSelected()) {
+                charterCityList();
+                confirm_Passage_Country_Button.setVisible(false);
+                passage_Destiny_Panel.setVisible(true);
+                passenger_Destiny_NextButton.setVisible(true);
+            }
+        }
+    }
+
+    public class ConfirmPassageDateButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int day;
+            int month;
+            int year;
+            LocalDate date;
+
+            day = Integer.parseInt(passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()));
+            month = Integer.parseInt(passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()));
+            year = Integer.parseInt(passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()));
+            date = LocalDate.of(year,Month.of(month),day);
+
+            for (Flight flight : Terminal.getTerminal_Flights()) {
+                if (flight.getPartialDate().equals(date) &&
+                        flight.getFlightAirline().equals(passenger_Airline_ComboBox.getItemAt(passenger_Airline_ComboBox.getSelectedIndex()))) {
+                    passage_Flight_ComboBox.addItem(flight.getFlightName());
+                }
+            }
+
+            confirm_Passage_Date_Button.setVisible(false);
+            passage_Flight_Panel.setVisible(true);
         }
     }
 }

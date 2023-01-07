@@ -22,9 +22,7 @@ public class Helper {
                 }
             } else if (option == 2) {
                 for (Flight flight:Terminal.terminal_Flights) {
-                    if (flight instanceof National_Flight) {
-                        System.out.println(flight.toString() + "\n");
-                    }
+                    System.out.println(flight.toString() + "\n");
                 }
             } else if (option == 3) {
                 for (Plane plane : Plane.planes) {
