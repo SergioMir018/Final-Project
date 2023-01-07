@@ -1965,32 +1965,6 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-
-            String[] Canada = {"", "Montreal", "Toronto"};
-            String[] EEUU = {"", "Fort Lauderdale", "Houston", "Miami", "Newark", "Nueva York", "Tampa"};
-            String[] Mexico = {"", "Cancún", "Ciudad de México", "Mérida", "Monterrey"};
-            String[] Bahamas = {"", "Nasáu"};
-            String[] Haiti = {"", "Puerto Príncipe"};
-            String[] Islas_Caiman = {"", "Gran Caimán"};
-            String[] Jamaica = {"", "Kingston", "Montego Bay"};
-            String[] Nicaragua = {"", "Managua"};
-            String[] Panama = {"", "Ciudad de Panamá"};
-            String[] Republica_Dominicana = {"", "Punta Cana", "Santo Domingo"};
-            String[] Trinidad_Tobago = {"", "Puerto España"};
-            String[] Argentina = {"", "Buenos Aires"};
-            String[] Colombia = {"", "Bogotá", "Medellín"};
-            String[] Guyana = {"", "Georgetown"};
-            String[] Surinam = {"", "Paramaribo"};
-            String[] Venezuela = {"", "Caracas", "Las Piedras"};
-            String[] Alemania = {"", "Fráncfort"};
-            String[] Espana = {"", "Madrid"};
-            String[] Francia = {"", "París"};
-            String[] Italia = {"", "Milán", "Roma"};
-            String[] Rusia = {"", "Moscú"};
-            String[] Suiza = {"", "Zúrich"};
-            String[] Turquia = {"", "Estambul"};
-            String[] Angola = {"", "Luanda"};
-
             passage_Class_ComboBox.setModel(new DefaultComboBoxModel<>(ticketClass));
             passage_Day_ComboBox.setModel(new DefaultComboBoxModel<>(days));
             passage_Month_ComboBox.setModel(new DefaultComboBoxModel<>(months));
