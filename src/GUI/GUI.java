@@ -195,7 +195,7 @@ public class GUI {
     private JButton confirm_Passage_Country_Button;
     private JButton passenger_Destiny_NextButton;
     private JLabel passenger_Destiny_Label;
-    private JTextField passage_Cuantity_Text;
+    private JTextField passage_Quantity_Text;
     private JButton sell_Passage;
 
     AirportControl airportControl = new AirportControl();
@@ -338,6 +338,7 @@ public class GUI {
         passenger_Destiny_NextButton.addActionListener(new PassengerDestinyNextButton());
         confirm_Passage_Country_Button.addActionListener(new ConfirmPassageCountryButtonActionListener());
         confirm_Passage_Date_Button.addActionListener(new ConfirmPassageDateButtonActionListener());
+        sell_Passage.addActionListener(new SellPassageActionButton());
     }
 
     public void startGUI() {
@@ -2086,6 +2087,77 @@ public class GUI {
 
             confirm_Passage_Date_Button.setVisible(false);
             passage_Flight_Panel.setVisible(true);
+        }
+    }
+
+    public class SellPassageActionButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name;
+            String last_Name;
+            String destiny;
+            String flight_Name;
+            String classPassage;
+            int passageNumber = 0;
+            int day;
+            int month;
+            int year;
+            LocalDate date;
+
+            if (national_Passage_CheckBox.isSelected()){
+                if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
+                            "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha concluido con la seleccion " +
+                            "del destinio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
+                            "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex()).equals("") ||
+                        passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha concluido con la seleccion " +
+                            "del destinio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()).equals("") ||
+                        passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()).equals("") ||
+                        passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado con la seleccion " +
+                            "de la fecha del pasaje", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Flight_ComboBox.getItemAt(passage_Flight_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha seleccionado " +
+                            "el vuelo del pasaje", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Quantity_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido la cantidad " +
+                            "de pasajes q desea comprar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    try {
+                        name = passenger_Name_Text.getText();
+                        last_Name = passenger_LastName_Text.getText();
+                        destiny = passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex());
+                        flight_Name = passage_Flight_ComboBox.getItemAt(passage_Flight_ComboBox.getSelectedIndex());
+                        classPassage = passage_Class_ComboBox.getItemAt(passage_Class_ComboBox.getSelectedIndex());
+                        passageNumber = Integer.parseInt(passage_Quantity_Text.getText());
+                        day = Integer.parseInt(passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()));
+                        month = Integer.parseInt(passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()));
+                        year = Integer.parseInt(passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()));
+                        date = LocalDate.of(year,Month.of(month),day);
+
+                        if (airportControl.newPassage(name,last_Name,destiny,flight_Name,classPassage,passageNumber)) {
+                            JOptionPane.showMessageDialog(null, "La compra se ha completado",
+                                    "Compra completada!",JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, """
+                                ERROR!
+                                Caracteres erroneos!
+                                Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
+                                "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+                        passage_Quantity_Text.setText("");
+                    }
+                }
+            }
         }
     }
 }

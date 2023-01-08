@@ -25,6 +25,7 @@ public class International_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (firstClassTickets * (internationalKmPrice(travel_km) + airportControl.getBaseInternationalPrice() + ticket.getFirstClassPrice()));
+                flightSeatNumber++;
             }
         }
     }
@@ -35,6 +36,7 @@ public class International_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (secondClassTickets * (internationalKmPrice(travel_km) + airportControl.getBaseInternationalPrice() + ticket.getSecondClassPrice()));
+                flightSeatNumber++;
             }
         }
     }
@@ -45,6 +47,7 @@ public class International_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (thirdClassTickets * (internationalKmPrice(travel_km) + airportControl.getBaseInternationalPrice() + ticket.getThirdClassPrice()));
+                flightSeatNumber++;
             }
         }
     }

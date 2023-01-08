@@ -22,6 +22,7 @@ public class Charter_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (firstClassTickets * (charterKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice()));
+                flightSeatNumber++;
             }
         }
     }
@@ -32,6 +33,7 @@ public class Charter_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (secondClassTickets * (charterKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice()));
+                flightSeatNumber++;
             }
         }
     }
@@ -42,6 +44,7 @@ public class Charter_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (thirdClassTickets * (charterKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice()));
+                flightSeatNumber++;
             }
         }
     }

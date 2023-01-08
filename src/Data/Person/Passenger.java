@@ -6,17 +6,16 @@ public class Passenger {
     private final String passengerDestiny;
     private final String passengerFlight;
     private final String passengerClass;
-    private final int passageNumber;
     private float passageCost;
-    private int flightSeatNumber;
+    private final int flightSeatNumber;
 
     public Passenger(String passengerName, String passengerLastName, String passengerDestiny, String passengerFlight,
-                     String passengerClass, int passageNumber) {
+                     String passengerClass, int flightSeatNumber) {
         this.passengerName = passengerName;
         this.passengerLastName = passengerLastName;
         this.passengerDestiny = passengerDestiny;
         this.passengerFlight = passengerFlight;
         this.passengerClass = passengerClass;
-        this.passageNumber = passageNumber;
+        this.flightSeatNumber = flightSeatNumber;
     }
 }

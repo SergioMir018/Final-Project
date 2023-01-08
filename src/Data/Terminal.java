@@ -18,6 +18,8 @@ public class Terminal implements Serializable {
     static ArrayList<Passenger> terminal_Sold_Passages = new ArrayList<>();
     static ArrayList<Flight> terminal_Arrivals = new ArrayList<>();
 
+    public Terminal() {}
+
     public Terminal (String terminal_Name, int terminal_Number, boolean isNational, boolean isCharter){
         this.terminal_Name = terminal_Name;
         this.terminal_Number = terminal_Number;

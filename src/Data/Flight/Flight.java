@@ -19,6 +19,8 @@ public abstract class Flight implements Serializable {
     protected int thirdClassTickets;
     protected String terminal_Name;
     protected float flightRevenue;
+    protected int flightSeats;
+    protected int flightSeatNumber = 0;
     AirportControl airportControl = new AirportControl();
 
     public Flight(String flightName, String destiny_city, float travel_km, String flightAirline, String assigned_plane,
@@ -77,6 +79,14 @@ public abstract class Flight implements Serializable {
         firstClassTickets = firstClassSeats;
         secondClassTickets = secondClassSeats;
         thirdClassTickets = thirdClassSeats;
+    }
+
+    public void setFlightSeats(int seats) {
+        flightSeats = seats;
+    }
+
+    public int getFlightSeatNumber() {
+        return flightSeatNumber;
     }
 
     public abstract void sellFirstClassTickets(int firstClassTickets, float travel_km, String flightAirline);

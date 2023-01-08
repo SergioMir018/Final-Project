@@ -4,6 +4,7 @@ import Data.Flight.Charter_Flight;
 import Data.Flight.Flight;
 import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
+import Data.Person.Passenger;
 import Data.Person.User;
 import GUI.GUI;
 
@@ -144,6 +145,7 @@ public class AirportControl implements Serializable {
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
                     national_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                    national_flight.setFlightSeats(plane.getSeats());
                 }
             }
 
@@ -162,6 +164,7 @@ public class AirportControl implements Serializable {
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
                     international_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                    international_flight.setFlightSeats(plane.getSeats());
                 }
             }
 
@@ -178,6 +181,7 @@ public class AirportControl implements Serializable {
             for (Plane plane : Plane.planes) {
                 if (plane.getPlate().equals(assigned_Plane)) {
                     charter_flight.setClassTickets(plane.getFirstClass_seats(), plane.getSecondClass_seats(), plane.getThirdClass_seats());
+                    charter_flight.setFlightSeats(plane.getSeats());
                 }
             }
 
@@ -238,51 +242,75 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
-    public void newPassage(String name, String las_Name, String passenger_Destiny, String passenger_Flight,
+    public boolean newPassage(String name, String last_Name, String passenger_Destiny, String passenger_Flight,
                            String passengerClass, int passageNumber) {
+        boolean cont = true;
+        Terminal terminal = new Terminal();
 
+        if (sellPassage(passenger_Flight, passageNumber, passengerClass)) {
+            int SeatNumber = 0;
+            for (Flight flight : Terminal.getTerminal_Flights()) {
+                if (flight.getFlightName().equals(passenger_Flight)) {
+                    SeatNumber = flight.getFlightSeatNumber();
+                    break;
+                }
+            }
+
+            for (int i = 0; i < passageNumber; i++) {
+                Passenger passenger = new Passenger(name, last_Name, passenger_Destiny, passenger_Flight, passengerClass,
+                        SeatNumber);
+                terminal.addNewSoldPassage(passenger);
+            }
+        } else {
+            cont = false;
+        }
+        return cont;
     }
 
-    public void sellPassage(String flight_Name, int passageQuantity, String passageClass) {
+    public boolean sellPassage(String flight_Name, int passageQuantity, String passageClass) {
+        boolean cont = true;
 
-        for (Flight flight : Terminal.terminal_Flights) {
+        for (Flight flight : Terminal.getTerminal_Flights()) {
             if (flight.getFlightName().equals(flight_Name)) {
-                if (passageQuantity < flight.getFirstClassTickets()) {
-                    switch (passageClass) {
-                        case "Primera Clase" -> {
+                switch (passageClass) {
+                    case "Primera Clase" -> {
+                        if (passageQuantity < flight.getFirstClassTickets()) {
                             if (flight instanceof National_Flight) {
                                 flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
                             } else if (flight instanceof International_Flight) {
                                 flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-
                             } else if (flight instanceof Charter_Flight) {
                                 flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-                            }
-                        }
-                        case "Clase Ejecutiva" -> {
-                            if (flight instanceof National_Flight) {
-                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-                            } else if (flight instanceof International_Flight) {
-                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-
-                            } else if (flight instanceof Charter_Flight) {
-                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-                            }
-                        }
-                        case "Clase Turista" -> {
-                            if (flight instanceof National_Flight) {
-                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-                            } else if (flight instanceof International_Flight) {
-                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
-                            } else if (flight instanceof Charter_Flight) {
-                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
                             }
                         }
                     }
+                    case "Clase Ejecutiva" -> {
+                        if (flight instanceof National_Flight) {
+                            flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                        } else if (flight instanceof International_Flight) {
+                            flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                        } else if (flight instanceof Charter_Flight)
+                            flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                    }
+                    case "Clase Turista" -> {
+                        if (flight instanceof National_Flight) {
+                            flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                        } else if (flight instanceof International_Flight) {
+                            flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                        } else if (flight instanceof Charter_Flight) {
+                            flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                        }
+                    }
                 }
+            } else {
+                cont = false;
             }
         }
+        return cont;
     }
+
+
+
 
     public static void main(String[] args) {
         Terminal terminal1 = new Terminal("Terminal 1 Vuelos Nacionales", 1,true,false);
