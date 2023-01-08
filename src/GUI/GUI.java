@@ -177,15 +177,14 @@ public class GUI {
     private JButton change_AirlineTicket_Price_Button;
     private JComboBox<String> airline_Price_ComboBox;
     private JPanel change_Ticket_Price_Panel;
-    private JTextField firstClass_price_Text;
+    private JTextField firstClass_Price_Text;
     private JPanel firstClass_Price_Panel;
-    private JTextField secondClass_price_Text;
-    private JTextField thirdClass_price_Text;
+    private JTextField secondClass_Price_Text;
+    private JTextField thirdClass_Price_Text;
     private JPanel type_Ticket_Panel;
-    private JCheckBox allClass_Price_CheckBox;
     private JCheckBox firstClass_Price_CheckBox;
     private JCheckBox secondClass_Price_CheckBox;
-    private JCheckBox thirdClass_PriceCheckBox;
+    private JCheckBox thirdClass_Price_CheckBox;
     private JButton next_Type_Ticket_Button;
     private JButton change_Ticket_Price_Button;
     private JButton change_AirportTicket_Price;
@@ -197,6 +196,9 @@ public class GUI {
     private JLabel passenger_Destiny_Label;
     private JTextField passage_Quantity_Text;
     private JButton sell_Passage;
+    private JPanel secondClass_Price_Panel;
+    private JPanel third_Class_Price_Panel;
+    private JLabel thirdClass_Price_Label;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -301,6 +303,7 @@ public class GUI {
         adminBack_Options_Button.addActionListener(new AdminBackOptionsButtonActionListener());
         change_AirlineTicket_Price_Button.addActionListener(new ChangeAirlineTicketPriceButtonActionListener());
         next_Type_Ticket_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
+        change_Ticket_Price_Button.addActionListener(new ChangeTicketPriceButtonActionListener());
 
         new_Terminal_Button.addActionListener(new NewTerminalActionListener());
         add_Terminal_Button.addActionListener(new AddTerminalActionListener());
@@ -339,6 +342,7 @@ public class GUI {
         confirm_Passage_Country_Button.addActionListener(new ConfirmPassageCountryButtonActionListener());
         confirm_Passage_Date_Button.addActionListener(new ConfirmPassageDateButtonActionListener());
         sell_Passage.addActionListener(new SellPassageActionButton());
+
     }
 
     public void startGUI() {
@@ -463,6 +467,16 @@ public class GUI {
             passage_Country_Panel.setVisible(false);
             passage_Country_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             passenger_Destiny_NextButton.setVisible(false);
+            change_Ticket_Price_Panel.setVisible(false);
+            firstClass_Price_CheckBox.setSelected(false);
+            secondClass_Price_CheckBox.setSelected(false);
+            thirdClass_Price_CheckBox.setSelected(false);
+            firstClass_Price_Panel.setVisible(false);
+            secondClass_Price_Panel.setVisible(false);
+            third_Class_Price_Panel.setVisible(false);
+            firstClass_Price_Text.setText("");
+            secondClass_Price_Text.setText("");
+            thirdClass_Price_Text.setText("");
         }
     }
 
@@ -596,6 +610,15 @@ public class GUI {
             admin_Options_Panel.setVisible(true);
             new_Terminal_Panel.setVisible(false);
             change_Ticket_Price_Panel.setVisible(false);
+            firstClass_Price_CheckBox.setSelected(false);
+            secondClass_Price_CheckBox.setSelected(false);
+            thirdClass_Price_CheckBox.setSelected(false);
+            firstClass_Price_Panel.setVisible(false);
+            secondClass_Price_Panel.setVisible(false);
+            third_Class_Price_Panel.setVisible(false);
+            firstClass_Price_Text.setText("");
+            secondClass_Price_Text.setText("");
+            thirdClass_Price_Text.setText("");
         }
     }
 
@@ -961,9 +984,31 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (firstClass_Price_CheckBox.isSelected() || secondClass_Price_CheckBox.isSelected()
-                    || thirdClass_PriceCheckBox.isSelected() || allClass_Price_CheckBox.isSelected()) {
+                    || thirdClass_Price_CheckBox.isSelected()) {
                 JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Ticket_Panel));
                 pane.dispose();
+
+                if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected() &&
+                        thirdClass_Price_CheckBox.isSelected()) {
+                    firstClass_Price_Panel.setVisible(true);
+                    secondClass_Price_Panel.setVisible(true);
+                    third_Class_Price_Panel.setVisible(true);
+                } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected()) {
+                    firstClass_Price_Panel.setVisible(true);
+                    secondClass_Price_Panel.setVisible(true);
+                } else if (firstClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
+                    firstClass_Price_Panel.setVisible(true);
+                    third_Class_Price_Panel.setVisible(true);
+                } else if (secondClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
+                    secondClass_Price_Panel.setVisible(true);
+                    third_Class_Price_Panel.setVisible(true);
+                } else if (firstClass_Price_CheckBox.isSelected()) {
+                    firstClass_Price_Panel.setVisible(true);
+                } else if (secondClass_Price_CheckBox.isSelected()) {
+                    secondClass_Price_Panel.setVisible(true);
+                } else if (thirdClass_Price_CheckBox.isSelected()) {
+                    third_Class_Price_Panel.setVisible(true);
+                }
 
                 admin_Options_Panel.setVisible(false);
                 option_Panel.setVisible(true);
@@ -973,6 +1018,13 @@ public class GUI {
                 JOptionPane.showMessageDialog(null,"ERROR!", "Elija una de las opciones para " +
                         "continuar!",JOptionPane.WARNING_MESSAGE);
             }
+        }
+    }
+
+    public class ChangeTicketPriceButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     }
 
