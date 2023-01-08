@@ -199,6 +199,7 @@ public class GUI {
     private JPanel secondClass_Price_Panel;
     private JPanel third_Class_Price_Panel;
     private JLabel thirdClass_Price_Label;
+    private JPanel change_Airport_Price_Panel;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -211,6 +212,12 @@ public class GUI {
     String[] minutes = {"","00","05","10","15","20","25","30","35","40","45","50","55"};
     String[] ticketClass = {"", "Primera Clase", "Clase Ejecutiva", "Clase Turista"};
     String[] cubaCities = {"", "Baracoa", "Cayo Coco", "Guantánamo", "Holguín", "Nueva Gerona", "Santiago de Cuba"};
+    String[] airlines = {"", "Aerogaviota", "Cubana de Aviación", "Air Transat", "Air Canada Rouge", "JetBlue Airways",
+            "Southwest Airlines", "United Airlines", "United Express", "American Airlines", "Delta Air Lines", "Aeromar",
+            "Viva Aerobus", "Aeroméxico" ,"Magnicharters", "Bahamasair", "Sunrise Airways", "Cayman Airways", "InterCaribbean Airways",
+            "Aruba Airlines", "Conviasa", "Copa Airlines", "Wingo", "Aerolíneas Argentinas", "Air Century", "Caribbean Airlines",
+            "Fly All Ways", "Condor", "Air Europa", "Iberia", "Iberojet", "World2fly", "Air France", "Neos", "Aeroflot",
+            "Edelweiss Air", "Turkish Airlines", "TAAG Angola Airlines", "Havana Air"};
 
     public GUI() {
         national_Terminal_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
@@ -279,6 +286,7 @@ public class GUI {
         confirm_Passage_Country_Button.setVisible(false);
         confirm_Passage_Date_Button.setVisible(false);
         passenger_Destiny_NextButton.setVisible(false);
+        change_Airport_Price_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -302,6 +310,7 @@ public class GUI {
         options_Admin_Button.addActionListener(new AdminActionListener());
         adminBack_Options_Button.addActionListener(new AdminBackOptionsButtonActionListener());
         change_AirlineTicket_Price_Button.addActionListener(new ChangeAirlineTicketPriceButtonActionListener());
+        change_AirportTicket_Price.addActionListener(new ChangeAirportTicketPriceActionListener());
         next_Type_Ticket_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
         change_Ticket_Price_Button.addActionListener(new ChangeTicketPriceButtonActionListener());
 
@@ -1010,6 +1019,7 @@ public class GUI {
                     third_Class_Price_Panel.setVisible(true);
                 }
 
+                airline_Price_ComboBox.setModel(new DefaultComboBoxModel<>(airlines));
                 admin_Options_Panel.setVisible(false);
                 option_Panel.setVisible(true);
                 change_Ticket_Price_Panel.setVisible(true);
@@ -1022,6 +1032,88 @@ public class GUI {
     }
 
     public class ChangeTicketPriceButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String airline;
+            float firstClass;
+            float secondClass;
+            float thirdClass;
+
+            try {
+                if (airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nIngrese una aerolinea para continuar",
+                            "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected() &&
+                        thirdClass_Price_CheckBox.isSelected()) {
+                    if (firstClass_Price_Text.getText().equals("") || secondClass_Price_Text.getText().equals("") ||
+                            thirdClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                    }
+                } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected()) {
+                    if (firstClass_Price_Text.getText().equals("") || secondClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                    }
+                } else if (firstClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
+                    if (firstClass_Price_Text.getText().equals("") || thirdClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                    }
+                } else if (secondClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
+                    if (secondClass_Price_Text.getText().equals("") || thirdClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                    }
+                } else if (firstClass_Price_CheckBox.isSelected()) {
+                    if (firstClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                    }
+                } else if (secondClass_Price_CheckBox.isSelected()) {
+                    if (secondClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                    }
+                } else if (thirdClass_Price_CheckBox.isSelected()) {
+                    if (thirdClass_Price_Text.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                    }
+                }
+
+                airportControl.newTicket();
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, """
+                                ERROR!
+                                Caracteres erroneos!
+                                Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
+                        "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    public class ChangeAirportTicketPriceActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -2201,6 +2293,7 @@ public class GUI {
                                     "Compra completada!",JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (NumberFormatException ex) {
+                        ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, """
                                 ERROR!
                                 Caracteres erroneos!

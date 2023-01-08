@@ -309,7 +309,9 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
+public void newTicket() {
 
+}
 
 
     public static void main(String[] args) {
