@@ -2,9 +2,9 @@ package Data;
 
 public class Ticket {
     private final String ticketAirline;
-    private float firstClassPrice;
+    private float firstClassPrice ;
     private float secondClassPrice;
-    private float thirdClassPrice;
+    private float thirdClassPrice ;
 
     public Ticket(String ticketAirline, float firstClassPrice, float secondClassPrice, float thirdClassPrice) {
         this.ticketAirline = ticketAirline;
@@ -39,5 +39,14 @@ public class Ticket {
 
     public void setThirdClassPrice(float newThirdClassBasePrice) {
         thirdClassPrice = newThirdClassBasePrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket" +
+                "\nticketAirline: " + ticketAirline +
+                "\nfirstClassPrice: " + firstClassPrice +
+                "\nsecondClassPrice: " + secondClassPrice +
+                "\nthirdClassPrice: " + thirdClassPrice;
     }
 }

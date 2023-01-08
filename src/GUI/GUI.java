@@ -4,6 +4,7 @@ import Data.AirportControl;
 import Data.Plane;
 import Data.Terminal;
 import Data.Flight.Flight;
+import Data.Ticket;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -498,6 +499,7 @@ public class GUI {
                 os.writeObject(Terminal.getTerminal_Flights());
                 os.writeObject(AirportControl.getTerminals());
                 os.writeObject(Plane.getAirportPlanes());
+                os.writeObject(AirportControl.getTickets());
 
                 save_Panel.setVisible(true);
                 load_Error_Panel.setVisible(false);
@@ -521,6 +523,7 @@ public class GUI {
                 Terminal.setTerminal_Flights((ArrayList<Flight>) is.readObject());
                 AirportControl.setTerminals((ArrayList<Terminal>) is.readObject());
                 Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
+                AirportControl.setTickets((ArrayList<Ticket>) is.readObject());
 
                 load_Panel.setVisible(true);
                 save_Panel.setVisible(false);
@@ -997,6 +1000,10 @@ public class GUI {
                 JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Ticket_Panel));
                 pane.dispose();
 
+                firstClass_Price_Text.setText("0");
+                secondClass_Price_Text.setText("0");
+                thirdClass_Price_Text.setText("0");
+
                 if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected() &&
                         thirdClass_Price_CheckBox.isSelected()) {
                     firstClass_Price_Panel.setVisible(true);
@@ -1038,6 +1045,9 @@ public class GUI {
             float firstClass;
             float secondClass;
             float thirdClass;
+            boolean isFirst = firstClass_Price_CheckBox.isSelected();
+            boolean isSecond  = secondClass_Price_CheckBox.isSelected();
+            boolean isThird = thirdClass_Price_CheckBox.isSelected();
 
             try {
                 if (airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex()).equals("")) {
@@ -1045,69 +1055,112 @@ public class GUI {
                             "ERROR!", JOptionPane.WARNING_MESSAGE);
                 } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected() &&
                         thirdClass_Price_CheckBox.isSelected()) {
-                    if (firstClass_Price_Text.getText().equals("") || secondClass_Price_Text.getText().equals("") ||
-                            thirdClass_Price_Text.getText().equals("")) {
+                    if (firstClass_Price_Text.getText().equals("0") || secondClass_Price_Text.getText().equals("0") ||
+                            thirdClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
                                 "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
                         firstClass = Float.parseFloat(firstClass_Price_Text.getText());
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected()) {
-                    if (firstClass_Price_Text.getText().equals("") || secondClass_Price_Text.getText().equals("")) {
+                    if (firstClass_Price_Text.getText().equals("0") || secondClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
                                 "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
                         firstClass = Float.parseFloat(firstClass_Price_Text.getText());
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
-                    if (firstClass_Price_Text.getText().equals("") || thirdClass_Price_Text.getText().equals("")) {
+                    if (firstClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
                                 "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
                         firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (secondClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
-                    if (secondClass_Price_Text.getText().equals("") || thirdClass_Price_Text.getText().equals("")) {
+                    if (secondClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
                                 "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (firstClass_Price_CheckBox.isSelected()) {
-                    if (firstClass_Price_Text.getText().equals("")) {
+                    if (firstClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
                                 "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
                         firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (secondClass_Price_CheckBox.isSelected()) {
-                    if (secondClass_Price_Text.getText().equals("")) {
+                    if (secondClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
                                 "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
+                        thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 } else if (thirdClass_Price_CheckBox.isSelected()) {
-                    if (thirdClass_Price_Text.getText().equals("")) {
+                    if (thirdClass_Price_Text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
                                 "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     } else {
+                        airline = airline_Price_ComboBox.getItemAt(airline_Price_ComboBox.getSelectedIndex());
+                        firstClass = Float.parseFloat(firstClass_Price_Text.getText());
+                        secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
+                        airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
+
+                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
+                                + "\n" + isSecond+ "\n" + isThird);
                     }
                 }
 
-                airportControl.newTicket();
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, """
                                 ERROR!
                                 Caracteres erroneos!
-                                Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
+                                Ingrese solo numeros en >>PRECIO DE LA CLASE<<""",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
             }
         }

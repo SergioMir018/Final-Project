@@ -13,8 +13,8 @@ public class Helper {
         Scanner input = new Scanner(System.in);
 
         do {
-            System.out.print("Option: ");
-            option = input.nextInt();
+                System.out.print("Option: ");
+                option = input.nextInt();
 
             if (option == 1) {
                 for (Terminal terminal : AirportControl.terminals) {
@@ -32,6 +32,15 @@ public class Helper {
                 for (User user: AirportControl.users) {
                     System.out.println(user.toString() + "\n");
                 }
+            } else if (option == 5) {
+                if (AirportControl.tickets.isEmpty()) {
+                    System.out.println("Empty tickets");
+                } else {
+                    for (Ticket ticket: AirportControl.tickets) {
+                        System.out.println(ticket.toString() + "\n");
+                    }
+                }
+
             }
 
             System.out.println("Continue (y/n): ");

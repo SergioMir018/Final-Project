@@ -70,6 +70,10 @@ public class AirportControl implements Serializable {
         AirportControl.terminals = terminals;
     }
 
+    public static void setTickets(ArrayList<Ticket> tickets) {
+        AirportControl.tickets = tickets;
+    }
+
     public boolean newTerminal(String terminal_Name, int terminal_Number, boolean isNational, boolean isCharter) {
         boolean cont = true;
 
@@ -309,8 +313,76 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
-public void newTicket() {
+public void newTicket(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
+                      boolean isSecondClass, boolean isThirdClass) {
+        if (checkTickets(airline,firstClass,secondClass,thirdClass,isFirstClass,isSecondClass,isThirdClass)) {
+            Ticket ticket = new Ticket (airline,firstClass,secondClass,thirdClass);
+            tickets.add(ticket);
+        }
+}
 
+public boolean checkTickets(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
+                            boolean isSecondClass, boolean isThirdClass) {
+        boolean cont = true;
+
+    if (isFirstClass && isSecondClass && isThirdClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setFirstClassPrice(firstClass);
+                ticket.setSecondClassPrice(secondClass);
+                ticket.setThirdClassPrice(thirdClass);
+                cont = false;
+                break;
+            }
+        }
+    } else if (isFirstClass && isSecondClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setFirstClassPrice(firstClass);
+                ticket.setSecondClassPrice(secondClass);
+                cont = false;
+            }
+        }
+    } else if (isFirstClass && isThirdClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setFirstClassPrice(firstClass);
+                ticket.setThirdClassPrice(thirdClass);
+                cont = false;
+            }
+        }
+    } else if (isSecondClass && isThirdClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setSecondClassPrice(secondClass);
+                ticket.setThirdClassPrice(thirdClass);
+                cont = false;
+            }
+        }
+    } else if (isFirstClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setFirstClassPrice(firstClass);
+                cont = false;
+            }
+        }
+    } else if (isSecondClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setSecondClassPrice(secondClass);
+                cont = false;
+            }
+        }
+    } else if (isThirdClass) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketAirline().equals(airline)) {
+                ticket.setThirdClassPrice(thirdClass);
+                cont = false;
+            }
+        }
+    }
+
+    return cont;
 }
 
 
