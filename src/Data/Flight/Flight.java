@@ -1,5 +1,7 @@
 package Data.Flight;
 
+import Data.AirportControl;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public abstract class Flight implements Serializable {
     protected int thirdClassTickets;
     protected String terminal_Name;
     protected float flightRevenue;
+    AirportControl airportControl = new AirportControl();
 
     public Flight(String flightName, String destiny_city, float travel_km, String flightAirline, String assigned_plane,
                   String terminal_Name, LocalDateTime date, LocalDate partialDate) {
@@ -76,7 +79,11 @@ public abstract class Flight implements Serializable {
         thirdClassTickets = thirdClassSeats;
     }
 
-    public abstract void sellFirstClassTickets(int firstClassTickets, float travel_km);
+    public abstract void sellFirstClassTickets(int firstClassTickets, float travel_km, String flightAirline);
+
+    public abstract void sellSecondClassTickets(int secondClassTickets, float travel_km, String flightAirline);
+
+    public abstract void sellThirdClassTickets(int thirdClassTickets, float travel_km, String flightAirline);
 
     @Override
     public String toString() {

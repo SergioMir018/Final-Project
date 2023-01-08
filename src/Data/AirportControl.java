@@ -19,10 +19,50 @@ public class AirportControl implements Serializable {
     static ArrayList<Terminal> terminals = new ArrayList<>();
     static ArrayList<Ticket> tickets = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>();
+    float baseNationalPrice;
+    float basInternationalPrice;
+    float baseCharterPrice;
+    float airportKmPrice;
     static GUI gui = new GUI();
 
-    public static ArrayList < Terminal > getTerminals() {
+    public void setKmPrice(float kmPrice) {
+        airportKmPrice = kmPrice;
+    }
+
+    public void setBaseNationalPrice(float baseNationalPrice) {
+        this.baseNationalPrice = baseNationalPrice;
+    }
+
+    public void setBaseInternationalPrice(float baseInternationalPrice) {
+        this.basInternationalPrice = baseInternationalPrice;
+    }
+
+    public void setBaseCharterPrice(float baseCharterPrice) {
+        this.baseCharterPrice = baseCharterPrice;
+    }
+
+    public float getBaseNationalPrice() {
+        return baseNationalPrice;
+    }
+
+    public float getBaseInternationalPrice() {
+        return basInternationalPrice;
+    }
+
+    public float getBaseCharterPrice() {
+        return baseCharterPrice;
+    }
+
+    public float getAirportKmPrice() {
+        return airportKmPrice;
+    }
+
+    public static ArrayList<Terminal> getTerminals() {
         return terminals;
+    }
+
+    public static ArrayList<Ticket> getTickets() {
+        return tickets;
     }
 
     public static void setTerminals(ArrayList < Terminal > terminals) {
@@ -196,6 +236,52 @@ public class AirportControl implements Serializable {
         }
 
         return cont;
+    }
+
+    public void newPassage(String name, String las_Name, String passenger_Destiny, String passenger_Flight,
+                           String passengerClass, int passageNumber) {
+
+    }
+
+    public void sellPassage(String flight_Name, int passageQuantity, String passageClass) {
+
+        for (Flight flight : Terminal.terminal_Flights) {
+            if (flight.getFlightName().equals(flight_Name)) {
+                if (passageQuantity < flight.getFirstClassTickets()) {
+                    switch (passageClass) {
+                        case "Primera Clase" -> {
+                            if (flight instanceof National_Flight) {
+                                flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            } else if (flight instanceof International_Flight) {
+                                flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+
+                            } else if (flight instanceof Charter_Flight) {
+                                flight.sellFirstClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            }
+                        }
+                        case "Clase Ejecutiva" -> {
+                            if (flight instanceof National_Flight) {
+                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            } else if (flight instanceof International_Flight) {
+                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+
+                            } else if (flight instanceof Charter_Flight) {
+                                flight.sellSecondClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            }
+                        }
+                        case "Clase Turista" -> {
+                            if (flight instanceof National_Flight) {
+                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            } else if (flight instanceof International_Flight) {
+                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            } else if (flight instanceof Charter_Flight) {
+                                flight.sellThirdClassTickets(passageQuantity, flight.getTravel_km(), flight.getFlightAirline());
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {

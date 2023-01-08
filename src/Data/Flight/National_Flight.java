@@ -1,5 +1,8 @@
 package Data.Flight;
 
+import Data.AirportControl;
+import Data.Ticket;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,8 +14,37 @@ public class National_Flight extends Flight{
     }
 
     @Override
-    public void sellFirstClassTickets(int firstClassTickets, float travel_km) {
-        this.firstClassTickets = firstClassTickets - 1;
+    public void sellFirstClassTickets(int firstClassTickets, float travel_km, String flight_Airline) {
+        this.firstClassTickets -= firstClassTickets;
+        for (Ticket ticket : AirportControl.getTickets()) {
+            if (ticket.getTicketAirline().equals(flight_Airline)) {
+                flightRevenue += (firstClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice()));
+            }
+        }
+    }
+
+    @Override
+    public void sellSecondClassTickets(int secondClassTickets, float travel_km, String flightAirline) {
+        this.secondClassTickets -= secondClassTickets;
+        for (Ticket ticket : AirportControl.getTickets()) {
+            if (ticket.getTicketAirline().equals(flightAirline)) {
+                flightRevenue += (secondClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice()));
+            }
+        }
+    }
+
+    @Override
+    public void sellThirdClassTickets(int thirdClassTickets, float travel_km, String flightAirline) {
+        this.thirdClassTickets -= thirdClassTickets;
+        for (Ticket ticket : AirportControl.getTickets()) {
+            if (ticket.getTicketAirline().equals(flightAirline)) {
+                flightRevenue += (thirdClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice()));
+            }
+        }
+    }
+
+    public float nationalKmPrice(float travel_km) {
+        return (float) ((travel_km * airportControl.getAirportKmPrice()) * 0.20);
     }
 
     @Override

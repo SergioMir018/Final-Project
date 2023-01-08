@@ -195,6 +195,8 @@ public class GUI {
     private JButton confirm_Passage_Country_Button;
     private JButton passenger_Destiny_NextButton;
     private JLabel passenger_Destiny_Label;
+    private JTextField passage_Cuantity_Text;
+    private JButton sell_Passage;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -458,7 +460,7 @@ public class GUI {
             international_Passage_CheckBox.setSelected(false);
             charter_Passage_CheckBox.setSelected(false);
             passage_Country_Panel.setVisible(false);
-            passage_Country_ComboBox.setModel(new DefaultComboBoxModel(empty));
+            passage_Country_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
             passenger_Destiny_NextButton.setVisible(false);
         }
     }
@@ -849,16 +851,6 @@ public class GUI {
         }
     }
 
-    public class CharterRegionButton implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (charter_Region_ComboBox.getItemAt(charter_Region_ComboBox.getSelectedIndex()).equals("")) {
-                JOptionPane.showMessageDialog(null, "ERROR!\nIngrese una region para continuar",
-                        "ERROR!", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }
-
     public class NewTerminalActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -1139,7 +1131,7 @@ public class GUI {
             } else {
                 try {
                     flight_Name = charter_Flight_Name_Text.getText();
-                    destined_Charter_City = (String) charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex());
+                    destined_Charter_City = charter_City_ComboBox.getItemAt(charter_City_ComboBox.getSelectedIndex());
                     travel_km = Float.parseFloat(charter_Km_Label.getText());
                     flightAirline = charter_Airline_ComboBox.getItemAt(charter_Airline_ComboBox.getSelectedIndex());
                     assigned_Plane = charter_Assigned_Plane_ComboBox.getItemAt(charter_Assigned_Plane_ComboBox.getSelectedIndex());

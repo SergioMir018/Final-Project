@@ -3,6 +3,7 @@ package Data;
 import Data.Flight.Flight;
 import Data.Flight.International_Flight;
 import Data.Flight.National_Flight;
+import Data.Person.Passenger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Terminal implements Serializable {
     boolean isCharter;
 
     static ArrayList<Flight> terminal_Flights = new ArrayList<Flight>();
+    static ArrayList<Passenger> terminal_Sold_Passages = new ArrayList<>();
     static ArrayList<Flight> terminal_Arrivals = new ArrayList<>();
 
     public Terminal (String terminal_Name, int terminal_Number, boolean isNational, boolean isCharter){
@@ -37,6 +39,10 @@ public class Terminal implements Serializable {
 
     public void addNewNationalFlight(National_Flight national_flight){
         terminal_Flights.add(national_flight);
+    }
+
+    public void addNewSoldPassage(Passenger passenger) {
+        terminal_Sold_Passages.add(passenger);
     }
 
     public static ArrayList<Flight> getTerminal_Flights(){
