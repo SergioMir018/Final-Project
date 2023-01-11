@@ -1,9 +1,10 @@
 package Data.Person;
 
 import javax.naming.Name;
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class User {
+public class User implements Serializable {
     private final String userName;
     private final String userPassword;
     private final boolean isAdmin;

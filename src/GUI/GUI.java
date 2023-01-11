@@ -1,6 +1,7 @@
 package GUI;
 
 import Data.AirportControl;
+import Data.Person.User;
 import Data.Plane;
 import Data.Terminal;
 import Data.Flight.Flight;
@@ -35,7 +36,7 @@ public class GUI {
     private JPanel new_International_Flight_Panel;
     private JComboBox<String> international_Country_ComboBox;
     private JLabel destinedCountryLabel;
-    private JComboBox<String> destined_Region_ComboBox;
+    private JComboBox<String> international_Region_ComboBox;
     private JPanel international_Country_Panel;
     private JButton next_InternationalCountry_Button;
     private JComboBox<String> international_City_ComboBox;
@@ -114,7 +115,6 @@ public class GUI {
     private JButton new_Arrival_Button;
     private JButton new_FlightOut_Button;
     private JComboBox<String> national_Airline_ComboBox;
-    private JComboBox<String> international_Region_ComboBox;
     private JCheckBox national_Terminal_CheckBox;
     private JCheckBox international_Terminal_CheckBox;
     private JCheckBox charter_Terminal_CheckBox;
@@ -196,11 +196,30 @@ public class GUI {
     private JButton passenger_Destiny_NextButton;
     private JLabel passenger_Destiny_Label;
     private JTextField passage_Quantity_Text;
-    private JButton sell_Passage;
+    private JButton sell_Passage_Button;
     private JPanel secondClass_Price_Panel;
     private JPanel third_Class_Price_Panel;
     private JLabel thirdClass_Price_Label;
     private JPanel change_Airport_Price_Panel;
+    private JTextField km_Price_Text;
+    private JTextField national_Flight_Base_Price_Text;
+    private JTextField international_Flight_Base_Price_Text;
+    private JPanel airport_Km_Price_Panel;
+    private JPanel national_Flight_Base_Price_Panel;
+    private JPanel international_Flight_Base_Price_Panel;
+    private JButton airport_Change_Price_Button;
+    private JPanel type_Airport_Price_Panel;
+    private JCheckBox charter_Base_Price_CheckBox;
+    private JButton next_Type_Airport_Price_Button;
+    private JCheckBox airport_km_Base_CheckBox;
+    private JCheckBox national_Base_Price_CheckBox;
+    private JCheckBox international_Base_Price_CheckBox;
+    private JTextField charter_Flight_Base_Price_text;
+    private JPanel charter_Flight_Base_Price_Panel;
+    private JButton show_Flights_Menu_Button;
+    private JComboBox<String> show_Terminal_Flights_ComboBox;
+    private JPanel show_Terminal_Flight_Panel;
+    private JPanel show_Flight_Revenue_Date_Panel;
 
     AirportControl airportControl = new AirportControl();
     String[] empty = {""};
@@ -228,6 +247,8 @@ public class GUI {
         international_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
         charter_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
 
+        load();
+
         for (Terminal terminal: AirportControl.getTerminals()) {
             if (terminal.getTerminal_Number() == 1) {
                 national_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
@@ -236,6 +257,7 @@ public class GUI {
             } else if (terminal.getTerminal_Number() == 3) {
                 international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
             }
+            show_Terminal_Flights_ComboBox.addItem(terminal.getTerminal_Name());
         }
 
         new_National_Flight_Panel.setVisible(false);
@@ -288,6 +310,13 @@ public class GUI {
         confirm_Passage_Date_Button.setVisible(false);
         passenger_Destiny_NextButton.setVisible(false);
         change_Airport_Price_Panel.setVisible(false);
+        type_Airport_Price_Panel.setVisible(false);
+        airport_Km_Price_Panel.setVisible(false);
+        national_Flight_Base_Price_Panel.setVisible(false);
+        international_Flight_Base_Price_Panel.setVisible(false);
+        charter_Flight_Base_Price_Panel.setVisible(false);
+        show_Terminal_Flight_Panel.setVisible(false);
+        show_Flight_Revenue_Date_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -295,8 +324,8 @@ public class GUI {
         menu_Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
         menu_Button.addActionListener(new MenuActionListenerActionListener());
-        save_Button.addActionListener(new SaveButtonActionListener());
-        load_Button.addActionListener(new LoadButtonActionListener());
+        //save_Button.addActionListener(new SaveButtonActionListener());
+        //load_Button.addActionListener(new LoadButtonActionListener());
         new_FlightOut_Button.addActionListener(new NewFlightActionListener());
         next_Type_Flight_Button.addActionListener(new NextTypeFlightButtonActionListener());
         new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
@@ -306,6 +335,7 @@ public class GUI {
         international_Passage_CheckBox.addActionListener(new InternationalPassageCheckBoxActionListener());
         charter_Passage_CheckBox.addActionListener(new CharterPassageCheckBoxActionListener());
         next_Type_Passage_Button.addActionListener(new NextTypePassageButtonActionListener());
+        show_Flights_Menu_Button.addActionListener(new ShowFlightsMenuButtonActionListener());
 
         admin_Options_Button.addActionListener(new OptionsActionListener());
         options_Admin_Button.addActionListener(new AdminActionListener());
@@ -314,6 +344,8 @@ public class GUI {
         change_AirportTicket_Price.addActionListener(new ChangeAirportTicketPriceActionListener());
         next_Type_Ticket_Button.addActionListener(new NextTypeTicketPriceButtonActionListener());
         change_Ticket_Price_Button.addActionListener(new ChangeTicketPriceButtonActionListener());
+        next_Type_Airport_Price_Button.addActionListener(new NextTypeAirportPriceActionListener());
+        airport_Change_Price_Button.addActionListener(new ChangeAirportPriceButtonActionListener());
 
         new_Terminal_Button.addActionListener(new NewTerminalActionListener());
         add_Terminal_Button.addActionListener(new AddTerminalActionListener());
@@ -351,8 +383,7 @@ public class GUI {
         passenger_Destiny_NextButton.addActionListener(new PassengerDestinyNextButton());
         confirm_Passage_Country_Button.addActionListener(new ConfirmPassageCountryButtonActionListener());
         confirm_Passage_Date_Button.addActionListener(new ConfirmPassageDateButtonActionListener());
-        sell_Passage.addActionListener(new SellPassageActionButton());
-
+        sell_Passage_Button.addActionListener(new SellPassageActionButton());
     }
 
     public void startGUI() {
@@ -487,19 +518,33 @@ public class GUI {
             firstClass_Price_Text.setText("");
             secondClass_Price_Text.setText("");
             thirdClass_Price_Text.setText("");
+            airport_Km_Price_Panel.setVisible(false);
+            national_Flight_Base_Price_Panel.setVisible(false);
+            international_Flight_Base_Price_Panel.setVisible(false);
+            charter_Flight_Base_Price_Panel.setVisible(false);
+            km_Price_Text.setText("");
+            national_Flight_Base_Price_Text.setText("");
+            international_Flight_Base_Price_Text.setText("");
+            charter_Flight_Base_Price_text.setText("");
+            airport_Change_Price_Button.setVisible(false);
+            change_Airport_Price_Panel.setVisible(false);
         }
     }
 
-    public class SaveButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("TerminalFlights.ser"));
+    public void save() {
 
+        try {
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("TerminalFlights.ser"));
                 os.writeObject(Terminal.getTerminal_Flights());
                 os.writeObject(AirportControl.getTerminals());
                 os.writeObject(Plane.getAirportPlanes());
+                os.writeObject(AirportControl.getUsers());
                 os.writeObject(AirportControl.getTickets());
+                os.writeObject(AirportControl.getAirportKmPrice());
+                os.writeObject(AirportControl.getBaseNationalPrice());
+                os.writeObject(AirportControl.getBaseInternationalPrice());
+                os.writeObject(AirportControl.getBaseCharterPrice());
+                os.writeObject(Terminal.getTerminal_Sold_Passages());
 
                 save_Panel.setVisible(true);
                 load_Error_Panel.setVisible(false);
@@ -511,31 +556,42 @@ public class GUI {
                 load_Error_Panel.setVisible(false);
                 load_Panel.setVisible(false);
             }
+    }
+
+    public void load() {
+
+        try {
+            ObjectInputStream is = new ObjectInputStream(new FileInputStream("TerminalFlights.ser"));
+
+            Terminal.setTerminal_Flights((ArrayList<Flight>) is.readObject());
+            AirportControl.setTerminals((ArrayList<Terminal>) is.readObject());
+            Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
+            AirportControl.setTickets((ArrayList<Ticket>) is.readObject());
+            airportControl.setKmPrice((float) is.readObject());
+            airportControl.setBaseNationalPrice((float) is.readObject());
+            airportControl.setBaseInternationalPrice((float) is.readObject());
+            airportControl.setBaseCharterPrice((float) is.readObject());
+            AirportControl.setUsers((ArrayList<User>) is.readObject());
+
+            load_Panel.setVisible(true);
+            save_Panel.setVisible(false);
+            save_Error_Panel.setVisible(false);
+            load_Button.setVisible(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            load_Panel.setVisible(false);
+            load_Error_Panel.setVisible(true);
+            save_Panel.setVisible(false);
+            save_Error_Panel.setVisible(false);
         }
     }
 
-    public class LoadButtonActionListener implements ActionListener {
+    public class ShowFlightsMenuButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                ObjectInputStream is = new ObjectInputStream(new FileInputStream("TerminalFlights.ser"));
-
-                Terminal.setTerminal_Flights((ArrayList<Flight>) is.readObject());
-                AirportControl.setTerminals((ArrayList<Terminal>) is.readObject());
-                Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
-                AirportControl.setTickets((ArrayList<Ticket>) is.readObject());
-
-                load_Panel.setVisible(true);
-                save_Panel.setVisible(false);
-                save_Error_Panel.setVisible(false);
-                load_Button.setVisible(false);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                load_Panel.setVisible(false);
-                load_Error_Panel.setVisible(true);
-                save_Panel.setVisible(false);
-                save_Error_Panel.setVisible(false);
-            }
+            show_Terminal_Flight_Panel.setVisible(true);
+            JOptionPane.showMessageDialog(null,show_Terminal_Flight_Panel,"Elija terminal",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -631,6 +687,16 @@ public class GUI {
             firstClass_Price_Text.setText("");
             secondClass_Price_Text.setText("");
             thirdClass_Price_Text.setText("");
+            change_Airport_Price_Panel.setVisible(false);
+            airport_Km_Price_Panel.setVisible(false);
+            national_Flight_Base_Price_Panel.setVisible(false);
+            international_Flight_Base_Price_Panel.setVisible(false);
+            charter_Flight_Base_Price_Panel.setVisible(false);
+            km_Price_Text.setText("");
+            national_Flight_Base_Price_Text.setText("");
+            international_Flight_Base_Price_Text.setText("");
+            charter_Flight_Base_Price_text.setText("");
+            airport_Change_Price_Button.setVisible(false);
         }
     }
 
@@ -955,6 +1021,7 @@ public class GUI {
 
                     if (airportControl.newTerminal(terminal_Name, terminal_Number, isNational, isCharter)) {
                         addNameTerminal(terminal_Name, isNational, isCharter);
+                        show_Terminal_Flights_ComboBox.addItem(terminal_Name);
                         terminal_Name_Text.setText("");
                         terminal_Number_Text.setText("");
                         national_Terminal_CheckBox.setSelected(false);
@@ -1065,9 +1132,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0") || secondClass_Price_Text.getText().equals("0")) {
@@ -1079,9 +1144,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
@@ -1093,9 +1156,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (secondClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
                     if (secondClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
@@ -1107,9 +1168,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0")) {
@@ -1121,9 +1180,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (secondClass_Price_CheckBox.isSelected()) {
                     if (secondClass_Price_Text.getText().equals("0")) {
@@ -1135,9 +1192,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 } else if (thirdClass_Price_CheckBox.isSelected()) {
                     if (thirdClass_Price_Text.getText().equals("0")) {
@@ -1149,9 +1204,7 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-
-                        System.out.println(airline +"\n" + firstClass + "\n" + secondClass + "\n" + thirdClass + "\n" + isFirst
-                                + "\n" + isSecond+ "\n" + isThird);
+                        save();
                     }
                 }
 
@@ -1169,7 +1222,9 @@ public class GUI {
     public class ChangeAirportTicketPriceActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            type_Airport_Price_Panel.setVisible(true);
+            JOptionPane.showOptionDialog(null, type_Airport_Price_Panel,"Precio a configurar",
+                    JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
         }
     }
 
@@ -1232,6 +1287,7 @@ public class GUI {
 
                         airportControl.newNationalFlight(flight_Name, national_City, travel_km, flightAirline, assigned_Plane,
                                 terminal, date, partialDate);
+                        save();
                 } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1347,6 +1403,7 @@ public class GUI {
 
                     airportControl.newCharterFlight(flight_Name, destined_Charter_City, travel_km, flightAirline, assigned_Plane,
                             terminal, date, partialDate, destined_Country);
+                    save();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1409,7 +1466,7 @@ public class GUI {
             LocalDate partialDate;
             LocalDateTime date;
 
-            if (destined_Region_ComboBox.getItemAt(destined_Region_ComboBox.getSelectedIndex()).equals("") ||
+            if (international_Region_ComboBox.getItemAt(international_Region_ComboBox.getSelectedIndex()).equals("") ||
                     international_Country_ComboBox.getItemAt(international_Country_ComboBox.getSelectedIndex()).equals("") ||
                     international_City_ComboBox.getItemAt(international_City_ComboBox.getSelectedIndex()).equals("")) {
                 JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de introducir los " +
@@ -1454,6 +1511,7 @@ public class GUI {
 
                     airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, flightAirline,
                             assigned_Plane, terminal, date, partialDate, destined_Country);
+                    save();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1733,6 +1791,7 @@ public class GUI {
                         plane_Rute_Destiny_ComboBox.setSelectedItem("");
                         national_Plane_CheckBox.setSelected(false);
                         international_Plane_CheckBox.setSelected(false);
+                        save();
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, """
@@ -2302,19 +2361,71 @@ public class GUI {
             LocalDate date;
 
             if (national_Passage_CheckBox.isSelected()){
+                System.out.println("estoy en nacional passage");
                 if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
                             "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 } else if (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha concluido con la seleccion " +
                             "del destinio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
+                            "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()).equals("") ||
+                        passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()).equals("") ||
+                        passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado con la seleccion " +
+                            "de la fecha del pasaje", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Flight_ComboBox.getItemAt(passage_Flight_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha seleccionado " +
+                            "el vuelo del pasaje", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Quantity_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha introducido la cantidad " +
+                            "de pasajes q desea comprar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    try {
+                        name = passenger_Name_Text.getText();
+                        last_Name = passenger_LastName_Text.getText();
+                        destiny = passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex());
+                        flight_Name = passage_Flight_ComboBox.getItemAt(passage_Flight_ComboBox.getSelectedIndex());
+                        classPassage = passage_Class_ComboBox.getItemAt(passage_Class_ComboBox.getSelectedIndex());
+                        passageNumber = Integer.parseInt(passage_Quantity_Text.getText());
+                        day = Integer.parseInt(passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()));
+                        month = Integer.parseInt(passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()));
+                        year = Integer.parseInt(passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()));
+                        date = LocalDate.of(year, Month.of(month), day);
+
+                        if (airportControl.newPassage(name, last_Name, destiny, flight_Name, classPassage, passageNumber, date)) {
+                            JOptionPane.showMessageDialog(null, "La compra se ha completado",
+                                    "Compra completada!", JOptionPane.INFORMATION_MESSAGE);
+                            save();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La compra no se ha completado",
+                                    "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, """
+                                        ERROR!
+                                        Caracteres erroneos!
+                                        Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
+                                "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+                        passage_Quantity_Text.setText("");
+                    }
                 }
-            } else {
+            } else if (international_Passage_CheckBox.isSelected() || charter_Passage_CheckBox.isSelected()) {
+                System.out.println("estoy en los pasajes inetrnacionales");
                 if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
                             "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
-                } else if (passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex()).equals("") ||
-                        passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex()).equals("")) {
+                } else if (passenger_Destiny_ComboBox.getItemAt(passenger_Destiny_ComboBox.getSelectedIndex()).equals("") ||
+                        passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha concluido con la seleccion " +
+                            "del destinio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passenger_Name_Text.getText().equals("") || passenger_LastName_Text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nIntroduzca el nombre completo del " +
+                            "cliente para continuar", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                } else if (passage_Country_ComboBox.getItemAt(passage_Country_ComboBox.getSelectedIndex()).equals("")) {
                     JOptionPane.showMessageDialog(null, "ERROR!\nNo ha concluido con la seleccion " +
                             "del destinio", "ERROR!", JOptionPane.WARNING_MESSAGE);
                 } else if (passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()).equals("") ||
@@ -2339,18 +2450,22 @@ public class GUI {
                         day = Integer.parseInt(passage_Day_ComboBox.getItemAt(passage_Day_ComboBox.getSelectedIndex()));
                         month = Integer.parseInt(passage_Month_ComboBox.getItemAt(passage_Month_ComboBox.getSelectedIndex()));
                         year = Integer.parseInt(passage_Year_ComboBox.getItemAt(passage_Year_ComboBox.getSelectedIndex()));
-                        date = LocalDate.of(year,Month.of(month),day);
+                        date = LocalDate.of(year, Month.of(month), day);
 
-                        if (airportControl.newPassage(name,last_Name,destiny,flight_Name,classPassage,passageNumber)) {
+                        if (airportControl.newPassage(name, last_Name, destiny, flight_Name, classPassage, passageNumber, date)) {
                             JOptionPane.showMessageDialog(null, "La compra se ha completado",
-                                    "Compra completada!",JOptionPane.INFORMATION_MESSAGE);
+                                    "Compra completada!", JOptionPane.INFORMATION_MESSAGE);
+                            save();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La compra no se ha completado",
+                                    "ERROR!", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (NumberFormatException ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, """
-                                ERROR!
-                                Caracteres erroneos!
-                                Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
+                                        ERROR!
+                                        Caracteres erroneos!
+                                        Ingrese solo numeros en >>CANTIDAD DE PASAJES<<""",
                                 "ERROR!", JOptionPane.INFORMATION_MESSAGE);
                         passage_Quantity_Text.setText("");
                     }
@@ -2358,4 +2473,297 @@ public class GUI {
             }
         }
     }
+
+    public class NextTypeAirportPriceActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (airport_km_Base_CheckBox.isSelected() || national_Base_Price_CheckBox.isSelected() ||
+                    international_Base_Price_CheckBox.isSelected() || charter_Base_Price_CheckBox.isSelected()) {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(type_Airport_Price_Panel));
+                pane.dispose();
+                km_Price_Text.setText("0");
+                national_Flight_Base_Price_Text.setText("0");
+                international_Flight_Base_Price_Text.setText("0");
+                charter_Flight_Base_Price_text.setText("0");
+
+                if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        international_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        international_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        charter_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected() &&
+                        charter_Base_Price_CheckBox.isSelected()) {
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                }  else if (airport_km_Base_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                } else if (airport_km_Base_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected()) {
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                } else if (national_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (international_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                } else if (airport_km_Base_CheckBox.isSelected()) {
+                    airport_Km_Price_Panel.setVisible(true);
+                } else if (national_Base_Price_CheckBox.isSelected()) {
+                    national_Flight_Base_Price_Panel.setVisible(true);
+                } else if (international_Base_Price_CheckBox.isSelected()) {
+                    international_Flight_Base_Price_Panel.setVisible(true);
+                } else if (charter_Base_Price_CheckBox.isSelected()) {
+                    charter_Flight_Base_Price_Panel.setVisible(true);
+                }
+
+                admin_Options_Panel.setVisible(false);
+                option_Panel.setVisible(true);
+                airport_Change_Price_Button.setVisible(true);
+                change_Airport_Price_Panel.setVisible(true);
+                adminBack_Options_Button.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null,"ERROR!", "Elija una de las opciones para " +
+                        "continuar!",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    public class ChangeAirportPriceButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            float kmPrice;
+            float nationalPrice;
+            float internationalPrice;
+            float charterPrice;
+            boolean isKm = airport_km_Base_CheckBox.isSelected();
+            boolean isNational = national_Base_Price_CheckBox.isSelected();
+            boolean isInternational = international_Base_Price_CheckBox.isSelected();
+            boolean isCharter = charter_Base_Price_CheckBox.isSelected();
+
+            try {
+                if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        international_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0") || national_Flight_Base_Price_Text.getText().equals("0") ||
+                            international_Flight_Base_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        international_Base_Price_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0") || national_Flight_Base_Price_Text.getText().equals("0") ||
+                            international_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
+                        charter_Base_Price_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0") || national_Flight_Base_Price_Text.getText().equals("0") ||
+                            charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                        save();
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected() &&
+                        charter_Base_Price_CheckBox.isSelected()) {
+                    if (national_Flight_Base_Price_Text.getText().equals("0") || international_Flight_Base_Price_Text.getText().equals("0") ||
+                            charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0") || national_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if ((airport_km_Base_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected())) {
+                    if (km_Price_Text.getText().equals("0") || international_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (airport_km_Base_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected()) {
+                    if (national_Flight_Base_Price_Text.getText().equals("0") || international_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if ((national_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected())) {
+                    if (national_Flight_Base_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (international_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
+                    if (international_Flight_Base_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
+                                "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                }else if (airport_km_Base_CheckBox.isSelected()) {
+                    if (km_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                }else if (national_Base_Price_CheckBox.isSelected()) {
+                    if (national_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                }else if (international_Base_Price_CheckBox.isSelected()) {
+                    if (international_Flight_Base_Price_Text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                } else if (charter_Base_Price_CheckBox.isSelected()) {
+                    if (charter_Flight_Base_Price_text.getText().equals("0")) {
+                        JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar el " +
+                                "precio", "ERROR!", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        kmPrice = Float.parseFloat(km_Price_Text.getText());
+                        nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
+                        internationalPrice = Float.parseFloat(international_Flight_Base_Price_Text.getText());
+                        charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
+                        airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
+                                isNational, isInternational, isCharter);
+                        save();
+                    }
+                }
+
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, """
+                                ERROR!
+                                Caracteres erroneos!
+                                Ingrese solo numeros en >>PRECIO DE LA CLASE<<""",
+                        "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
 }
+
+
+

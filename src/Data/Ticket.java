@@ -1,6 +1,8 @@
 package Data;
 
-public class Ticket {
+import java.io.Serializable;
+
+public class Ticket implements Serializable {
     private final String ticketAirline;
     private float firstClassPrice ;
     private float secondClassPrice;

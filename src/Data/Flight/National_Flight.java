@@ -14,33 +14,33 @@ public class National_Flight extends Flight{
     }
 
     @Override
-    public void sellFirstClassTickets(int firstClassTickets, float travel_km, String flight_Airline) {
-        this.firstClassTickets -= firstClassTickets;
+    public void sellFirstClassTickets(float travel_km, String flight_Airline) {
+        this.firstClassTickets --;
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flight_Airline)) {
-                flightRevenue += (firstClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice()));
+                flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice());
                 flightSeatNumber++;
             }
         }
     }
 
     @Override
-    public void sellSecondClassTickets(int secondClassTickets, float travel_km, String flightAirline) {
-        this.secondClassTickets -= secondClassTickets;
+    public void sellSecondClassTickets(float travel_km, String flightAirline) {
+        this.secondClassTickets --;
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
-                flightRevenue += (secondClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice()));
+                flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice());
                 flightSeatNumber++;
             }
         }
     }
 
     @Override
-    public void sellThirdClassTickets(int thirdClassTickets, float travel_km, String flightAirline) {
-        this.thirdClassTickets -= thirdClassTickets;
+    public void sellThirdClassTickets(float travel_km, String flightAirline) {
+        this.thirdClassTickets --;
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
-                flightRevenue += (thirdClassTickets * (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice()));
+                flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice());
                 flightSeatNumber++;
             }
         }
@@ -61,6 +61,7 @@ public class National_Flight extends Flight{
                 "\ndate: " + date +
                 "\nfirstClass: " + firstClassTickets +
                 "\nsecondClass: " + secondClassTickets +
-                "\nthirdClass: " + thirdClassTickets;
+                "\nthirdClass: " + thirdClassTickets +
+                "\nrevenue: " + flightRevenue;
     }
 }

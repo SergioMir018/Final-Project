@@ -11,6 +11,7 @@ public class Helper {
         char cont = 'n';
         int option = 0;
         Scanner input = new Scanner(System.in);
+        AirportControl airportControl = new AirportControl();
 
         do {
                 System.out.print("Option: ");
@@ -40,7 +41,11 @@ public class Helper {
                         System.out.println(ticket.toString() + "\n");
                     }
                 }
-
+            } else if (option == 6) {
+                System.out.println(AirportControl.airportKmPrice +
+                        "\n" + AirportControl.baseNationalPrice +
+                        "\n" + AirportControl.baseInternationalPrice +
+                        "\n" + AirportControl.baseCharterPrice);
             }
 
             System.out.println("Continue (y/n): ");

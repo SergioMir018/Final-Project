@@ -47,6 +47,10 @@ public class Terminal implements Serializable {
         terminal_Sold_Passages.add(passenger);
     }
 
+    public static ArrayList<Passenger> getTerminal_Sold_Passages() {
+        return terminal_Sold_Passages;
+    }
+
     public static ArrayList<Flight> getTerminal_Flights(){
         return terminal_Flights;
     }

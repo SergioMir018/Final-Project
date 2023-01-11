@@ -63,6 +63,14 @@ public abstract class Flight implements Serializable {
         return partialDate;
     }
 
+    public String getFlightTerminal() {
+        return terminal_Name;
+    }
+
+    public float getFlightRevenue() {
+        return flightRevenue;
+    }
+
     public int getFirstClassTickets() {
         return firstClassTickets;
     }
@@ -89,11 +97,11 @@ public abstract class Flight implements Serializable {
         return flightSeatNumber;
     }
 
-    public abstract void sellFirstClassTickets(int firstClassTickets, float travel_km, String flightAirline);
+    public abstract void sellFirstClassTickets(float travel_km, String flightAirline);
 
-    public abstract void sellSecondClassTickets(int secondClassTickets, float travel_km, String flightAirline);
+    public abstract void sellSecondClassTickets(float travel_km, String flightAirline);
 
-    public abstract void sellThirdClassTickets(int thirdClassTickets, float travel_km, String flightAirline);
+    public abstract void sellThirdClassTickets(float travel_km, String flightAirline);
 
     @Override
     public String toString() {
