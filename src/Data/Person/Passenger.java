@@ -14,7 +14,7 @@ public class Passenger implements Serializable {
     private final int flightSeatNumber;
 
     public Passenger(String passengerName, String passengerLastName, String passengerDestiny, String passengerFlight,
-                     String passengerClass, LocalDate passageDate, int flightSeatNumber) {
+                     String passengerClass, LocalDate passageDate, int flightSeatNumber, float passageCost) {
         this.passengerName = passengerName;
         this.passengerLastName = passengerLastName;
         this.passengerDestiny = passengerDestiny;
@@ -22,5 +22,21 @@ public class Passenger implements Serializable {
         this.passengerClass = passengerClass;
         this.passageDate = passageDate;
         this.flightSeatNumber = flightSeatNumber;
+        this.passageCost = passageCost;
     }
+
+    @Override
+    public String toString() {
+        return "Passenger{" +
+                "passengerName='" + passengerName + '\'' +
+                ", passengerLastName='" + passengerLastName + '\'' +
+                ", passengerDestiny='" + passengerDestiny + '\'' +
+                ", passengerFlight='" + passengerFlight + '\'' +
+                ", passengerClass='" + passengerClass + '\'' +
+                ", passageDate=" + passageDate +
+                ", passageCost=" + passageCost +
+                ", flightSeatNumber=" + flightSeatNumber +
+                '}';
+    }
+
 }

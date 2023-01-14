@@ -2,6 +2,7 @@ package Data;
 
 import Data.Flight.Flight;
 import Data.Flight.National_Flight;
+import Data.Person.Passenger;
 import Data.Person.User;
 
 import java.util.Scanner;
@@ -46,6 +47,10 @@ public class Helper {
                         "\n" + AirportControl.baseNationalPrice +
                         "\n" + AirportControl.baseInternationalPrice +
                         "\n" + AirportControl.baseCharterPrice);
+            } else if (option == 7) {
+                for (Passenger passenger : Terminal.getTerminal_Sold_Passages()) {
+                    System.out.println(passenger.toString() + "\n");
+                }
             }
 
             System.out.println("Continue (y/n): ");

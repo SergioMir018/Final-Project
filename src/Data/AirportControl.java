@@ -28,13 +28,6 @@ public class AirportControl implements Serializable {
 
     public AirportControl(){}
 
-    public AirportControl(float km, float national, float international, float charter) {
-        airportKmPrice = km;
-        baseInternationalPrice = international;
-        baseNationalPrice = national;
-        baseCharterPrice = charter;
-    }
-
     public void setKmPrice(float kmPrice) {
         airportKmPrice = kmPrice;
     }
@@ -272,6 +265,7 @@ public class AirportControl implements Serializable {
         boolean cont = false;
         Terminal terminal = new Terminal();
         int SeatNumber = 0;
+        float passageCost = 0;
 
         for (int i = 0; i < passageNumber; i++) {
             if (sellPassage(passenger_Flight, passengerClass)) {
@@ -280,8 +274,9 @@ public class AirportControl implements Serializable {
                      if (flight.getFlightName().equals(passenger_Flight)) {
                          System.out.println("entro al if dentro del segundo for");
                             SeatNumber = flight.getFlightSeatNumber();
+                            passageCost = flight.getPassageCost();
                             Passenger passenger = new Passenger(name, last_Name, passenger_Destiny, passenger_Flight,
-                                    passengerClass, date, SeatNumber);
+                                    passengerClass, date, SeatNumber, passageCost);
                             terminal.addNewSoldPassage(passenger);
                             cont = true;
                             break;
@@ -319,78 +314,78 @@ public class AirportControl implements Serializable {
         return cont;
     }
 
-public void newTicket(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
+    public void newTicket(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
                       boolean isSecondClass, boolean isThirdClass) {
-        if (checkTickets(airline,firstClass,secondClass,thirdClass,isFirstClass,isSecondClass,isThirdClass)) {
-            Ticket ticket = new Ticket (airline,firstClass,secondClass,thirdClass);
-            tickets.add(ticket);
-        }
-}
-
-public boolean checkTickets(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
-                            boolean isSecondClass, boolean isThirdClass) {
-        boolean cont = true;
-
-    if (isFirstClass && isSecondClass && isThirdClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setFirstClassPrice(firstClass);
-                ticket.setSecondClassPrice(secondClass);
-                ticket.setThirdClassPrice(thirdClass);
-                cont = false;
-                break;
+            if (checkTickets(airline,firstClass,secondClass,thirdClass,isFirstClass,isSecondClass,isThirdClass)) {
+                Ticket ticket = new Ticket (airline,firstClass,secondClass,thirdClass);
+                tickets.add(ticket);
             }
-        }
-    } else if (isFirstClass && isSecondClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setFirstClassPrice(firstClass);
-                ticket.setSecondClassPrice(secondClass);
-                cont = false;
-            }
-        }
-    } else if (isFirstClass && isThirdClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setFirstClassPrice(firstClass);
-                ticket.setThirdClassPrice(thirdClass);
-                cont = false;
-            }
-        }
-    } else if (isSecondClass && isThirdClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setSecondClassPrice(secondClass);
-                ticket.setThirdClassPrice(thirdClass);
-                cont = false;
-            }
-        }
-    } else if (isFirstClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setFirstClassPrice(firstClass);
-                cont = false;
-            }
-        }
-    } else if (isSecondClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setSecondClassPrice(secondClass);
-                cont = false;
-            }
-        }
-    } else if (isThirdClass) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getTicketAirline().equals(airline)) {
-                ticket.setThirdClassPrice(thirdClass);
-                cont = false;
-            }
-        }
     }
-    return cont;
-}
 
-public void setAirportPrice(float kmPrice, float nationalPrice, float internationalPrice, float charterPrice, boolean isKm,
+    public boolean checkTickets(String airline, float firstClass, float secondClass, float thirdClass, boolean isFirstClass,
+                            boolean isSecondClass, boolean isThirdClass) {
+            boolean cont = true;
+
+        if (isFirstClass && isSecondClass && isThirdClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setFirstClassPrice(firstClass);
+                    ticket.setSecondClassPrice(secondClass);
+                    ticket.setThirdClassPrice(thirdClass);
+                    cont = false;
+                    break;
+                }
+            }
+        } else if (isFirstClass && isSecondClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setFirstClassPrice(firstClass);
+                    ticket.setSecondClassPrice(secondClass);
+                    cont = false;
+                }
+            }
+        } else if (isFirstClass && isThirdClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setFirstClassPrice(firstClass);
+                    ticket.setThirdClassPrice(thirdClass);
+                    cont = false;
+                }
+            }
+        } else if (isSecondClass && isThirdClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setSecondClassPrice(secondClass);
+                    ticket.setThirdClassPrice(thirdClass);
+                    cont = false;
+                }
+            }
+        } else if (isFirstClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setFirstClassPrice(firstClass);
+                    cont = false;
+                }
+            }
+        } else if (isSecondClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setSecondClassPrice(secondClass);
+                    cont = false;
+                }
+            }
+        } else if (isThirdClass) {
+            for (Ticket ticket : tickets) {
+                if (ticket.getTicketAirline().equals(airline)) {
+                    ticket.setThirdClassPrice(thirdClass);
+                    cont = false;
+                }
+            }
+        }
+        return cont;
+    }
+
+    public void setAirportPrice(float kmPrice, float nationalPrice, float internationalPrice, float charterPrice, boolean isKm,
                             boolean isNational, boolean isInternational, boolean isCharter) {
 
         if (isKm && isNational && isInternational && isCharter) {
@@ -439,24 +434,37 @@ public void setAirportPrice(float kmPrice, float nationalPrice, float internatio
         }
 }
 
-public float terminalFlightsOnDate(LocalDateTime flightInitialDate, LocalDateTime flightFinalDate, String terminal) {
+    public float terminalFlightsOnIntervalDate(LocalDateTime flightInitialDate, LocalDateTime flightFinalDate, String terminal) {
         float timePeriodRevenue = 0;
 
+        System.out.println("estoy en intervalDate");
+
         for (Flight flight : Terminal.getTerminal_Flights()) {
+            System.out.println("estoy en el for de interval");
             if (flight.getDate().isAfter(flightInitialDate) && flight.getDate().isBefore(flightFinalDate) &&
                     flight.getFlightTerminal().equals(terminal)) {
+                System.out.println("estoy en el if de interval");
                 timePeriodRevenue += flight.getFlightRevenue();
             }
         }
 
         return timePeriodRevenue;
-}
+    }
+
+    public float terminalFlightOnDate(LocalDate flightDate, String terminal) {
+        float timePeriodRevenue = 0;
+
+        for(Flight flight : Terminal.getTerminal_Flights()) {
+            if (flight.getPartialDate().equals(flightDate) && flight.getFlightTerminal().equals(terminal)) {
+                timePeriodRevenue += flight.getFlightRevenue();
+            }
+        }
+
+        return timePeriodRevenue;
+    }
 
     public static void main(String[] args) {
-        /*Terminal terminal1 = new Terminal("Terminal 1 Vuelos Nacionales", 1,true,false);
-        Terminal terminal2 = new Terminal("Terminal 2 Vuelos Chartes", 2, false, true);
-        Terminal terminal3 = new Terminal("Terminal 3 Vuelos Internacionales", 3, false, false);
-        */User adminUser1 = new User("SergioMir", "sergio2002",true);
+        User adminUser1 = new User("SergioMir", "sergio2002",true);
         User user1 = new User("Idania","123",false);
 
         users.add(adminUser1);

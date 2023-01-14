@@ -1,14 +1,13 @@
 package GUI;
 
-import Data.AirportControl;
+import Data.*;
+import Data.Person.Passenger;
 import Data.Person.User;
-import Data.Plane;
-import Data.Terminal;
 import Data.Flight.Flight;
-import Data.Ticket;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +15,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class GUI {
@@ -49,11 +49,8 @@ public class GUI {
     private JButton add_Terminal_Button;
     public JComboBox<String> national_Terminal_ComboBox;
     public JComboBox<String> international_Terminal_ComboBox;
-    private JLabel save_Label;
     private JPanel save_Panel;
     private JPanel load_Panel;
-    private JLabel saveErrorLabel;
-    private JLabel load_Error_Label;
     private JLabel international_Km_Label;
     private JPanel save_Error_Panel;
     private JPanel load_Error_Panel;
@@ -95,7 +92,6 @@ public class GUI {
     private JCheckBox national_Plane_CheckBox;
     private JCheckBox international_Plane_CheckBox;
     private JComboBox<String> international_Assigned_Plane_ComboBox;
-    private JLabel load_Label;
     private JPanel new_Charter_Flight_Panel;
     private JCheckBox charter_Plane_CheckBox;
     private JComboBox<String> charter_Country_ComboBox;
@@ -112,7 +108,6 @@ public class GUI {
     private JComboBox<String> charter_Assigned_Plane_ComboBox;
     private JComboBox<String> charter_Airline_ComboBox;
     private JButton admin_Options_Button;
-    private JButton new_Arrival_Button;
     private JButton new_FlightOut_Button;
     private JComboBox<String> national_Airline_ComboBox;
     private JCheckBox national_Terminal_CheckBox;
@@ -216,17 +211,45 @@ public class GUI {
     private JCheckBox international_Base_Price_CheckBox;
     private JTextField charter_Flight_Base_Price_text;
     private JPanel charter_Flight_Base_Price_Panel;
-    private JButton show_Flights_Menu_Button;
-    private JComboBox<String> show_Terminal_Flights_ComboBox;
-    private JPanel show_Terminal_Flight_Panel;
+    private JButton show_Termianl_Flights_Revenue_Menu;
+    private JComboBox<String> revenue_Terminal_Flights_ComboBox;
+    private JPanel show_Terminal_Flight_Revenue_Panel;
     private JPanel show_Flight_Revenue_Date_Panel;
+    private JComboBox<String> flight_Init_Day_ComoBox;
+    private JComboBox<String> flight_Init_Month_ComoBox;
+    private JComboBox<String> flight_Init_Year_ComoBox;
+    private JComboBox<String> flight_Init_Hour_ComoBox;
+    private JComboBox<String> flight_Init_Min_ComoBox;
+    private JComboBox<String> flight_End_Day_ComoBox;
+    private JComboBox<String> flight_End_Month_ComoBox;
+    private JComboBox<String> flight_End_Year_ComoBox;
+    private JComboBox<String> flight_End_Hour_ComoBox;
+    private JComboBox<String> flight_End_Min_ComoBox;
+    private JButton gen_Flight_Revenue_Button;
+    private JButton next_Terminal_Show_Flight_Button;
+    private JPanel interval_Flight_Panel;
+    private JCheckBox oneDay_CheckBox;
+    private JCheckBox interval_CheckBox;
+    private JButton show_Terminal_Flights_NextButton;
+    private JComboBox show_Terminal_Flights_ComboBox;
+    private JPanel show_Terminal_Flights_Panel;
+    private JLabel save_Label;
+    private JLabel saveErrorLabel;
+    private JLabel load_Error_Label;
+    private JLabel load_Label;
+    private JButton show_Flights_Menu_Button;
+    private JPanel main_Menu_Panel;
+    private JTable terminal_Flights_Table;
+    private JScrollPane terminal_Flight_Tabel_Panel;
+    private JPanel standing_man_panel;
 
     AirportControl airportControl = new AirportControl();
+    static AirportLoad airportPrice;
     String[] empty = {""};
     String[] days = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19",
             "20","21","22","23","24","25","26","27","28","29","30","31"};
     String[] months = {"","1","2","3","4","5","6","7","8","9", "10","11","12"};
-    String[] years = {"","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
+    String[] years = {"","2023","2024","2025","2026","2027","2028","2029","2030"};
     String[] hours = {"","00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17",
             "18","19","20","21","22","23","24"};
     String[] minutes = {"","00","05","10","15","20","25","30","35","40","45","50","55"};
@@ -246,6 +269,12 @@ public class GUI {
         national_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
         international_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
         charter_Assigned_Plane_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
+        revenue_Terminal_Flights_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
+        show_Terminal_Flights_ComboBox.setModel(new DefaultComboBoxModel<>(empty));
+        main_Menu_Panel.setBackground(null);
+
+        ImageIcon standing_man = new ImageIcon("src/GUI/Icons/standing_man.png");
+
 
         load();
 
@@ -257,66 +286,108 @@ public class GUI {
             } else if (terminal.getTerminal_Number() == 3) {
                 international_Terminal_ComboBox.addItem(terminal.getTerminal_Name());
             }
+            revenue_Terminal_Flights_ComboBox.addItem(terminal.getTerminal_Name());
             show_Terminal_Flights_ComboBox.addItem(terminal.getTerminal_Name());
         }
 
         new_National_Flight_Panel.setVisible(false);
+        new_National_Flight_Panel.setBackground(null);
         new_International_Flight_Panel.setVisible(false);
+        new_International_Flight_Panel.setBackground(null);
         menu_Panel.setVisible(true);
         type_Flight_Panel.setVisible(false);
+        type_Flight_Panel.setBackground(null);
         international_Country_Panel.setVisible(false);
+        international_Country_Panel.setBackground(null);
         international_City_Panel.setVisible(false);
+        international_City_Panel.setBackground(null);
         option_Panel.setVisible(false);
         new_Terminal_Panel.setVisible(false);
+        new_Terminal_Panel.setBackground(null);
         save_Panel.setVisible(false);
         save_Error_Panel.setVisible(false);
         load_Panel.setVisible(false);
         load_Error_Panel.setVisible(false);
         national_Km_Panel.setVisible(false);
+        national_Km_Panel.setBackground(null);
         international_Km_Panel.setVisible(false);
+        international_Km_Panel.setBackground(null);
         new_Plane_Panel.setVisible(false);
+        new_Plane_Panel.setBackground(null);
         new_Charter_Flight_Panel.setVisible(false);
+        new_Charter_Flight_Panel.setBackground(null);
         admin_Credentials_Panel.setVisible(false);
         admin_Options_Panel.setVisible(false);
+        admin_Options_Panel.setBackground(null);
         adminBack_Options_Button.setVisible(false);
         type_Plane_Panel.setVisible(false);
         planeNational_Type_Label.setVisible(false);
         planeInternational_Type_Label.setVisible(false);
         planeCharter_Type_Label.setVisible(false);
         charter_City_Panel.setVisible(false);
+        charter_City_Panel.setBackground(null);
         charter_Country_Panel.setVisible(false);
+        charter_Country_Panel.setBackground(null);
         charter_Km_Panel.setVisible(false);
+        charter_Km_Panel.setBackground(null);
         next_CharterCountry_Button.setVisible(false);
         confirm_Charter_Destiny_Button.setVisible(false);
         national_Airline_Panel.setVisible(false);
+        national_Airline_Panel.setBackground(null);
         national_Assigned_Plane_Panel.setVisible(false);
+        national_Assigned_Plane_Panel.setBackground(null);
         international_Airline_Panel.setVisible(false);
+        international_Airline_Panel.setBackground(null);
         international_Assigned_Plane_Panel.setVisible(false);
+        international_Assigned_Plane_Panel.setBackground(null);
         charter_Airline_Panel.setVisible(false);
+        charter_Airline_Panel.setBackground(null);
         charter_Assigned_Plane_Panel.setVisible(false);
+        charter_Assigned_Plane_Panel.setBackground(null);
         national_ConfirmAirline_Button.setVisible(false);
         international_ConfirmAirline_Button.setVisible(false);
         charter_ConfirmAirline_Button.setVisible(false);
         plane_Rute_Panel.setVisible(false);
+        plane_Rute_Panel.setBackground(null);
         type_Passage_Panel.setVisible(false);
         sell_Passage_Panel.setVisible(false);
+        sell_Passage_Panel.setBackground(null);
         change_Ticket_Price_Panel.setVisible(false);
+        change_Ticket_Price_Panel.setBackground(null);
         type_Ticket_Panel.setVisible(false);
         passenger_Airline_Panel.setVisible(false);
+        passenger_Airline_Panel.setBackground(null);
         passage_Flight_Panel.setVisible(false);
+        passage_Flight_Panel.setBackground(null);
         passage_Country_Panel.setVisible(false);
+        passage_Country_Panel.setBackground(null);
         passage_Destiny_Panel.setVisible(false);
+        passage_Destiny_Panel.setBackground(null);
         confirm_Passage_Country_Button.setVisible(false);
         confirm_Passage_Date_Button.setVisible(false);
         passenger_Destiny_NextButton.setVisible(false);
         change_Airport_Price_Panel.setVisible(false);
+        change_Airport_Price_Panel.setBackground(null);
         type_Airport_Price_Panel.setVisible(false);
         airport_Km_Price_Panel.setVisible(false);
+        airport_Km_Price_Panel.setBackground(null);
         national_Flight_Base_Price_Panel.setVisible(false);
+        national_Flight_Base_Price_Panel.setBackground(null);
         international_Flight_Base_Price_Panel.setVisible(false);
         charter_Flight_Base_Price_Panel.setVisible(false);
-        show_Terminal_Flight_Panel.setVisible(false);
+        charter_Flight_Base_Price_Panel.setBackground(null);
+        show_Terminal_Flight_Revenue_Panel.setVisible(false);
+        show_Terminal_Flight_Revenue_Panel.setBackground(null);
         show_Flight_Revenue_Date_Panel.setVisible(false);
+        show_Flight_Revenue_Date_Panel.setBackground(null);
+        interval_Flight_Panel.setVisible(false);
+        interval_Flight_Panel.setBackground(null);
+        show_Terminal_Flights_Panel.setVisible(false);
+        firstClass_Price_Panel.setBackground(null);
+        secondClass_Price_Panel.setBackground(null);
+        third_Class_Price_Panel.setBackground(null);
+        international_Flight_Base_Price_Panel.setBackground(null);
+        terminal_Flight_Tabel_Panel.setVisible(false);
 
         new_National_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         new_International_Flight_Panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -324,8 +395,7 @@ public class GUI {
         menu_Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
         menu_Button.addActionListener(new MenuActionListenerActionListener());
-        //save_Button.addActionListener(new SaveButtonActionListener());
-        //load_Button.addActionListener(new LoadButtonActionListener());
+        save_Button.addActionListener(new SaveButtonActionListener());
         new_FlightOut_Button.addActionListener(new NewFlightActionListener());
         next_Type_Flight_Button.addActionListener(new NextTypeFlightButtonActionListener());
         new_Plane_Button.addActionListener(new NewPlaneButtonActionListener());
@@ -335,7 +405,10 @@ public class GUI {
         international_Passage_CheckBox.addActionListener(new InternationalPassageCheckBoxActionListener());
         charter_Passage_CheckBox.addActionListener(new CharterPassageCheckBoxActionListener());
         next_Type_Passage_Button.addActionListener(new NextTypePassageButtonActionListener());
-        show_Flights_Menu_Button.addActionListener(new ShowFlightsMenuButtonActionListener());
+        show_Termianl_Flights_Revenue_Menu.addActionListener(new ShowFlightsRevenueMenuButtonActionListener());
+        next_Terminal_Show_Flight_Button.addActionListener(new NextTerminalShowFlightButtonActionListener());
+        show_Flights_Menu_Button.addActionListener(new ShowTerminalFlightsMenuActionListener());
+        show_Terminal_Flights_NextButton.addActionListener(new ShowTerminalFlightsTable());
 
         admin_Options_Button.addActionListener(new OptionsActionListener());
         options_Admin_Button.addActionListener(new AdminActionListener());
@@ -384,6 +457,10 @@ public class GUI {
         confirm_Passage_Country_Button.addActionListener(new ConfirmPassageCountryButtonActionListener());
         confirm_Passage_Date_Button.addActionListener(new ConfirmPassageDateButtonActionListener());
         sell_Passage_Button.addActionListener(new SellPassageActionButton());
+
+        gen_Flight_Revenue_Button.addActionListener(new GenerateTerminalDateRevenue());
+        oneDay_CheckBox.addActionListener(new OneDayCheckBoxActionListener());
+        interval_CheckBox.addActionListener(new IntervalCheckBoxActionListener());
     }
 
     public void startGUI() {
@@ -396,9 +473,11 @@ public class GUI {
         frame.setLocationRelativeTo(null);
     }
 
+
     public class MenuActionListenerActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            main_Menu_Panel.setVisible(true);
             menu_Panel.setVisible(true);
             new_National_Flight_Panel.setVisible(false);
             new_International_Flight_Panel.setVisible(false);
@@ -528,22 +607,29 @@ public class GUI {
             charter_Flight_Base_Price_text.setText("");
             airport_Change_Price_Button.setVisible(false);
             change_Airport_Price_Panel.setVisible(false);
+            show_Flight_Revenue_Date_Panel.setVisible(false);
+            confirm_PlaneAirline_Button.setVisible(true);
+            plane_Rute_Panel.setVisible(false);
+            terminal_Flight_Tabel_Panel.setVisible(false);
+            show_Terminal_Flights_ComboBox.setSelectedItem("");
         }
     }
 
-    public void save() {
+    public class SaveButtonActionListener implements  ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                airportPrice = new AirportLoad(airportControl.getAirportKmPrice(),airportControl.getBaseNationalPrice(),
+                        airportControl.getBaseInternationalPrice(),airportControl.getBaseCharterPrice());
+                System.out.println(airportPrice.toString());
+                ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("TerminalFlights.ser"));
 
-        try {
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("TerminalFlights.ser"));
                 os.writeObject(Terminal.getTerminal_Flights());
                 os.writeObject(AirportControl.getTerminals());
                 os.writeObject(Plane.getAirportPlanes());
                 os.writeObject(AirportControl.getUsers());
                 os.writeObject(AirportControl.getTickets());
-                os.writeObject(AirportControl.getAirportKmPrice());
-                os.writeObject(AirportControl.getBaseNationalPrice());
-                os.writeObject(AirportControl.getBaseInternationalPrice());
-                os.writeObject(AirportControl.getBaseCharterPrice());
+                os.writeObject(airportPrice);
                 os.writeObject(Terminal.getTerminal_Sold_Passages());
 
                 save_Panel.setVisible(true);
@@ -556,6 +642,7 @@ public class GUI {
                 load_Error_Panel.setVisible(false);
                 load_Panel.setVisible(false);
             }
+        }
     }
 
     public void load() {
@@ -566,17 +653,19 @@ public class GUI {
             Terminal.setTerminal_Flights((ArrayList<Flight>) is.readObject());
             AirportControl.setTerminals((ArrayList<Terminal>) is.readObject());
             Plane.setAirPortPlanes((ArrayList<Plane>) is.readObject());
-            AirportControl.setTickets((ArrayList<Ticket>) is.readObject());
-            airportControl.setKmPrice((float) is.readObject());
-            airportControl.setBaseNationalPrice((float) is.readObject());
-            airportControl.setBaseInternationalPrice((float) is.readObject());
-            airportControl.setBaseCharterPrice((float) is.readObject());
             AirportControl.setUsers((ArrayList<User>) is.readObject());
+            AirportControl.setTickets((ArrayList<Ticket>) is.readObject());
+            airportPrice  = (AirportLoad) is.readObject();
+            Terminal.setTerminal_Sold_Passages((ArrayList<Passenger>) is.readObject());
+
+            airportControl.setKmPrice(airportPrice.loadAirportKm());
+            airportControl.setBaseNationalPrice(airportPrice.loadBaseNational());
+            airportControl.setBaseInternationalPrice(airportPrice.loadBaseInternational());
+            airportControl.setBaseCharterPrice(airportPrice.loadBaseCharter());
 
             load_Panel.setVisible(true);
             save_Panel.setVisible(false);
             save_Error_Panel.setVisible(false);
-            load_Button.setVisible(false);
         } catch (Exception ex) {
             ex.printStackTrace();
             load_Panel.setVisible(false);
@@ -586,12 +675,12 @@ public class GUI {
         }
     }
 
-    public class ShowFlightsMenuButtonActionListener implements ActionListener {
+    public class ShowFlightsRevenueMenuButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            show_Terminal_Flight_Panel.setVisible(true);
-            JOptionPane.showMessageDialog(null,show_Terminal_Flight_Panel,"Elija terminal",
-                    JOptionPane.INFORMATION_MESSAGE);
+            show_Terminal_Flight_Revenue_Panel.setVisible(true);
+            JOptionPane.showOptionDialog(null, show_Terminal_Flight_Revenue_Panel,"Elija terminal",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,null,new Object[]{},null);
         }
     }
 
@@ -657,7 +746,7 @@ public class GUI {
                         JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(admin_Credentials_Panel));
                         pane.dispose();
 
-                        menu_Panel.setVisible(false);
+                        main_Menu_Panel.setVisible(false);
                         option_Panel.setVisible(true);
                         admin_Credentials_Panel.setVisible(false);
                         admin_Options_Panel.setVisible(true);
@@ -709,7 +798,7 @@ public class GUI {
 
                 national_City_ComboBox.setModel(new DefaultComboBoxModel<>(cubaCities));
 
-                menu_Panel.setVisible(false);
+                main_Menu_Panel.setVisible(false);
                 type_Flight_Panel.setVisible(false);
                 new_National_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
@@ -722,7 +811,7 @@ public class GUI {
                 international_Region_ComboBox.setModel(new DefaultComboBoxModel<>(regions));
                 international_Region_ComboBox.setSelectedItem("");
 
-                menu_Panel.setVisible(false);
+                main_Menu_Panel.setVisible(false);
                 type_Flight_Panel.setVisible(false);
                 new_International_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
@@ -734,7 +823,7 @@ public class GUI {
                 charter_Region_ComboBox.setModel(new DefaultComboBoxModel<>(regions));
                 charter_Region_ComboBox.setSelectedItem("");
 
-                menu_Panel.setVisible(false);
+                main_Menu_Panel.setVisible(false);
                 type_Flight_Panel.setVisible(false);
                 new_Charter_Flight_Panel.setVisible(true);
                 option_Panel.setVisible(true);
@@ -1021,7 +1110,7 @@ public class GUI {
 
                     if (airportControl.newTerminal(terminal_Name, terminal_Number, isNational, isCharter)) {
                         addNameTerminal(terminal_Name, isNational, isCharter);
-                        show_Terminal_Flights_ComboBox.addItem(terminal_Name);
+                        revenue_Terminal_Flights_ComboBox.addItem(terminal_Name);
                         terminal_Name_Text.setText("");
                         terminal_Number_Text.setText("");
                         national_Terminal_CheckBox.setSelected(false);
@@ -1132,7 +1221,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && secondClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0") || secondClass_Price_Text.getText().equals("0")) {
@@ -1144,7 +1232,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
@@ -1156,7 +1243,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (secondClass_Price_CheckBox.isSelected() && thirdClass_Price_CheckBox.isSelected()) {
                     if (secondClass_Price_Text.getText().equals("0") || thirdClass_Price_Text.getText().equals("0")) {
@@ -1168,7 +1254,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (firstClass_Price_CheckBox.isSelected()) {
                     if (firstClass_Price_Text.getText().equals("0")) {
@@ -1180,7 +1265,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (secondClass_Price_CheckBox.isSelected()) {
                     if (secondClass_Price_Text.getText().equals("0")) {
@@ -1192,7 +1276,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 } else if (thirdClass_Price_CheckBox.isSelected()) {
                     if (thirdClass_Price_Text.getText().equals("0")) {
@@ -1204,7 +1287,6 @@ public class GUI {
                         secondClass = Float.parseFloat(secondClass_Price_Text.getText());
                         thirdClass = Float.parseFloat(thirdClass_Price_Text.getText());
                         airportControl.newTicket(airline,firstClass,secondClass,thirdClass,isFirst,isSecond,isThird);
-                        save();
                     }
                 }
 
@@ -1215,6 +1297,11 @@ public class GUI {
                                 Caracteres erroneos!
                                 Ingrese solo numeros en >>PRECIO DE LA CLASE<<""",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            } finally {
+                airline_Price_ComboBox.setSelectedItem("");
+                firstClass_Price_Text.setText("0");
+                secondClass_Price_Text.setText("0");
+                thirdClass_Price_Text.setText("0");
             }
         }
     }
@@ -1287,7 +1374,9 @@ public class GUI {
 
                         airportControl.newNationalFlight(flight_Name, national_City, travel_km, flightAirline, assigned_Plane,
                                 terminal, date, partialDate);
-                        save();
+
+                        JOptionPane.showMessageDialog(null,"Vuelo agregado con exito!","",JOptionPane.INFORMATION_MESSAGE);
+
                 } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1403,7 +1492,8 @@ public class GUI {
 
                     airportControl.newCharterFlight(flight_Name, destined_Charter_City, travel_km, flightAirline, assigned_Plane,
                             terminal, date, partialDate, destined_Country);
-                    save();
+
+                    JOptionPane.showMessageDialog(null,"Vuelo agregado con exito!","",JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1511,7 +1601,7 @@ public class GUI {
 
                     airportControl.newInternationalFlight(flight_Name, destined_International_City, travel_km, flightAirline,
                             assigned_Plane, terminal, date, partialDate, destined_Country);
-                    save();
+                    JOptionPane.showMessageDialog(null,"Vuelo agregado con exito!","",JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1685,7 +1775,7 @@ public class GUI {
 
             plane_Builder_Country_ComboBox.setModel(new DefaultComboBoxModel<>(world_Country_List));
 
-            menu_Panel.setVisible(false);
+            main_Menu_Panel.setVisible(false);
             type_Plane_Panel.setVisible(false);
             new_Plane_Panel.setVisible(true);
             option_Panel.setVisible(true);
@@ -1782,6 +1872,8 @@ public class GUI {
                     if (airportControl.newPlane(plane_Plate,plane_Model, plane_Seats,plane_Builder,plane_Builder_Country,
                             isNational, isCharter, plane_Airline, planeRuteDestiny)) {
 
+                        JOptionPane.showMessageDialog(null,"Avion agregado con exito!","",JOptionPane.INFORMATION_MESSAGE);
+
                         plane_Plate_Text.setText("");
                         plane_Airline_ComboBox.setSelectedItem("");
                         plane_Model_Text.setText("");
@@ -1791,7 +1883,6 @@ public class GUI {
                         plane_Rute_Destiny_ComboBox.setSelectedItem("");
                         national_Plane_CheckBox.setSelected(false);
                         international_Plane_CheckBox.setSelected(false);
-                        save();
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, """
@@ -2254,7 +2345,7 @@ public class GUI {
                     passage_Country_ComboBox.setModel(new DefaultComboBoxModel<>(passage_Charter_Country));
                 }
 
-                menu_Panel.setVisible(false);
+                main_Menu_Panel.setVisible(false);
                 option_Panel.setVisible(true);
                 sell_Passage_Panel.setVisible(true);
             } else {
@@ -2398,7 +2489,6 @@ public class GUI {
                         if (airportControl.newPassage(name, last_Name, destiny, flight_Name, classPassage, passageNumber, date)) {
                             JOptionPane.showMessageDialog(null, "La compra se ha completado",
                                     "Compra completada!", JOptionPane.INFORMATION_MESSAGE);
-                            save();
                         } else {
                             JOptionPane.showMessageDialog(null, "La compra no se ha completado",
                                     "ERROR!", JOptionPane.INFORMATION_MESSAGE);
@@ -2455,7 +2545,6 @@ public class GUI {
                         if (airportControl.newPassage(name, last_Name, destiny, flight_Name, classPassage, passageNumber, date)) {
                             JOptionPane.showMessageDialog(null, "La compra se ha completado",
                                     "Compra completada!", JOptionPane.INFORMATION_MESSAGE);
-                            save();
                         } else {
                             JOptionPane.showMessageDialog(null, "La compra no se ha completado",
                                     "ERROR!", JOptionPane.INFORMATION_MESSAGE);
@@ -2573,7 +2662,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
                         international_Base_Price_CheckBox.isSelected()) {
@@ -2588,7 +2676,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected() &&
                         charter_Base_Price_CheckBox.isSelected()) {
@@ -2596,7 +2683,6 @@ public class GUI {
                             charter_Flight_Base_Price_text.getText().equals("0")) {
                         JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de configurar los " +
                                 "precios", "ERROR!", JOptionPane.WARNING_MESSAGE);
-                        save();
                     } else {
                         kmPrice = Float.parseFloat(km_Price_Text.getText());
                         nationalPrice = Float.parseFloat(national_Flight_Base_Price_Text.getText());
@@ -2604,7 +2690,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected() &&
                         charter_Base_Price_CheckBox.isSelected()) {
@@ -2619,7 +2704,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (airport_km_Base_CheckBox.isSelected() && national_Base_Price_CheckBox.isSelected()) {
                     if (km_Price_Text.getText().equals("0") || national_Flight_Base_Price_Text.getText().equals("0")) {
@@ -2632,7 +2716,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if ((airport_km_Base_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected())) {
                     if (km_Price_Text.getText().equals("0") || international_Flight_Base_Price_Text.getText().equals("0")) {
@@ -2645,7 +2728,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (airport_km_Base_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
                     if (km_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
@@ -2658,7 +2740,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (national_Base_Price_CheckBox.isSelected() && international_Base_Price_CheckBox.isSelected()) {
                     if (national_Flight_Base_Price_Text.getText().equals("0") || international_Flight_Base_Price_Text.getText().equals("0")) {
@@ -2671,7 +2752,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if ((national_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected())) {
                     if (national_Flight_Base_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
@@ -2684,7 +2764,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (international_Base_Price_CheckBox.isSelected() && charter_Base_Price_CheckBox.isSelected()) {
                     if (international_Flight_Base_Price_Text.getText().equals("0") || charter_Flight_Base_Price_text.getText().equals("0")) {
@@ -2697,7 +2776,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 }else if (airport_km_Base_CheckBox.isSelected()) {
                     if (km_Price_Text.getText().equals("0")) {
@@ -2710,7 +2788,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 }else if (national_Base_Price_CheckBox.isSelected()) {
                     if (national_Flight_Base_Price_Text.getText().equals("0")) {
@@ -2723,7 +2800,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 }else if (international_Base_Price_CheckBox.isSelected()) {
                     if (international_Flight_Base_Price_Text.getText().equals("0")) {
@@ -2736,7 +2812,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 } else if (charter_Base_Price_CheckBox.isSelected()) {
                     if (charter_Flight_Base_Price_text.getText().equals("0")) {
@@ -2749,7 +2824,6 @@ public class GUI {
                         charterPrice = Float.parseFloat(charter_Flight_Base_Price_text.getText());
                         airportControl.setAirportPrice(kmPrice, nationalPrice, internationalPrice, charterPrice, isKm,
                                 isNational, isInternational, isCharter);
-                        save();
                     }
                 }
 
@@ -2760,10 +2834,198 @@ public class GUI {
                                 Caracteres erroneos!
                                 Ingrese solo numeros en >>PRECIO DE LA CLASE<<""",
                         "ERROR!", JOptionPane.INFORMATION_MESSAGE);
+            } finally {
+                km_Price_Text.setText("0");
+                national_Flight_Base_Price_Text.setText("0");
+                international_Flight_Base_Price_Text.setText("0");
+                charter_Flight_Base_Price_text.setText("0");
+            }
+        }
+    }
+
+    public class OneDayCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (oneDay_CheckBox.isSelected()) {
+                interval_CheckBox.setSelected(false);
+            }
+        }
+    }
+
+    public class IntervalCheckBoxActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (interval_CheckBox.isSelected()) {
+                oneDay_CheckBox.setSelected(false);
+            }
+        }
+    }
+
+    public class NextTerminalShowFlightButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (revenue_Terminal_Flights_ComboBox.getItemAt(revenue_Terminal_Flights_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null,"ERROR!\nSeleccione una terminal para continuar",
+                        "ERROR!",JOptionPane.ERROR_MESSAGE);
+            } else {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(show_Terminal_Flight_Revenue_Panel));
+                pane.dispose();
+
+                flight_Init_Day_ComoBox.setModel(new DefaultComboBoxModel(days));
+                flight_Init_Month_ComoBox.setModel(new DefaultComboBoxModel(months));
+                flight_Init_Year_ComoBox.setModel(new DefaultComboBoxModel(years));
+                flight_Init_Hour_ComoBox.setModel(new DefaultComboBoxModel(hours));
+                flight_Init_Min_ComoBox.setModel(new DefaultComboBoxModel(minutes));
+                flight_End_Day_ComoBox.setModel(new DefaultComboBoxModel(days));
+                flight_End_Month_ComoBox.setModel(new DefaultComboBoxModel(months));
+                flight_End_Year_ComoBox.setModel(new DefaultComboBoxModel(years));
+                flight_End_Hour_ComoBox.setModel(new DefaultComboBoxModel(hours));
+                flight_End_Min_ComoBox.setModel(new DefaultComboBoxModel(minutes));
+
+                main_Menu_Panel.setVisible(false);
+                option_Panel.setVisible(true);
+                if (interval_CheckBox.isSelected()) {
+                    interval_Flight_Panel.setVisible(true);
+                } else if (oneDay_CheckBox.isSelected()) {
+                    interval_Flight_Panel.setVisible(false);
+                }
+                show_Flight_Revenue_Date_Panel.setVisible(true);
+            }
+        }
+    }
+
+    public class GenerateTerminalDateRevenue implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int initDay;
+            int initMonth;
+            int initYear;
+            LocalDate initPartialDate;
+            int initHour;
+            int initMin;
+            LocalDateTime initDate;
+            int endDay;
+            int endMonth;
+            int endYear;
+            int endHour;
+            int endMin;
+            LocalDateTime endDate;
+            String terminal;
+
+            String flightsRevenue;
+
+            if (oneDay_CheckBox.isSelected()){
+                if (flight_Init_Day_ComoBox.getItemAt(flight_Init_Day_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Month_ComoBox.getItemAt(flight_Init_Month_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Year_ComoBox.getItemAt(flight_Init_Year_ComoBox.getSelectedIndex()).equals("")) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de introducir la fecha para " +
+                            "generar el monto");
+                } else {
+                    initDay = Integer.parseInt(flight_Init_Day_ComoBox.getItemAt(flight_Init_Day_ComoBox.getSelectedIndex()));
+                    initMonth = Integer.parseInt(flight_Init_Month_ComoBox.getItemAt(flight_Init_Month_ComoBox.getSelectedIndex()));
+                    initYear = Integer.parseInt(flight_Init_Year_ComoBox.getItemAt(flight_Init_Year_ComoBox.getSelectedIndex()));
+                    terminal = revenue_Terminal_Flights_ComboBox.getItemAt(revenue_Terminal_Flights_ComboBox.getSelectedIndex());
+
+                    initPartialDate = LocalDate.of(initYear,Month.of(initMonth),initDay);
+
+                    flightsRevenue = String.valueOf(airportControl.terminalFlightOnDate(initPartialDate,terminal));
+
+                    JOptionPane.showMessageDialog(null, "El monto de dinero generado con la venta de los\n" +
+                            "pasajes es: $" + flightsRevenue);
+                }
+            } else if (interval_CheckBox.isSelected()) {
+                if (flight_Init_Day_ComoBox.getItemAt(flight_Init_Day_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Month_ComoBox.getItemAt(flight_Init_Month_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Year_ComoBox.getItemAt(flight_Init_Year_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Hour_ComoBox.getItemAt(flight_Init_Hour_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_Init_Min_ComoBox.getItemAt(flight_Init_Min_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_End_Day_ComoBox.getItemAt(flight_End_Day_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_End_Month_ComoBox.getItemAt(flight_End_Month_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_End_Year_ComoBox.getItemAt(flight_End_Year_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_End_Hour_ComoBox.getItemAt(flight_End_Hour_ComoBox.getSelectedIndex()).equals("") ||
+                        flight_End_Min_ComoBox.getItemAt(flight_End_Min_ComoBox.getSelectedIndex()).equals("") ) {
+                    JOptionPane.showMessageDialog(null, "ERROR!\nNo ha terminado de introducir la fecha para " +
+                            "generar el monto");
+                }else {
+                    initDay = Integer.parseInt(flight_Init_Day_ComoBox.getItemAt(flight_Init_Day_ComoBox.getSelectedIndex()));
+                    initMonth = Integer.parseInt(flight_Init_Month_ComoBox.getItemAt(flight_Init_Month_ComoBox.getSelectedIndex()));
+                    initYear = Integer.parseInt(flight_Init_Year_ComoBox.getItemAt(flight_Init_Year_ComoBox.getSelectedIndex()));
+                    initHour = Integer.parseInt(flight_Init_Hour_ComoBox.getItemAt(flight_Init_Hour_ComoBox.getSelectedIndex()));
+                    initMin = Integer.parseInt(flight_Init_Min_ComoBox.getItemAt(flight_Init_Min_ComoBox.getSelectedIndex()));
+                    endDay = Integer.parseInt(flight_End_Day_ComoBox.getItemAt(flight_End_Day_ComoBox.getSelectedIndex()));
+                    endMonth = Integer.parseInt(flight_End_Month_ComoBox.getItemAt(flight_End_Month_ComoBox.getSelectedIndex()));
+                    endYear = Integer.parseInt(flight_End_Year_ComoBox.getItemAt(flight_End_Year_ComoBox.getSelectedIndex()));
+                    endHour = Integer.parseInt(flight_End_Hour_ComoBox.getItemAt(flight_End_Hour_ComoBox.getSelectedIndex()));
+                    endMin = Integer.parseInt(flight_End_Min_ComoBox.getItemAt(flight_End_Min_ComoBox.getSelectedIndex()));
+                    terminal = revenue_Terminal_Flights_ComboBox.getItemAt(revenue_Terminal_Flights_ComboBox.getSelectedIndex());
+
+                    initDate = LocalDateTime.of(initYear,Month.of(initMonth),initDay,initHour,initMin);
+                    endDate = LocalDateTime.of(endYear,Month.of(endMonth),endDay,endHour,endMin);
+
+                    flightsRevenue = String.valueOf(airportControl.terminalFlightsOnIntervalDate(initDate,endDate,terminal));
+
+                    flight_Init_Day_ComoBox.setSelectedItem("");
+                    flight_Init_Month_ComoBox.setSelectedItem("");
+                    flight_Init_Year_ComoBox.setSelectedItem("");
+                    flight_Init_Hour_ComoBox.setSelectedItem("");
+                    flight_Init_Min_ComoBox.setSelectedItem("");
+                    flight_End_Day_ComoBox.setSelectedItem("");
+                    flight_End_Month_ComoBox.setSelectedItem("");
+                    flight_End_Year_ComoBox.setSelectedItem("");
+                    flight_End_Hour_ComoBox.setSelectedItem("");
+                    flight_End_Min_ComoBox.setSelectedItem("");
+
+                    JOptionPane.showMessageDialog(null, "El monto de dinero generado con la venta de los\n" +
+                            "pasajes es: $" + flightsRevenue);
+                }
+            }
+        }
+    }
+
+    public class ShowTerminalFlightsMenuActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            show_Terminal_Flights_Panel.setVisible(true);
+            JOptionPane.showOptionDialog(null, show_Terminal_Flights_Panel,"Elegir terminal",
+                    JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{},null);
+        }
+    }
+
+    public class ShowTerminalFlightsTable implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (show_Terminal_Flights_ComboBox.getItemAt(show_Terminal_Flights_ComboBox.getSelectedIndex()).equals("")) {
+                JOptionPane.showMessageDialog(null,"ERROR!\nElija una terminal","ERROR!",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                JDialog pane = (JDialog) SwingUtilities.getWindowAncestor(SwingUtilities.getRootPane(show_Terminal_Flights_Panel));
+                pane.dispose();
+
+                String[] columnNames = {"Nombre", "Destino","Aerolinea","Avion Asignado","Fecha","Dinero Generado"};
+
+                DefaultTableModel model = new DefaultTableModel(0,7);
+                model.setColumnIdentifiers(columnNames);
+                terminal_Flights_Table.setModel(model);
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-YYYY  HH:mm");
+
+                for (Flight flight : Terminal.getTerminal_Flights()) {
+                    if (flight.getFlightTerminal().equals(show_Terminal_Flights_ComboBox.getItemAt(show_Terminal_Flights_ComboBox.getSelectedIndex()))) {
+                        String name = flight.getFlightName();
+                        String destiny = flight.getDestiny_city();
+                        String airline = flight.getFlightAirline();
+                        String plane = flight.getAssigned_plane();
+                        String date = flight.getDate().format(dateFormat);
+                        String revenue = String.valueOf(flight.getFlightRevenue());
+
+                        Object[] data = {name,destiny,airline,plane,date,revenue};
+                        model.addRow(data);
+                    }
+                }
+
+                main_Menu_Panel.setVisible(false);
+                terminal_Flight_Tabel_Panel.setVisible(true);
+                option_Panel.setVisible(true);
             }
         }
     }
 }
-
-
-

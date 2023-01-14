@@ -19,6 +19,7 @@ public class National_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flight_Airline)) {
                 flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice());
+                passageCost = (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getFirstClassPrice());
                 flightSeatNumber++;
             }
         }
@@ -30,6 +31,7 @@ public class National_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice());
+                passageCost = (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getSecondClassPrice());
                 flightSeatNumber++;
             }
         }
@@ -41,6 +43,7 @@ public class National_Flight extends Flight{
         for (Ticket ticket : AirportControl.getTickets()) {
             if (ticket.getTicketAirline().equals(flightAirline)) {
                 flightRevenue += (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice());
+                passageCost = (nationalKmPrice(travel_km) + airportControl.getBaseNationalPrice() + ticket.getThirdClassPrice());
                 flightSeatNumber++;
             }
         }

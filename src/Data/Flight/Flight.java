@@ -1,7 +1,6 @@
 package Data.Flight;
 
 import Data.AirportControl;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +20,8 @@ public abstract class Flight implements Serializable {
     protected float flightRevenue;
     protected int flightSeats;
     protected int flightSeatNumber = 0;
+
+    protected float passageCost = 0;
     AirportControl airportControl = new AirportControl();
 
     public Flight(String flightName, String destiny_city, float travel_km, String flightAirline, String assigned_plane,
@@ -69,6 +70,10 @@ public abstract class Flight implements Serializable {
 
     public float getFlightRevenue() {
         return flightRevenue;
+    }
+
+    public float getPassageCost() {
+        return passageCost;
     }
 
     public int getFirstClassTickets() {

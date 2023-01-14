@@ -59,6 +59,10 @@ public class Terminal implements Serializable {
         Terminal.terminal_Flights = terminal_Flights;
     }
 
+    public static void setTerminal_Sold_Passages(ArrayList<Passenger> passages) {
+        terminal_Sold_Passages = passages;
+    }
+
     @Override
     public String toString() {
         return  "terminal_Name " + terminal_Name +
